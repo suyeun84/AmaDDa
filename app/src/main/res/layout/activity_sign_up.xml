@@ -6,12 +6,4 @@
     android:layout_height="match_parent"
     tools:context=".SignUpActivity">
 
-    <RelativeLayout
-        android:id="@+id/login"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/signup"
-        android:clipToOutline="true"
-        tools:ignore="MissingConstraints,RedundantNamespace,UnusedAttribute" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
