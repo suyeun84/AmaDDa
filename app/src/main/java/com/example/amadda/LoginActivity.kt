@@ -15,8 +15,14 @@ class LoginActivity : AppCompatActivity() {
         initBtn();
     }
     fun initBtn(){
+
+        binding.buttonLogin.setOnClickListener {
+            val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.textViewSignUpLink.setOnClickListener{
-            val intent = Intent(this, AddCategoryActivity::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
 

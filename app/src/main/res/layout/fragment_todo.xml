@@ -1,14 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".TodoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="500dp"
+            android:background="#FFFFFF"
+            android:gravity="start"
+            android:orientation="vertical"
+            android:padding="24dp">
 
+            <TextView
+                android:id="@+id/textViewDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1월 1일 (월)"
+                android:textColor="@android:color/black"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewDday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="D-Day"
+                android:textColor="#979797"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutTodo"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:divider="@drawable/empty_divider"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/rowTodo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/todo_row_style"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageViewTodoStar"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_baseline_star_border_24" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="10dp">
+
+                        <TextView
+                            android:id="@+id/textViewTodoCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="카테고리"
+                            android:textColor="#7E7E7E"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/textViewTodoTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="일정 이름"
+                            android:textColor="#505050"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imageViewCheckBox"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_baseline_check_box_outline_blank_24" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#E8E8E8"
+                android:paddingVertical="15dp"
+                android:text="+ 할 일을 추가하세요"
+                android:textAlignment="textStart"
+                android:textColor="#7D7D7D"
+                android:textSize="14sp" />
+        </LinearLayout>
 </FrameLayout>
