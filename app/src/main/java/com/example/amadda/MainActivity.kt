@@ -21,14 +21,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        supportFragmentManager.beginTransaction().replace(binding.frameLayout.id, SubscribeFragment())
+        supportFragmentManager.beginTransaction().replace(binding.frameLayout.id, CalendarFragment())
             .commitAllowingStateLoss()
 
         bnv.setOnItemSelectedListener { item ->
             changeFragment(
                 when (item.itemId) {
                     R.id.calendarMenu -> {
-                        SubscribeFragment()
+                        CalendarFragment()
                     }
                     R.id.favoriteMenu -> {
                         SubscribeFragment()
