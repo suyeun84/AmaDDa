@@ -4,14 +4,14 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.amadda.databinding.ActivitySelectColorBinding
+import com.example.amadda.databinding.ActivityAddCategoryBinding
 
 
-class SelectColorActivity : AppCompatActivity() {
-    lateinit var binding: ActivitySelectColorBinding
+class AddCategoryActivity : AppCompatActivity() {
+    lateinit var binding: ActivityAddCategoryBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySelectColorBinding.inflate(layoutInflater)
+        binding = ActivityAddCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initLayout();

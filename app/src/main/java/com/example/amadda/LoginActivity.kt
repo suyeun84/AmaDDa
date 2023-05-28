@@ -1,6 +1,5 @@
 package com.example.amadda
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
     }
     fun initBtn(){
         binding.textViewSignUpLink.setOnClickListener{
-            val intent = Intent(this, SelectColorActivity::class.java)
+            val intent = Intent(this, AddCategoryActivity::class.java)
             startActivity(intent)
         }
 
