@@ -1,3 +1,3 @@
 package com.example.amadda
 
-data class EventData(val category:String, val event:String, val Dday:Int)
+data class EventData(val category:String, val event:String, val Dday:Int, var edit:Boolean=false)
