@@ -17,7 +17,7 @@ class LoginActivity : AppCompatActivity() {
     }
     fun initBtn(){
         binding.textViewSignUpLink.setOnClickListener{
-            val intent = Intent(this, SignUpActivity::class.java)
+            val intent = Intent(this, SelectColorActivity::class.java)
             startActivity(intent)
         }
 
