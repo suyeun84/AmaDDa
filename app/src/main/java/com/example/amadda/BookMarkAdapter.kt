@@ -37,6 +37,7 @@ class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.A
     override fun getItemCount(): Int {
         return items.size
     }
+    //변화
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(items[position].category == "건국대 학사일정"){
