@@ -91,22 +91,23 @@ class CalendarFragment : Fragment() {
                 StaggeredGridLayoutManager.VERTICAL
             )
         )
-        val calendar = GregorianCalendar(year, month, 1)
+//        val calendar = GregorianCalendar(year, month, 1)
+//
+//        val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 1일의 위치
+//        val max: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+//
+//        for (i in 0 until dayOfWeek) {
+//            monthData.add("0")
+//        }
+//        for (i in 1..max) {
+//            var mdate = Integer.toString(year * 10000 + (month + 1) * 100 + i)
+//            Log.d("mdate", mdate)
+//
+//            monthData.add(mdate)
+//            //날짜에 따른 일정 표시
+//        }
+//        adapter_calendar = CalendarRecyclerAdapter(monthData)
 
-        val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 1일의 위치
-        val max: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-        for (i in 0 until dayOfWeek) {
-            monthData.add("0")
-        }
-        for (i in 1..max) {
-            var mdate = Integer.toString(year * 10000 + (month + 1) * 100 + i)
-            Log.d("mdate", mdate)
-
-            monthData.add(mdate)
-            //날짜에 따른 일정 표시
-        }
-        adapter_calendar = CalendarRecyclerAdapter(monthData)
         binding.recyclerViewCalendar.adapter = adapter_calendar
 
 
