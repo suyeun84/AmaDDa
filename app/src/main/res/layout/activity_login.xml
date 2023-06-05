@@ -16,7 +16,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:padding="16dp"
-        android:text="아이디"
+        android:hint="아이디"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,8 +29,8 @@
         android:background="@drawable/edittext_style"
         android:ems="10"
         android:inputType="textPersonName"
+        android:hint="비밀번호"
         android:padding="16dp"
-        android:text="비밀번호"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextId" />
 
@@ -42,6 +42,7 @@
         android:layout_marginTop="14dp"
         android:padding="16dp"
         android:text="로그인"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
@@ -52,6 +53,8 @@
         android:layout_marginStart="4dp"
         android:layout_marginBottom="14dp"
         android:text="로그인"
+        android:textColor="@color/black"
+
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/editTextId"
@@ -64,6 +67,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="96dp"
         android:text="아마따"
+        android:textColor="@color/black"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="시작하기"
+        android:textColor="@color/black"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textView4"

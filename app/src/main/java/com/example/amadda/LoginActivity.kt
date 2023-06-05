@@ -16,11 +16,6 @@ class LoginActivity : AppCompatActivity() {
     }
     fun initBtn(){
 
-        binding.buttonLogin.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
-        }
-
         binding.textViewSignUpLink.setOnClickListener{
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
