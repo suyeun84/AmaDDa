@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AmaDDa"
         tools:targetApi="31">
+
         <activity
             android:name=".Profile_push"
             android:exported="false" />
