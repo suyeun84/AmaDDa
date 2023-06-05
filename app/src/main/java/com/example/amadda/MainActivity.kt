@@ -1,5 +1,6 @@
 package com.example.amadda
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -64,3 +65,23 @@ class MainActivity : AppCompatActivity() {
 //        }.attach()
 //    }
 }
+
+
+/*
+
+    fun initBtn(){
+        binding.buttonTodo.setOnClickListener {
+            TodoFragment().show(
+                supportFragmentManager, "SampleDialog"
+            )
+        }
+        binding.buttonAddCategory.setOnClickListener {
+            val intent = Intent(this, AddCategoryActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.buttonCalendar.setOnClickListener {
+            val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)        }
+    }}
+ */
