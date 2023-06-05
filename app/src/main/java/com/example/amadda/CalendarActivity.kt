@@ -4,7 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
+//import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.amadda.databinding.ActivityCalendarBinding
 import java.time.LocalDate
 import java.time.Month
@@ -12,7 +13,8 @@ import java.time.Year
 
 class CalendarActivity : AppCompatActivity() {
     lateinit var binding: ActivityCalendarBinding
-    val dateViewModel: DateViewModel by viewModels()
+    // val dateViewModel: DateViewModel by viewModels()
+    val dateViewModel = ViewModelProvider(this).get(DateViewModel::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCalendarBinding.inflate(layoutInflater)

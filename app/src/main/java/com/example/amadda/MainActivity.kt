@@ -27,10 +27,15 @@ class MainActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
 
         bnv.setOnItemSelectedListener { item ->
+            if (item.itemId == 0) {
+                val intent = Intent(this, CalendarActivity::class.java)
+                startActivity(intent)
+            }
             changeFragment(
                 when (item.itemId) {
                     R.id.calendarMenu -> {
-                        CalendarFragment()
+                        // CalendarFragment()
+                        SettingFragment()
                     }
                     R.id.favoriteMenu -> {
                         BookMarkFragment()
@@ -42,7 +47,8 @@ class MainActivity : AppCompatActivity() {
                         SettingFragment()
                     }
                     else -> {
-                        CalendarFragment()
+                        // CalendarFragment()
+                        SettingFragment()
                     }
                 }
             )

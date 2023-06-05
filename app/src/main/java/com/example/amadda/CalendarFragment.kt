@@ -1,5 +1,6 @@
 package com.example.amadda
 
+import android.content.Intent
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.os.Bundle
@@ -8,7 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+//import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -18,7 +20,10 @@ import java.util.ArrayList
 class CalendarFragment : Fragment() {
     var binding: FragmentCalendarBinding? = null
     var adapter_calendar: CalendarRecyclerAdapter? = null
-    val dateModel: DateViewModel by activityViewModels()
+    // val dateModel: DateViewModel by activityViewModels()
+//    val dateModel = ViewModelProvider(this).get(DateViewModel::class.java)
+//    val dateModel: DateViewModel by activityViewModels()
+    val dateModel = ViewModelProvider(requireActivity()).get(DateViewModel::class.java)
     val monthData: ArrayList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +36,8 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
+//        val intent = Intent(context, CalendarActivity::class.java)
+//        startActivity(intent)
         return binding!!.root
     }
 
