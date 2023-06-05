@@ -37,8 +37,11 @@ class MainActivity : AppCompatActivity() {
                     R.id.subscribeMenu -> {
                         SubscribeFragment()
                     }
+                    R.id.profileMenu -> {
+                        SettingFragment()
+                    }
                     else -> {
-                        SubscribeFragment()
+                        CalendarFragment()
                     }
                 }
             )
