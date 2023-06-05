@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AmaDDa"
         tools:targetApi="31">
+
         <activity
             android:name=".TimeTable"
             android:exported="false">
@@ -20,7 +21,21 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".CalendarActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ProfileActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AddCategoryActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
