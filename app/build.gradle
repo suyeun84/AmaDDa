@@ -6,7 +6,9 @@ plugins {
 android {
     namespace 'com.example.amadda'
     compileSdk 33
-
+    buildFeatures{
+        viewBinding = true
+    }
     defaultConfig {
         applicationId "com.example.amadda"
         minSdk 30
