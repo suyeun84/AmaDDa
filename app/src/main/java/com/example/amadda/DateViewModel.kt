@@ -4,14 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class DateViewModel : ViewModel() {
-    val curYear = MutableLiveData<Int>()
-    val curMonth = MutableLiveData<Int>()
+    var curYear = MutableLiveData<Int>()
+    var curMonth = MutableLiveData<Int>()
 
     fun setCurYear(data: Int) {
         curYear.value = data
+        println("setCurYear $data")
     }
 
     fun setCurMonth(data: Int) {
         curMonth.value = data
+        println("setCurMonth $data")
     }
 }

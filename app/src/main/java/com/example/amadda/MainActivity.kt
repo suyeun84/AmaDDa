@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.amadda.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -27,15 +28,12 @@ class MainActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
 
         bnv.setOnItemSelectedListener { item ->
-            if (item.itemId == 0) {
-                val intent = Intent(this, CalendarActivity::class.java)
-                startActivity(intent)
-            }
+
             changeFragment(
                 when (item.itemId) {
                     R.id.calendarMenu -> {
-                        // CalendarFragment()
-                        SettingFragment()
+                        CalendarFragment()
+                        // SettingFragment()
                     }
                     R.id.favoriteMenu -> {
                         BookMarkFragment()
@@ -57,6 +55,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeFragment(fragment: Fragment) {
+        println(fragment.id)
+
         supportFragmentManager
             .beginTransaction()
             .replace(binding.frameLayout.id, fragment)
