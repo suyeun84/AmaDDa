@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.amadda.databinding.ActivitySignUpBinding
 import com.google.firebase.database.DatabaseReference
@@ -71,17 +72,19 @@ class SignUpActivity : AppCompatActivity() {
             finish();
         }
         binding.buttonSignin.setOnClickListener {
+
+            val inputId = binding.editTextId.text.toString()
+            val inputPwd = binding.editTextPassword.text.toString()
+            val inputPwd2 = binding.editTextPassword2.text.toString()
+
             //firebase에 회원정보 저장
             rdb = Firebase.database.getReference("Users/user")
             var subArr: ArrayList<Int> = ArrayList<Int>()
             subArr.add(0)
-            subArr.add(1)
-            subArr.add(5)
             var todoArr: ArrayList<Todo> = ArrayList<Todo>()
             todoArr.add(Todo("20230610", 0, "title", false, false))
             var cateArr: ArrayList<Category> = ArrayList<Category>()
 //            cateArr.add(Category(0, "title", "#FFFFFF"))
-            val userId = binding.editTextId.text.toString()
             val userinfo = Users(
                 binding.editTextId.text.toString(),
                 binding.editTextPassword.text.toString(),
@@ -89,20 +92,25 @@ class SignUpActivity : AppCompatActivity() {
                 null,
                 null
             )
-            rdb.child(binding.editTextId.text.toString()).setValue(userinfo)
-            rdb = Firebase.database.getReference("Users/user/" + binding.editTextId.text.toString())
-            userinfo.subscribe = subArr
-
-//            val hashMap: HashMap<String, Int> = hashMapOf()
-//            for (index in 0 until subArr.size) {
-//                hashMap["id"] = subArr[index]
-//            }
-
-
-            rdb.child("/subscribe").setValue(userinfo.subscribe)
+            rdb.child(inputId).get().addOnSuccessListener {
+                if (it.value != null) {
+                    flag1 = false
+                    binding.IdInputLayout.error = "이미 존재하는 아이디입니다."
+                } else if (inputPwd != inputPwd2) {
+                    Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    rdb.child(binding.editTextId.text.toString()).setValue(userinfo)
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            rdb = Firebase.database.getReference("Users/user/" + binding.editTextId.text.toString() + "/categoryList")
+            userinfo.category = cateArr
+            rdb.child("category").setValue(userinfo.category)
 
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+
             //id 중복 안되게 설정
 //            val id = binding.editTextId.text.toString()
 //            rdb.child(id).child(id).get().addOnSuccessListener {

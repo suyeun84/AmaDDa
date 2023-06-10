@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import com.example.amadda.databinding.ActivityLoginBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -39,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
                     // 아이디 있음
                     rdb.child(inputId).child("password").get().addOnSuccessListener {
                         if (it.value == inputPwd) {
-                            Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "환영합니다.", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
                         } else {
@@ -53,9 +54,5 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "id, password 데이터 가져오기 실패", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
-
 }
-
-
