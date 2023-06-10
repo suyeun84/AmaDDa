@@ -28,7 +28,7 @@
         android:layout_marginTop="14dp"
         android:background="@drawable/edittext_style"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:hint="비밀번호"
         android:padding="16dp"
         app:layout_constraintStart_toStartOf="parent"
