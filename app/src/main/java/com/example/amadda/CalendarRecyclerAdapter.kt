@@ -1,5 +1,6 @@
 package com.example.amadda
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -59,8 +60,16 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
             holder.binding.textViewTodo3.setBackgroundColor(Color.TRANSPARENT)
         }
 
+
         if (items[position].count == 1) {
+            if(items[position].category[0] == "KBO"){
+                val KBOInfo = items[position].name[0].split("/")
+                holder.binding.textViewTodo1.text = "${KBOInfo[1]}:${KBOInfo[2]}"
+                holder.binding.textViewTodo1.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
+            }else{
+
             holder.binding.textViewTodo1.text = items[position].name[0]
+            }
             holder.binding.textViewTodo2.setBackgroundColor(Color.TRANSPARENT)
             holder.binding.textViewTodo3.setBackgroundColor(Color.TRANSPARENT)
 
