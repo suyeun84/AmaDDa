@@ -61,11 +61,9 @@ class CalendarFragment : Fragment() {
             Log.d("mdate", mdate)
             monthData.add(MyData(mdate))
         }
-
         adapter_calendar = CalendarRecyclerAdapter(monthData)
         getEvent()
         println("inintCalendar finished!")
-
     }
 
     override fun onCreateView(
@@ -133,6 +131,8 @@ class CalendarFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // dateModel =
+
         super.onViewCreated(view, savedInstanceState)
         println("datemodel : ${dateModel.curYear.value} / ${dateModel.curMonth.value}")
         year = dateModel.curYear.value!!
@@ -180,6 +180,7 @@ class CalendarFragment : Fragment() {
 //            //날짜에 따른 일정 표시
 //        }
 //        adapter_calendar = CalendarRecyclerAdapter(monthData)
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
                     // 아이디 있음
                     rdb.child(inputId).child("password").get().addOnSuccessListener {
                         if (it.value == inputPwd) {
-                            Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "환영합니다.", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
                         } else {
