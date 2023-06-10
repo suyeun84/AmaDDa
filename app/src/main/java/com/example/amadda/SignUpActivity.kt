@@ -3,6 +3,7 @@ package com.example.amadda
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import com.example.amadda.databinding.ActivitySignUpBinding
 import com.google.firebase.database.DatabaseReference
@@ -74,10 +75,13 @@ class SignUpActivity : AppCompatActivity() {
             rdb = Firebase.database.getReference("Users/user")
             var subArr: ArrayList<Int> = ArrayList<Int>()
             subArr.add(0)
+            subArr.add(1)
+            subArr.add(5)
             var todoArr: ArrayList<Todo> = ArrayList<Todo>()
             todoArr.add(Todo("20230610", 0, "title", false, false))
             var cateArr: ArrayList<Category> = ArrayList<Category>()
 //            cateArr.add(Category(0, "title", "#FFFFFF"))
+            val userId = binding.editTextId.text.toString()
             val userinfo = Users(
                 binding.editTextId.text.toString(),
                 binding.editTextPassword.text.toString(),
@@ -86,9 +90,16 @@ class SignUpActivity : AppCompatActivity() {
                 null
             )
             rdb.child(binding.editTextId.text.toString()).setValue(userinfo)
-            rdb = Firebase.database.getReference("Users/user/" + binding.editTextId.text.toString() + "/categoryList")
-            userinfo.category = cateArr
-            rdb.child("category").setValue(userinfo.category)
+            rdb = Firebase.database.getReference("Users/user/" + binding.editTextId.text.toString())
+            userinfo.subscribe = subArr
+
+//            val hashMap: HashMap<String, Int> = hashMapOf()
+//            for (index in 0 until subArr.size) {
+//                hashMap["id"] = subArr[index]
+//            }
+
+
+            rdb.child("/subscribe").setValue(userinfo.subscribe)
 
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
