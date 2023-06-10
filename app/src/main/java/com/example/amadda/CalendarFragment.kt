@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.amadda.databinding.FragmentCalendarBinding
@@ -28,14 +27,14 @@ class CalendarFragment : Fragment() {
     lateinit var binding: FragmentCalendarBinding
     lateinit var adapter_calendar: CalendarRecyclerAdapter
     val monthData: ArrayList<MyData> = ArrayList()
-    var todoList: ArrayList<String> = ArrayList()
+
+    //    var todoList: ArrayList<String> = ArrayList()
     private var year = 2023
     private var month = 5
     val CALENDAR_EMPTY: String = "CALENDAR_EMPTY"
     val CALENDAR_DAY: String = "CALENDAR_DAY"
     val dateModel: DateViewModel by viewModels()
     var userId: String = ""
-
 
     private val konkukUrl =
         "http://www.konkuk.ac.kr/do/MessageBoard/HaksaArticleList.do?forum=11543"
@@ -64,12 +63,13 @@ class CalendarFragment : Fragment() {
         }
 
         adapter_calendar.notifyDataSetChanged()
-
         getKonkukEvent()
+        Log.d("adsf", year.toString() + "," + month.toString())
         getKBO()
-
     }
+
     private fun initCalendar() {
+        println("initCalendar !!")
         val calendar = GregorianCalendar(year, month, 1)
         val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1
         val max: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
@@ -83,6 +83,8 @@ class CalendarFragment : Fragment() {
             var mdate = Integer.toString(year * 10000 + (month + 1) * 100 + i)
             monthData.add(MyData(arrayListOf(), mdate, arrayListOf()))
         }
+
+
         adapter_calendar = CalendarRecyclerAdapter(monthData)
         adapter_calendar.itemClickListener = object : CalendarRecyclerAdapter.OnItemClickListener {
             override fun OnClick(
@@ -104,10 +106,10 @@ class CalendarFragment : Fragment() {
 
             }
         }
+
         adapter_calendar.notifyDataSetChanged()
         getKonkukEvent()
         getKBO()
-
     }
 
     override fun onCreateView(
@@ -157,7 +159,7 @@ class CalendarFragment : Fragment() {
 //        var iyear: Int = date.year
 //        var imonth: Int = date.monthValue
         year = date.year
-        month = date.monthValue
+        month = date.monthValue - 1
         dateModel.setCurYear(year)
         dateModel.setCurMonth(month)
         println("initdate! $year / $month")
@@ -179,8 +181,6 @@ class CalendarFragment : Fragment() {
         // 변환된 날짜 반환
         return "$year$day$month"
     }
-
-
 
     fun KBOConvertDate(input: String): String {
         // 숫자만 추출해서 월과 일로 분리
@@ -209,7 +209,6 @@ class CalendarFragment : Fragment() {
             val name = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dd")
             val date = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dt")
             for (day in monthData) {
-                day.name = arrayListOf()
                 for (i in 0 until date.size) {
                     val convertedDate = convertDate(date[i].text())
                     if (day.date == convertedDate) {
@@ -227,7 +226,8 @@ class CalendarFragment : Fragment() {
 
     private fun getKBO() {
         val KBOurl =
-            "https://sports.news.naver.com/kbaseball/schedule/index?month=${month}&year=2023"
+            "https://sports.news.naver.com/kbaseball/schedule/index?month=${month + 1}&year=${year}"
+
 
         scope.launch {
             val KBOdoc = Jsoup.connect(KBOurl).get()
@@ -252,11 +252,7 @@ class CalendarFragment : Fragment() {
 //                            Log.d("asdf", matchInfo)
                             for (i in 0 until monthData.size) {
                                 var d = monthData[i]
-                                if (d.date == "20230601") {
-                                    Log.d("asdf", monthData[4].name.toString())
-                                }
-
-                                    if (d.date == dateKBO) {
+                                if (d.date == dateKBO) {
 
 //                                    Log.d("asdf", day.date)
                                     d.category.add("KBO")
