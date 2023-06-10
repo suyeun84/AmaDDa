@@ -3,6 +3,7 @@ package com.example.amadda
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.amadda.databinding.ActivitySignUpBinding
