@@ -38,8 +38,8 @@ class SignUpActivity : AppCompatActivity() {
                     flag1 = false
                     binding.IdInputLayout.error = "올바른 형식을 입력하세요"
                 }
-                buttonSignin.isEnabled = flag1 && flag2 && flag3
-
+                if (flag1 && flag2 && flag3)
+                    buttonSignin.isEnabled = true
             }
             editTextPassword.addTextChangedListener {
                 if (it.toString().length >= 8) {
@@ -49,7 +49,8 @@ class SignUpActivity : AppCompatActivity() {
                     flag2 = false
                     binding.PasswordInputLayout.error = "8자리 이상 입력하세요"
                 }
-                buttonSignin.isEnabled = flag1 && flag2 && flag3
+                if (flag1 && flag2 && flag3)
+                    buttonSignin.isEnabled = true
             }
             editTextPassword2.addTextChangedListener {
                 if (it.toString() == binding.editTextPassword.text.toString()) {
@@ -59,7 +60,8 @@ class SignUpActivity : AppCompatActivity() {
                     flag3 = false
                     binding.PasswordInputLayout2.error = "비밀번호가 일치하지 않습니다."
                 }
-                buttonSignin.isEnabled = flag1 && flag2 && flag3
+                if (flag1 && flag2 && flag3)
+                    buttonSignin.isEnabled = true
             }
         }
     }
@@ -75,8 +77,13 @@ class SignUpActivity : AppCompatActivity() {
             val inputPwd2 = binding.editTextPassword2.text.toString()
 
             //firebase에 회원정보 저장
-
             rdb = Firebase.database.getReference("Users/user")
+            var subArr: ArrayList<Int> = ArrayList<Int>()
+            subArr.add(0)
+            var todoArr: ArrayList<Todo> = ArrayList<Todo>()
+            todoArr.add(Todo("20230610", 0, "title", false, false))
+            var cateArr: ArrayList<Category> = ArrayList<Category>()
+//            cateArr.add(Category(0, "title", "#FFFFFF"))
             val userinfo = Users(
                 binding.editTextId.text.toString(),
                 binding.editTextPassword.text.toString(),
@@ -96,11 +103,14 @@ class SignUpActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-        }
-    }
-}
+            rdb = Firebase.database.getReference("Users/user/" + binding.editTextId.text.toString() + "/categoryList")
+            userinfo.category = cateArr
+            rdb.child("category").setValue(userinfo.category)
 
-//id 중복 안되게 설정
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+
+            //id 중복 안되게 설정
 //            val id = binding.editTextId.text.toString()
 //            rdb.child(id).child(id).get().addOnSuccessListener {
 //                val map = it.value.toString()
@@ -120,6 +130,12 @@ class SignUpActivity : AppCompatActivity() {
 //                    startActivity(intent)
 //                }
 //            }
+        }
+
+    }
+}
+
+
 
 
 
