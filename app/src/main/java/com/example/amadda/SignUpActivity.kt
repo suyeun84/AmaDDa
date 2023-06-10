@@ -3,6 +3,7 @@ package com.example.amadda
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.amadda.databinding.ActivitySignUpBinding
 import com.google.firebase.database.DatabaseReference
@@ -37,8 +38,8 @@ class SignUpActivity : AppCompatActivity() {
                     flag1 = false
                     binding.IdInputLayout.error = "올바른 형식을 입력하세요"
                 }
-                if (flag1 && flag2 && flag3)
-                    buttonSignin.isEnabled = true
+                buttonSignin.isEnabled = flag1 && flag2 && flag3
+
             }
             editTextPassword.addTextChangedListener {
                 if (it.toString().length >= 8) {
@@ -48,8 +49,7 @@ class SignUpActivity : AppCompatActivity() {
                     flag2 = false
                     binding.PasswordInputLayout.error = "8자리 이상 입력하세요"
                 }
-                if (flag1 && flag2 && flag3)
-                    buttonSignin.isEnabled = true
+                buttonSignin.isEnabled = flag1 && flag2 && flag3
             }
             editTextPassword2.addTextChangedListener {
                 if (it.toString() == binding.editTextPassword.text.toString()) {
@@ -59,8 +59,7 @@ class SignUpActivity : AppCompatActivity() {
                     flag3 = false
                     binding.PasswordInputLayout2.error = "비밀번호가 일치하지 않습니다."
                 }
-                if (flag1 && flag2 && flag3)
-                    buttonSignin.isEnabled = true
+                buttonSignin.isEnabled = flag1 && flag2 && flag3
             }
         }
     }
@@ -70,7 +69,13 @@ class SignUpActivity : AppCompatActivity() {
             finish();
         }
         binding.buttonSignin.setOnClickListener {
+
+            val inputId = binding.editTextId.text.toString()
+            val inputPwd = binding.editTextPassword.text.toString()
+            val inputPwd2 = binding.editTextPassword2.text.toString()
+
             //firebase에 회원정보 저장
+
             rdb = Firebase.database.getReference("Users/user")
             val userinfo = Users(
                 binding.editTextId.text.toString(),
@@ -79,11 +84,23 @@ class SignUpActivity : AppCompatActivity() {
                 null,
                 null
             )
-            rdb.child(binding.editTextId.text.toString()).setValue(userinfo)
+            rdb.child(inputId).get().addOnSuccessListener {
+                if (it.value != null) {
+                    flag1 = false
+                    binding.IdInputLayout.error = "이미 존재하는 아이디입니다."
+                } else if (inputPwd != inputPwd2) {
+                    Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    rdb.child(binding.editTextId.text.toString()).setValue(userinfo)
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+    }
+}
 
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            //id 중복 안되게 설정
+//id 중복 안되게 설정
 //            val id = binding.editTextId.text.toString()
 //            rdb.child(id).child(id).get().addOnSuccessListener {
 //                val map = it.value.toString()
@@ -103,12 +120,6 @@ class SignUpActivity : AppCompatActivity() {
 //                    startActivity(intent)
 //                }
 //            }
-        }
-
-    }
-}
-
-
 
 
 

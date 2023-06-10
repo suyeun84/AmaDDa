@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import com.example.amadda.databinding.ActivityLoginBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -53,9 +54,5 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "id, password 데이터 가져오기 실패", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
-
 }
-
-
