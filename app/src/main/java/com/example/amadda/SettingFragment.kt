@@ -12,12 +12,13 @@ import com.example.amadda.databinding.FragmentSubscribeBinding
 class SettingFragment : Fragment() {
 
     lateinit var binding: FragmentSettingBinding
+    var userId: String = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
+        userId = arguments?.getString("userId").toString()
         binding = FragmentSettingBinding.inflate(inflater, container, false)
         init()
         return binding.root

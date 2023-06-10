@@ -13,11 +13,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var bnv: BottomNavigationView
     val ImgArr = arrayListOf<Int>(R.drawable.todo, R.drawable.bookmark, R.drawable.subscribe, R.drawable.setting)
+    var userId: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bnv = binding.bottomNav
+        userId = intent.getStringExtra("userId").toString()
+
 
         init()
         // initLayout()
@@ -57,9 +60,15 @@ class MainActivity : AppCompatActivity() {
     fun changeFragment(fragment: Fragment) {
         println(fragment.id)
 
+        var bundle = Bundle()
+        bundle.putString("userId", userId)
+        var frg = fragment
+        frg.arguments = bundle
+
+
         supportFragmentManager
             .beginTransaction()
-            .replace(binding.frameLayout.id, fragment)
+            .replace(binding.frameLayout.id, frg)
             .commit()
     }
 

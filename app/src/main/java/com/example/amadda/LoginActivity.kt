@@ -28,33 +28,32 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.buttonLogin.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
 
             //firebase에 회원정보 저장
-//            rdb = Firebase.database.getReference("Users/user")
-//            val inputId = binding.editTextId.text.toString()
-//            val inputPwd = binding.editTextPassword.text.toString()
-//            rdb.child(inputId).child("id").get().addOnSuccessListener {
-//                if (it.value == null) {
-//                    Toast.makeText(this, "아이디나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    // 아이디 있음
-//                    rdb.child(inputId).child("password").get().addOnSuccessListener {
-//                        if (it.value == inputPwd) {
-//                            Toast.makeText(this, "환영합니다.", Toast.LENGTH_SHORT).show()
-//                            val intent = Intent(this, MainActivity::class.java)
-//                            startActivity(intent)
-//                        } else {
-//                            Toast.makeText(this, "아이디나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }.addOnFailureListener{
-//                        Toast.makeText(this, "id, password 데이터 가져오기 실패", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }.addOnFailureListener {
-//                Toast.makeText(this, "id, password 데이터 가져오기 실패", Toast.LENGTH_SHORT).show()
-//            }
+            rdb = Firebase.database.getReference("Users/user")
+            val inputId = binding.editTextId.text.toString()
+            val inputPwd = binding.editTextPassword.text.toString()
+            rdb.child(inputId).child("id").get().addOnSuccessListener {
+                if (it.value == null) {
+                    Toast.makeText(this, "아이디나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    // 아이디 있음
+                    rdb.child(inputId).child("password").get().addOnSuccessListener {
+                        if (it.value == inputPwd) {
+                            Toast.makeText(this, "환영합니다.", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.putExtra("userId", inputId)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this, "아이디나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }.addOnFailureListener{
+                        Toast.makeText(this, "id, password 데이터 가져오기 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }.addOnFailureListener {
+                Toast.makeText(this, "id, password 데이터 가져오기 실패", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
