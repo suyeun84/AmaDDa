@@ -31,9 +31,11 @@ class CalendarFragment : Fragment() {
     val CALENDAR_EMPTY: String = "CALENDAR_EMPTY"
     val CALENDAR_DAY: String = "CALENDAR_DAY"
     val dateModel: DateViewModel by viewModels()
+    var userId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userId = arguments?.getString("userId").toString()
         initDate()
         initCalendar()
 

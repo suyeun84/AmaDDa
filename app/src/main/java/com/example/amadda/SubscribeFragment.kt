@@ -27,12 +27,13 @@ class SubscribeFragment : Fragment() {
 
     lateinit var rdb: DatabaseReference
     lateinit var adapter: SubscribeAdapter
-    val userId: String = "blueme0"
+    var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        userId = arguments?.getString("userId").toString()
         data.add(Subscription("건국대 학사일정", R.drawable.subscribe_logo_1, false))
         data.add(Subscription("프리미어리그", R.drawable.subscribe_logo_2, false))
         data.add(Subscription("KBO리그", R.drawable.subscribe_logo_3, false))
