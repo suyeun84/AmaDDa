@@ -14,16 +14,17 @@ import com.example.amadda.databinding.FragmentBookMarkListBinding
 class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.Adapter<BookMarkAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
+        fun onItemClick(data: EventData, position: Int)
     }
 
     var itemClickListener: OnItemClickListener?= null
 
     inner class ViewHolder (val binding: FragmentBookMarkBinding): RecyclerView.ViewHolder(binding.root){
         init {
-        }
-    }
-    inner class ViewHolderList (val listbinding: FragmentBookMarkListBinding): RecyclerView.ViewHolder(listbinding.root){
-        init {
+
+            binding.eventrow.setOnClickListener {
+                itemClickListener?.onItemClick(items[adapterPosition], adapterPosition)
+            }
         }
     }
 
@@ -56,9 +57,9 @@ class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.A
             holder.binding.eraseBookMark.visibility = View.GONE
         }
     }
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(list: ArrayList<EventData>) {
-        items = list
-        notifyDataSetChanged()
-    }
+//    @SuppressLint("NotifyDataSetChanged")
+//    fun setData(list: ArrayList<EventData>) {
+//        items = list
+//        notifyDataSetChanged()
+//    }
 }

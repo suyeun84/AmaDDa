@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -7,17 +8,19 @@
     <LinearLayout
         android:layout_marginTop="13dp"
         android:layout_marginLeft="35dp"
+        android:id="@+id/eventrow"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bookmark_row_style"
         android:textAppearance="?attr/textAppearanceListItem">
-        <TextView
+        <ImageView
             android:id="@+id/eraseBookMark"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/erase_bookmark"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/erasemark"
             android:layout_gravity="center"
             android:gravity="center"
+            android:clickable="true"
             android:visibility="gone"/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -25,14 +28,16 @@
             android:orientation="vertical"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="7dp">
+
             <TextView
                 android:id="@+id/category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
-                android:textSize="13dp"
+                android:text="건국대 학사일정"
                 android:textColor="#979797"
-                android:text="건국대 학사일정"/>
+                android:textSize="13dp"
+                tools:ignore="TextSizeCheck" />
             <TextView
                 android:id="@+id/event"
                 android:layout_width="wrap_content"

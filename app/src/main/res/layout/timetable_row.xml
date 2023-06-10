@@ -1,32 +1,51 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
+    android:layout_width="match_parent"
     android:layout_height="80dp"
     android:layout_margin="10dp"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    android:layout_width="match_parent">
-
-    <androidx.constraintlayout.widget.Constraints
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        app:layout_constraintStart_toStartOf="@+id/item"
-        app:layout_constraintTop_toTopOf="@+id/item">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:textColor="@color/black"
-            android:text="강의실"
-
-            ></TextView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="강의실"
-
-            ></TextView>
-    </androidx.constraintlayout.widget.Constraints>
-
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+   <LinearLayout
+       android:id="@+id/ll1"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       android:orientation="vertical"
+       android:layout_width="wrap_content"
+       android:layout_height="match_parent"
+      app:layout_constraintHorizontal_weight="1">
+   <TextView
+       android:id="@+id/classRoom"
+       android:textSize="12dp"
+       android:text="강의실"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"/>
+   <TextView
+       android:id="@+id/className"
+       android:text="수업명"
+       android:textSize="24dp"
+       app:layout_constraintTop_toBottomOf="@+id/classRoom"
+       app:layout_constraintStart_toStartOf="parent"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"/>
+   </LinearLayout>
+   <LinearLayout
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:orientation="vertical"
+       app:layout_constraintHorizontal_weight="1"
+       android:layout_width="wrap_content"
+       android:layout_height="match_parent">
+      <TextView
+          android:text="월 10:30 ~ 12:00"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"></TextView>
+      <TextView
+          android:text="월 10:30 ~ 12:00"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"></TextView>
+   </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
