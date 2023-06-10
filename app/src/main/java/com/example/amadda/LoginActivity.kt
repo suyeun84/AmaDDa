@@ -3,8 +3,11 @@ package com.example.amadda
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.amadda.databinding.ActivityLoginBinding
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
@@ -16,16 +19,39 @@ class LoginActivity : AppCompatActivity() {
 
         initBtn();
     }
-    fun initBtn(){
 
-        binding.textViewSignUpLink.setOnClickListener{
+    fun initBtn() {
+
+        binding.textViewSignUpLink.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
-        binding.buttonLogin.setOnClickListener{
-//            if(val query = rdb.orderByChild("id").equalTo(binding.editTextId.toString())){}
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        binding.buttonLogin.setOnClickListener {
+
+            //firebase에 회원정보 저장
+            rdb = Firebase.database.getReference("Users/user")
+            val inputId = binding.editTextId.text.toString()
+            val inputPwd = binding.editTextPassword.text.toString()
+            rdb.child(inputId).child("id").get().addOnSuccessListener {
+                if (it.value == null) {
+                    Toast.makeText(this, "아이디나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    // 아이디 있음
+                    rdb.child(inputId).child("password").get().addOnSuccessListener {
+                        if (it.value == inputPwd) {
+                            Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this, "아이디나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }.addOnFailureListener{
+                        Toast.makeText(this, "id, password 데이터 가져오기 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }.addOnFailureListener {
+                Toast.makeText(this, "id, password 데이터 가져오기 실패", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
