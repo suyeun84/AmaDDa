@@ -28,7 +28,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.buttonLogin.setOnClickListener {
-
             //firebase에 회원정보 저장
             rdb = Firebase.database.getReference("Users/user")
             val inputId = binding.editTextId.text.toString()
