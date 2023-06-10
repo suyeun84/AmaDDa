@@ -27,7 +27,7 @@ class CalendarFragment : Fragment() {
     val monthData: ArrayList<MyData> = ArrayList()
     var todoList: ArrayList<String> = ArrayList()
     private var year = 2023
-    private var month = 5
+    private var month = 6
     val CALENDAR_EMPTY: String = "CALENDAR_EMPTY"
     val CALENDAR_DAY: String = "CALENDAR_DAY"
     val dateModel: DateViewModel by viewModels()
@@ -41,7 +41,27 @@ class CalendarFragment : Fragment() {
 
     }
 
+    private fun updateCalendar() {
+        println("updateCalendar !!")
+        monthData.clear()
+        val calendar = GregorianCalendar(year, month, 1)
+        val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1
+        val max: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        for (i in 0 until dayOfWeek) {
+            monthData.add(MyData("0", todoList))
+        }
+        for (i in 1..max) {
+            var mdate = Integer.toString(year * 10000 + (month + 1) * 100 + i)
+            monthData.add(MyData(mdate, todoList))
+        }
+
+        adapter_calendar.notifyDataSetChanged()
+
+        getEvent()
+
+    }
     private fun initCalendar() {
+        println("initCalendar !!")
         val calendar = GregorianCalendar(year, month, 1)
         val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1
         val max: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
@@ -55,6 +75,8 @@ class CalendarFragment : Fragment() {
             var mdate = Integer.toString(year * 10000 + (month + 1) * 100 + i)
             monthData.add(MyData(mdate, todoList))
         }
+
+
         adapter_calendar = CalendarRecyclerAdapter(monthData)
         adapter_calendar.itemClickListener = object : CalendarRecyclerAdapter.OnItemClickListener {
             override fun OnClick(
@@ -76,6 +98,9 @@ class CalendarFragment : Fragment() {
 
             }
         }
+
+        adapter_calendar.notifyDataSetChanged()
+
         getEvent()
     }
 
@@ -84,6 +109,38 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
+
+        binding.apply {
+            textView3.setText("$year" + "년 ${month + 1}" + "월")
+            prevMonth.setOnClickListener {
+                if (month == 0) {
+                    year--
+                    month = 11
+                } else {
+                    month--
+                }
+                dateModel.setCurYear(year)
+                dateModel.setCurMonth(month)
+                textView3.setText("$year" + "년 ${month + 1}" + "월")
+                updateCalendar()
+
+                println("prevMonth! $year / ${month + 1}")
+            }
+            nextMonth.setOnClickListener {
+                if (month == 11) {
+                    year++
+                    month = 0
+                } else {
+                    month++
+                }
+                dateModel.setCurYear(year)
+                dateModel.setCurMonth(month)
+                textView3.setText("$year" + "년 ${month + 1}" + "월")
+                updateCalendar()
+                println("nextMonth! $year / ${month + 1}")
+            }
+        }
+
         return binding.root
 //        val view =  inflater.inflate(R.layout.fragment_calendar, container, false)
 //        return view
@@ -91,11 +148,14 @@ class CalendarFragment : Fragment() {
 
     private fun initDate() {
         val date: LocalDate = LocalDate.now()
-        val iyear: Int = date.year
-        val imonth: Int = date.monthValue
-        dateModel.setCurYear(iyear)
-        dateModel.setCurMonth(imonth)
-        println("initdate! $iyear / $imonth")
+//        var iyear: Int = date.year
+//        var imonth: Int = date.monthValue
+        year = date.year
+        month = date.monthValue
+        dateModel.setCurYear(year)
+        dateModel.setCurMonth(month)
+        println("initdate! $year / $month")
+
     }
 
     fun convertDate(dateString: String): String {
