@@ -36,6 +36,8 @@ class TimeTable : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        // 확인을 위해 자동으로 데이터 추가하게끔 해뒀음
+        // 실제 구현 시 주석 처리 필요
         var lecArr : ArrayList<Int> = ArrayList<Int>()
         lecArr.add(1)
         lecArr.add(4)
