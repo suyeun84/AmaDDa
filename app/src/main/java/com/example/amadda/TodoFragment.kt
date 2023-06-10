@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.amadda.databinding.FragmentTodoBinding
 import com.example.amadda.databinding.TodoRowBinding
 import java.time.LocalDate
@@ -13,14 +14,20 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class TodoFragment : DialogFragment() {
+    private lateinit var binding: FragmentTodoBinding
+    private lateinit var bindingRow: TodoRowBinding
+    lateinit var adapter_todo: TodoRecyclerAdapter
     lateinit var data: MyData
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isCancelable = true
+
+        val bundle = arguments
+        @Suppress("DEPRECATION")
+        val notice = bundle?.getSerializable("data")
+        data = notice as MyData
     }
 
-    private lateinit var binding: FragmentTodoBinding
-    private lateinit var bindingRow: TodoRowBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,18 +36,18 @@ class TodoFragment : DialogFragment() {
         binding = FragmentTodoBinding.inflate(inflater, container, false)
         bindingRow = TodoRowBinding.inflate(layoutInflater)
 
-        val bundle = arguments
+        adapter_todo = TodoRecyclerAdapter(data.event)
+        binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewTodo.adapter = adapter_todo
 
-        @Suppress("DEPRECATION")
-        val notice = bundle?.getSerializable("data")
-        data = notice as MyData
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.linearLayoutTodo.addView(bindingRow.rowTodo)
+
+
 
         val now = LocalDate.now()
         val dDay = LocalDate.of(
@@ -56,11 +63,10 @@ class TodoFragment : DialogFragment() {
             binding.textViewDday.text = "D - " + daysDiff.toString()
         } else if (daysDiff < 0) {
             binding.textViewDday.text = "D + " + (daysDiff * -1).toString()
-        } else{
+        } else {
             binding.textViewDday.text = "D - DAY"
         }
 
+
     }
-
-
 }

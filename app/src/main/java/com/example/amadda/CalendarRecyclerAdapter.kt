@@ -2,6 +2,7 @@ package com.example.amadda
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.text.TextUtils.split
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -62,12 +63,12 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
 
 
         if (items[position].count == 1) {
-            if(items[position].category[0] == "KBO"){
-                val KBOInfo = items[position].name[0].split("/")
+            if(items[position].event[0].category == "KBO"){
+                val KBOInfo = items[position].event[0].name.split("/")
                 holder.binding.textViewTodo1.text = "${KBOInfo[1]}:${KBOInfo[2]}"
                 holder.binding.textViewTodo1.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
             }else{
-                holder.binding.textViewTodo1.text = items[position].name[0]
+                holder.binding.textViewTodo1.text = items[position].event[0].name
             }
             holder.binding.textViewTodo2.setBackgroundColor(Color.TRANSPARENT)
             holder.binding.textViewTodo3.setBackgroundColor(Color.TRANSPARENT)
@@ -75,26 +76,26 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
         }
 
         if (items[position].count == 2) {
-            holder.binding.textViewTodo1.text = items[position].name[0]
-            if(items[position].category[1] == "KBO"){
-                val KBOInfo = items[position].name[1].split("/")
+            holder.binding.textViewTodo1.text = items[position].event[0].name
+            if(items[position].event[1].category == "KBO"){
+                val KBOInfo = items[position].event[1].name.split("/")
                 holder.binding.textViewTodo2.text = "${KBOInfo[1]}:${KBOInfo[2]}"
                 holder.binding.textViewTodo2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
             }else{
-                holder.binding.textViewTodo2.text = items[position].name[1]
+                holder.binding.textViewTodo2.text = items[position].event[1].name
             }
             holder.binding.textViewTodo3.setBackgroundColor(Color.TRANSPARENT)
         }
 
         if (items[position].count >= 3) {
-            holder.binding.textViewTodo1.text = items[position].name[0]
-            holder.binding.textViewTodo2.text = items[position].name[1]
-            if(items[position].category[2] == "KBO"){
-                val KBOInfo = items[position].name[2].split("/")
+            holder.binding.textViewTodo1.text = items[position].event[0].name
+            holder.binding.textViewTodo2.text = items[position].event[1].name
+            if(items[position].event[2].category == "KBO"){
+                val KBOInfo = items[position].event[2].name.split("/")
                 holder.binding.textViewTodo3.text = "${KBOInfo[1]}:${KBOInfo[2]}"
                 holder.binding.textViewTodo3.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
             }else{
-                holder.binding.textViewTodo3.text = items[position].name[2]
+                holder.binding.textViewTodo3.text = items[position].event[2].name
             }
         }
 

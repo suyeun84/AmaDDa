@@ -17,6 +17,7 @@
         android:inputType="textPersonName"
         android:padding="16dp"
         android:hint="아이디"
+        android:text="qwer1234"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,6 +29,7 @@
         android:layout_marginTop="14dp"
         android:background="@drawable/edittext_style"
         android:ems="10"
+        android:text="11111111"
         android:inputType="textPassword"
         android:hint="비밀번호"
         android:padding="16dp"

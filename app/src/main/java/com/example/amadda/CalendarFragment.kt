@@ -55,11 +55,11 @@ class CalendarFragment : Fragment() {
         val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1
         val max: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         for (i in 0 until dayOfWeek) {
-            monthData.add(MyData(arrayListOf(), "0", arrayListOf()))
+            monthData.add(MyData("0", arrayListOf()))
         }
         for (i in 1..max) {
             var mdate = Integer.toString(year * 10000 + (month + 1) * 100 + i)
-            monthData.add(MyData(arrayListOf(), mdate, arrayListOf()))
+            monthData.add(MyData(mdate, arrayListOf()))
         }
 
         adapter_calendar.notifyDataSetChanged()
@@ -73,17 +73,15 @@ class CalendarFragment : Fragment() {
         val calendar = GregorianCalendar(year, month, 1)
         val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1
         val max: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
         var str = ""
 
         for (i in 0 until dayOfWeek) {
-            monthData.add(MyData(arrayListOf(), "0", arrayListOf()))
+            monthData.add(MyData( "0", arrayListOf()))
         }
         for (i in 1..max) {
             var mdate = Integer.toString(year * 10000 + (month + 1) * 100 + i)
-            monthData.add(MyData(arrayListOf(), mdate, arrayListOf()))
+            monthData.add(MyData( mdate, arrayListOf()))
         }
-
 
         adapter_calendar = CalendarRecyclerAdapter(monthData)
         adapter_calendar.itemClickListener = object : CalendarRecyclerAdapter.OnItemClickListener {
@@ -212,8 +210,7 @@ class CalendarFragment : Fragment() {
                 for (i in 0 until date.size) {
                     val convertedDate = convertDate(date[i].text())
                     if (day.date == convertedDate) {
-                        day.category.add("konkuk")
-                        day.name.add(name[i].text())
+                        day.event.add(EventData("konkuk", name[i].text()))
                         day.count += 1
                     }
                 }
@@ -249,14 +246,10 @@ class CalendarFragment : Fragment() {
                                 match.select("span.td_stadium")[0].text(),
                                 match.select("span.td_stadium")[1].text()
                             ).joinToString("/")
-//                            Log.d("asdf", matchInfo)
                             for (i in 0 until monthData.size) {
                                 var d = monthData[i]
                                 if (d.date == dateKBO) {
-
-//                                    Log.d("asdf", day.date)
-                                    d.category.add("KBO")
-                                    d.name.add(matchInfo)
+                                    d.event.add(EventData("KBO",matchInfo ))
                                     d.count += 1
                                     break
                                 }

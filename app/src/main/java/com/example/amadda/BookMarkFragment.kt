@@ -46,7 +46,7 @@ class BookMarkFragment : Fragment() {
                     if (subArr != null) {
                         for (i in subArr.indices) {
 //                            Log.d("bookmarkList", subArr[i].toString())
-                            val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].Dday.toInt())
+                            val event = EventData(subArr[i].category.toString(), subArr[i].name.toString(), subArr[i].Dday.toInt())
                             arrayList.add(event)
                         }
                     }
@@ -73,7 +73,7 @@ class BookMarkFragment : Fragment() {
                 addBookMark.setOnClickListener {
                     for (i in 0 until size){
                         val category = arrayList[i].category.toString()
-                        val event = arrayList[i].event.toString()
+                        val event = arrayList[i].name.toString()
                         var dDay = arrayList[i].Dday.toString().toInt()
                         val edit = !arrayList[i].edit
 
