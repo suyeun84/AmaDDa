@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="50dp"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:id="@+id/linearLayoutDay"
-    >
+    android:layout_width="60dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <TextView
         android:id="@+id/textViewD"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="@color/black"
         android:layout_weight="1"
         android:paddingBottom="10dp"
         android:text="1"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/textView"
-        android:background="@drawable/calendar_todo"
-        android:textAlignment="center"
-        android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:textSize="12dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
         android:layout_marginBottom="50dp"
-        android:text="todo 1" />
-
+        android:background="@drawable/calendar_todo"
+        android:backgroundTint="@color/green"
+        android:maxLines="1"
+        android:paddingLeft="2dp"
+        android:paddingTop="1dp"
+        android:text="TODO"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="12dp" />
 
 
 </LinearLayout>

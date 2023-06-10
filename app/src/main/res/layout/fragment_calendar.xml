@@ -5,211 +5,233 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".CalendarFragment"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".CalendarFragment">
 
     <TextView
-        android:textColor="@color/black"
-        android:textStyle="bold"
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="32dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="50dp"
         android:text="2023년 6월"
+        android:textColor="@color/black"
+        android:textSize="32dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <FrameLayout-->
-<!--        android:id="@+id/calendar_fragment_container"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/textView3" />-->
+    <!--    <FrameLayout-->
+    <!--        android:id="@+id/calendar_fragment_container"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="30dp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/textView3" />-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/subscribeList"
         android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        android:layout_height="30dp">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
         <HorizontalScrollView
-            android:scrollbars="none"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageView
                     android:id="@+id/circle1"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
                     android:background="@drawable/konkukcircle"
-                    android:layout_height="wrap_content"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:textColor="@color/black"
                     android:id="@+id/konkuk"
-                    android:textSize="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/circle1"
-                    android:text="건국대 학사일정"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="건국대 학사일정"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/circle1"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/circle2"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/konkuk"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
                     android:background="@drawable/kbocircle"
-                    android:layout_height="wrap_content"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/konkuk"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:textColor="@color/black"
-                   android:id="@+id/kbo"
-                    android:textSize="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/circle2"
-                    android:text="KBO리그"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginLeft="5dp"
+                    android:id="@+id/kbo"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="KBO리그"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/circle2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/circle3"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/kbo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
                     android:background="@drawable/festivalcircle"
-                    android:layout_height="wrap_content"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/kbo"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:textColor="@color/black"
                     android:id="@+id/festival"
-                    android:textSize="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/circle3"
-                    android:text="페스티벌"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="페스티벌"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/circle3"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/circle4"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/festival"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
                     android:background="@drawable/premiercircle"
-                    android:layout_height="wrap_content"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/festival"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="프리미어리그"
                     android:textColor="@color/black"
                     android:textSize="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/circle4"
-                    android:text="프리미어리그"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    app:layout_constraintStart_toEndOf="@+id/circle4"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </HorizontalScrollView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/day"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/subscribeList"
-        android:layout_height="30dp">
-        <TextView
-            android:textSize="16dp"
-            android:textColor="#7E7E7E"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="일"
-            android:layout_marginLeft="18dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"></TextView>
-        <TextView
-            android:textSize="16dp"
-            android:textColor="#7E7E7E"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="월"
-            android:layout_marginLeft="70dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"></TextView>
-        <TextView
-            android:textSize="16dp"
-            android:textColor="#7E7E7E"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="화"
-            android:layout_marginLeft="125dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"></TextView>
-        <TextView
-            android:textSize="16dp"
-            android:textColor="#7E7E7E"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="수"
-            android:layout_marginLeft="175dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"></TextView>
-        <TextView
-            android:textSize="16dp"
-            android:textColor="#7E7E7E"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="목"
-            android:layout_marginLeft="230dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"></TextView>
-        <TextView
-            android:textSize="16dp"
-            android:textColor="#7E7E7E"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="금"
-            android:layout_marginLeft="283dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"></TextView>
-        <TextView
-            android:textSize="16dp"
-            android:textColor="#7E7E7E"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="토"
-            android:layout_marginLeft="337dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"></TextView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/recyclerViewCalendar"
-        app:layout_constraintTop_toBottomOf="@+id/day"
+    <LinearLayout
+        android:id="@+id/day"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subscribeList">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="일"
+            android:textAlignment="center"
+            android:textColor="#7E7E7E"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="월"
+            android:textAlignment="center"
+            android:textColor="#7E7E7E"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="화"
+            android:textAlignment="center"
+            android:textColor="#7E7E7E"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="수"
+            android:textAlignment="center"
+            android:textColor="#7E7E7E"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="목"
+            android:textAlignment="center"
+            android:textColor="#7E7E7E"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="금"
+            android:textAlignment="center"
+            android:textColor="#7E7E7E"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="토"
+            android:textAlignment="center"
+            android:textColor="#7E7E7E"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/day" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
