@@ -8,14 +8,15 @@
     android:layout_width="match_parent">
 
     <androidx.constraintlayout.widget.Constraints
-        android:layout_width="193dp"
-        android:layout_height="72dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
         app:layout_constraintStart_toStartOf="@+id/item"
         app:layout_constraintTop_toTopOf="@+id/item">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:textColor="@color/black"
             android:text="강의실"
 
             ></TextView>
