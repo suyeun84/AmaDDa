@@ -72,6 +72,12 @@ class SignUpActivity : AppCompatActivity() {
         binding.buttonSignin.setOnClickListener {
             //firebase에 회원정보 저장
             rdb = Firebase.database.getReference("Users/user")
+            var subArr: ArrayList<Int> = ArrayList<Int>()
+            subArr.add(0)
+            var todoArr: ArrayList<Todo> = ArrayList<Todo>()
+            todoArr.add(Todo("20230610", 0, "title", false, false))
+            var cateArr: ArrayList<Category> = ArrayList<Category>()
+//            cateArr.add(Category(0, "title", "#FFFFFF"))
             val userinfo = Users(
                 binding.editTextId.text.toString(),
                 binding.editTextPassword.text.toString(),
@@ -80,6 +86,9 @@ class SignUpActivity : AppCompatActivity() {
                 null
             )
             rdb.child(binding.editTextId.text.toString()).setValue(userinfo)
+            rdb = Firebase.database.getReference("Users/user/" + binding.editTextId.text.toString() + "/categoryList")
+            userinfo.category = cateArr
+            rdb.child("category").setValue(userinfo.category)
 
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
