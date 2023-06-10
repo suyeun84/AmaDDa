@@ -45,7 +45,7 @@ class TimeTableAdapter(val items: ArrayList<TimeTableData>) :
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.classRoom.text = items[position].place
-        holder.binding.className.text =items[position].lecture
+        holder.binding.className.text = items[position].lecture
         holder.binding.textView1.text = dateArr[items[position].date[0]] + " " + items[position].startTime + " ~ " + items[position].endTime
         holder.binding.apply {
             if (items[position].date.size == 2) {

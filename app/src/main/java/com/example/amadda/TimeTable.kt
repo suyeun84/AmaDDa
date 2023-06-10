@@ -117,12 +117,27 @@ class TimeTable : AppCompatActivity() {
                 val className = mDialogView.findViewById<EditText>(R.id.className).text
                 val professor = mDialogView.findViewById<EditText>(R.id.professor).text
                 val classRoom = mDialogView.findViewById<EditText>(R.id.classRoom).text
+                val startHour = mDialogView.findViewById<EditText>(R.id.startHour).text.toString()
+                val startMinute = mDialogView.findViewById<EditText>(R.id.startMinute).text.toString()
+                val endHour = mDialogView.findViewById<EditText>(R.id.endHour).text.toString()
+                val endMinute = mDialogView.findViewById<EditText>(R.id.endMinute).text.toString()
+                // 요일 버튼 리스너 추가해야 함
+                // 요일 최소 1개 ~ 최대 2개 선택하도록
+                // 그리고 mon, tue, wed, thu, fri -> {0, 1, 2, 3, 4}로 숫자 배정해서
+                // list.add(int)로 넣어주세여
                 val list = arrayListOf<Int>()
-                val newData = TimeTableData(className.toString(),professor.toString(), classRoom.toString(),list,"","")
+                list.add(1)
+                val newData = TimeTableData(className.toString(),professor.toString(),
+                    classRoom.toString(),list,
+                    startHour + " : " + startMinute
+                    ,endHour + " : " + endMinute)
                 timetableAdapter.addItem(newData)
                 mAlertDialog.dismiss()
+                timetableAdapter.notifyDataSetChanged()
+                rdb.child("timetableList").setValue(timetableAdapter.items)
+
             }
-            timetableAdapter.notifyDataSetChanged()
+
 
           /*  val noButton = mDialogView.findViewById<Button>(R.id.closeButton)
             noButton.setOnClickListener {
