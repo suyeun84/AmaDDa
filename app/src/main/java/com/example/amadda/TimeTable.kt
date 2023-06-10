@@ -2,18 +2,18 @@ package com.example.amadda
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.amadda.databinding.ActivityProfileBinding
+import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.ActivityTimeTableBinding
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -21,13 +21,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+
 class TimeTable : AppCompatActivity() {
     lateinit var binding: ActivityTimeTableBinding
     lateinit var timetableAdapter: TimeTableAdapter
     val data: ArrayList<TimeTableData> = ArrayList()
     lateinit var rdb: DatabaseReference
     var userId: String = ""
-    val data:ArrayList<Lecture> = ArrayList()
+//    val data:ArrayList<Lecture> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userId = intent.getStringExtra("userId").toString()
@@ -43,9 +44,9 @@ class TimeTable : AppCompatActivity() {
         lecArr2.add(3)
         var lecArr3 : ArrayList<Int> = ArrayList<Int>()
         lecArr3.add(0)
-        data.add(Lecture("모프", "지정희", "공A1510", lecArr, "10:30", "12:00"))
-        data.add(Lecture("운체", "진현욱", "공C487", lecArr, "12:00", "13:30"))
-        data.add(Lecture("과기글", "김땡땡", "경영202", lecArr, "15:00", "18:00"))
+        data.add(TimeTableData("모프", "지정희", "공A1510", lecArr, "10:30", "12:00"))
+        data.add(TimeTableData("운체", "진현욱", "공C487", lecArr2, "12:00", "13:30"))
+        data.add(TimeTableData("과기글", "김땡땡", "경영202", lecArr3, "15:00", "18:00"))
 
         rdb = Firebase.database.getReference("Users/user/" + userId)
         Log.d("TimeTableLog", "1")
@@ -57,7 +58,7 @@ class TimeTable : AppCompatActivity() {
                 if (dataSnapshot.exists()) {
                     data.clear()
                     Log.d("TimeTableLog", "4")
-                    val listType = object : GenericTypeIndicator<ArrayList<Lecture>>() {}
+                    val listType = object : GenericTypeIndicator<ArrayList<TimeTableData>>() {}
                     val subArr = dataSnapshot.getValue(listType)
 
                     if (subArr != null) {
@@ -86,11 +87,11 @@ class TimeTable : AppCompatActivity() {
                 init() // 비동기 작업이 완료된 후에 init()를 호출
             }
         }
-//        init()
     }
 
     @SuppressLint("MissingInflatedId")
     fun init(){
+
         binding.recyclerView.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.VERTICAL, false
@@ -114,21 +115,23 @@ class TimeTable : AppCompatActivity() {
                 val className = mDialogView.findViewById<EditText>(R.id.className).text
                 val professor = mDialogView.findViewById<EditText>(R.id.professor).text
                 val classRoom = mDialogView.findViewById<EditText>(R.id.classRoom).text
-                val list = arrayListOf<String>()
+                val list = arrayListOf<Int>()
                 val newData = TimeTableData(className.toString(),professor.toString(), classRoom.toString(),list,"","")
                 timetableAdapter.addItem(newData)
                 mAlertDialog.dismiss()
             }
-            binding.recyclerView.adapter = timetableAdapter
+            timetableAdapter.notifyDataSetChanged()
 
           /*  val noButton = mDialogView.findViewById<Button>(R.id.closeButton)
             noButton.setOnClickListener {
                 mAlertDialog.dismiss()
             }*/
         }
+
+        binding.recyclerView.adapter = timetableAdapter
     }
 
-    private fun saveLecture(subArr: ArrayList<Lecture>, completion: (Boolean) -> Unit) {
+    private fun saveLecture(subArr: ArrayList<TimeTableData>, completion: (Boolean) -> Unit) {
         rdb.child("timetableList").setValue(subArr)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
