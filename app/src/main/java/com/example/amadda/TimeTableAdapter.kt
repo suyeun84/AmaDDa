@@ -2,6 +2,7 @@ package com.example.amadda
 
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.DayBinding
@@ -11,6 +12,7 @@ import com.example.amadda.databinding.TimetableRowBinding
 class TimeTableAdapter(val items: ArrayList<TimeTableData>) :
     RecyclerView.Adapter<TimeTableAdapter.ViewHolder>() {
     var itemClickListener: OnItemClickListener? = null
+    val dateArr: ArrayList<String> = ArrayList<String>()
 
     interface OnItemClickListener {
         fun OnClick(data: TimeTableData, holder: ViewHolder, position: Int)
@@ -21,6 +23,11 @@ class TimeTableAdapter(val items: ArrayList<TimeTableData>) :
             binding.item.setOnClickListener {
                 itemClickListener?.OnClick(items[adapterPosition], this, adapterPosition)
             }
+            dateArr.add("월")
+            dateArr.add("화")
+            dateArr.add("수")
+            dateArr.add("목")
+            dateArr.add("금")
         }
     }
 
@@ -37,8 +44,26 @@ class TimeTableAdapter(val items: ArrayList<TimeTableData>) :
         notifyItemInserted(items.size - 1)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.classRoom.text = items[position].classRoom
-        holder.binding.className.text =items[position].className
+        holder.binding.classRoom.text = items[position].place
+        holder.binding.className.text = items[position].lecture
+        holder.binding.textView1.text = dateArr[items[position].date[0]] + " " + items[position].startTime + " ~ " + items[position].endTime
+        holder.binding.apply {
+            if (items[position].date.size == 2) {
+                textView2.visibility == View.VISIBLE
+                holder.binding.textView2.text = dateArr[items[position].date[1]] + " " + items[position].startTime + " ~ " + items[position].endTime
+            }
+            else {
+                textView2.visibility == View.GONE
+                holder.binding.textView2.text = ""
+            }
+        }
+
 
     }
+//
+//    fun removeItem(adapterPosition: Int) {
+//        items.removeAt(adapterPosition)
+//        notifyItemRemoved(adapterPosition)
+//
+//    }
 }

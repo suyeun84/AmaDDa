@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:layout_margin="10dp"
+    android:clickable="true"
+    android:focusable="true"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
    <LinearLayout
@@ -40,10 +42,12 @@
        android:layout_width="wrap_content"
        android:layout_height="match_parent">
       <TextView
+          android:id="@+id/textView1"
           android:text="월 10:30 ~ 12:00"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"></TextView>
       <TextView
+          android:id="@+id/textView2"
           android:text="월 10:30 ~ 12:00"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"></TextView>

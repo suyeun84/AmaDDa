@@ -27,6 +27,7 @@ class SettingFragment : Fragment() {
     fun init(){
         binding.timetableBtn.setOnClickListener{
             val intent = Intent(context, TimeTable::class.java)
+            intent.putExtra("userId", userId)
             startActivity(intent)
         }
         binding.pushAlarmBtn.setOnClickListener{
