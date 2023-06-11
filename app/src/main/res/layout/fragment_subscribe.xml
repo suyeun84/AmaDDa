@@ -9,10 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/subscribe_title"
-        android:textSize="32sp"
+        android:textSize="32dp"
+        android:layout_marginLeft="35dp"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="30dp"
         android:layout_marginHorizontal="30dp"
         />
 
