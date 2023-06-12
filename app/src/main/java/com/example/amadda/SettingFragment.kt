@@ -14,7 +14,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class SettingFragment : Fragment() {
-
+    lateinit var rdb: DatabaseReference
     lateinit var binding: FragmentSettingBinding
     var userId: String = ""
     override fun onCreateView(

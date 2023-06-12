@@ -25,7 +25,6 @@ class BookMarkFragment : Fragment() {
     private var columnCount = 1
     private var arrayList = arrayListOf<EventData>()
 
-    val userId: String = "kelsey6225"
     var userId: String = ""
 
     @SuppressLint("CutPasteId")
@@ -49,7 +48,6 @@ class BookMarkFragment : Fragment() {
                     if (subArr != null) {
                         for (i in subArr.indices) {
                             Log.d("bookmarkList", subArr[i].toString())
-                            val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].Dday.toInt())
                             val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].dDay.toInt())
                             arrayList.add(event)
                         }
@@ -78,7 +76,6 @@ class BookMarkFragment : Fragment() {
                     for (i in 0 until size){
                         val category = arrayList[i].category.toString()
                         val event = arrayList[i].event.toString()
-                        var dDay = arrayList[i].Dday.toString().toInt()
                         var dDay = arrayList[i].dDay.toString().toInt()
                         val edit = !arrayList[i].edit
 
@@ -101,11 +98,6 @@ class BookMarkFragment : Fragment() {
                         }
                     }
                 }
-
-
-
-//                val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerList)
-//                recyclerView.adapter = bookmarkAdapter
             }
         }
 

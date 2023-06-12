@@ -58,9 +58,5 @@ class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.A
             holder.binding.eraseBookMark.visibility = View.GONE
         }
     }
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun setData(list: ArrayList<EventData>) {
-//        items = list
 //        notifyDataSetChanged()
-//    }
 }
