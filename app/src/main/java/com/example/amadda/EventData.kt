@@ -7,6 +7,9 @@ data class EventData(
     var edit: Boolean = false,
     var star: Boolean = false
 ) {
+    constructor(): this("", "", 0, false) {
+
+    }
 
 }
 
