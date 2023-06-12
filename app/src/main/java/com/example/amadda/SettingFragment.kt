@@ -6,8 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.amadda.databinding.FragmentSettingBinding
 import com.example.amadda.databinding.FragmentSubscribeBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class SettingFragment : Fragment() {
 
@@ -32,6 +36,16 @@ class SettingFragment : Fragment() {
         }
         binding.pushAlarmBtn.setOnClickListener{
             val intent = Intent(context, Profile_push::class.java)
+            startActivity(intent)
+        }
+        binding.logoutBtn.setOnClickListener{
+            val intent = Intent(context, LoginActivity::class.java)
+            startActivity(intent)
+        }
+        binding.withdrawalBtn.setOnClickListener{
+            rdb = Firebase.database.getReference("Users/user/" + userId)
+            rdb.removeValue()
+            val intent = Intent(context, LoginActivity::class.java)
             startActivity(intent)
         }
     }

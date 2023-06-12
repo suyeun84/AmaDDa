@@ -51,6 +51,7 @@ class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.A
         holder.binding.category.text = items[position].category.toString()
         holder.binding.event.text = items[position].event.toString()
         holder.binding.Dday.text = "D-" + items[position].Dday.toString()
+        holder.binding.Dday.text = "D-" + items[position].dDay.toString()
         if(items[position].edit){
             holder.binding.eraseBookMark.visibility = View.VISIBLE
         }else{

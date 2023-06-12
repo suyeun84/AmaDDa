@@ -26,6 +26,7 @@ class BookMarkFragment : Fragment() {
     private var arrayList = arrayListOf<EventData>()
 
     val userId: String = "kelsey6225"
+    var userId: String = ""
 
     @SuppressLint("CutPasteId")
     override fun onCreateView(
@@ -35,6 +36,8 @@ class BookMarkFragment : Fragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_book_mark_list, container, false)
 
+        userId = arguments?.getString("userId").toString()
+        Log.d("bookmarkList", userId)
         rdb = Firebase.database.getReference("Users/user/" + userId)
         rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
@@ -47,6 +50,7 @@ class BookMarkFragment : Fragment() {
                         for (i in subArr.indices) {
                             Log.d("bookmarkList", subArr[i].toString())
                             val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].Dday.toInt())
+                            val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].dDay.toInt())
                             arrayList.add(event)
                         }
                     }
@@ -75,6 +79,7 @@ class BookMarkFragment : Fragment() {
                         val category = arrayList[i].category.toString()
                         val event = arrayList[i].event.toString()
                         var dDay = arrayList[i].Dday.toString().toInt()
+                        var dDay = arrayList[i].dDay.toString().toInt()
                         val edit = !arrayList[i].edit
 
                         val eventdata = EventData(category, event, dDay, edit, false)
