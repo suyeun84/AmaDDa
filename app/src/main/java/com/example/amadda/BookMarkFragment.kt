@@ -23,6 +23,7 @@ class BookMarkFragment : Fragment() {
     lateinit var rdb: DatabaseReference
     private lateinit var bookmarkAdapter: BookMarkAdapter
     private var columnCount = 1
+    var count: Int = 0
     private var arrayList = arrayListOf<EventData>()
 
     val userId: String = "kelsey6225"
