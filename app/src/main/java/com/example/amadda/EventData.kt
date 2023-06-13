@@ -2,11 +2,14 @@ package com.example.amadda
 
 data class EventData(
     val category: String,
-    val name: String,
-    val Dday: Int = 0,
+    val event: String,
+    val dDay: Int = 0,
     var edit: Boolean = false,
     var star: Boolean = false
 ) {
+    constructor(): this("", "", 0, false, false) {
+
+    }
 
 }
 

@@ -104,33 +104,9 @@ class SignUpActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-            rdb = Firebase.database.getReference("Users/user/" + binding.editTextId.text.toString() + "/categoryList")
-            userinfo.category = cateArr
-            rdb.child("category").setValue(userinfo.category)
 
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-
-            //id 중복 안되게 설정
-//            val id = binding.editTextId.text.toString()
-//            rdb.child(id).child(id).get().addOnSuccessListener {
-//                val map = it.value.toString()
-//                Log.d("id", map)
-//                if(map != null){
-//                    Toast.makeText(this, "중복된 아이디가 있습니다.", Toast.LENGTH_SHORT).show()
-//                    binding.editTextId.text?.clear()
-//                    binding.editTextPassword.text?.clear()
-//                    binding.editTextPassword2.text?.clear()
-//                }else{
-//                    //firebase에 회원정보 저장
-//                    rdb = Firebase.database.getReference("Users/user")
-//                    val userinfo = Users(binding.editTextId.text.toString(), binding.editTextPassword.text.toString())
-//                    rdb.child(binding.editTextId.text.toString()).setValue(userinfo)
-//
-//                    val intent = Intent(this, LoginActivity::class.java)
-//                    startActivity(intent)
-//                }
-//            }
         }
 
     }

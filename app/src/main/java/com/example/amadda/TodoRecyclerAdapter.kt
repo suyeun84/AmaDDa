@@ -38,6 +38,6 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>) :
             holder.binding.rowTodo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#94CE95"))
         }
         holder.binding.textViewTodoCategory.text = items[position].category
-        holder.binding.textViewTodoTitle.text = items[position].name
+        holder.binding.textViewTodoTitle.text = items[position].event
     }
 }

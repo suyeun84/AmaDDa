@@ -129,8 +129,8 @@ class TimeTable : AppCompatActivity() {
                 list.add(1)
                 val newData = TimeTableData(className.toString(),professor.toString(),
                     classRoom.toString(),list,
-                    startHour + " : " + startMinute
-                    ,endHour + " : " + endMinute)
+                    startHour + ":" + startMinute
+                    ,endHour + ":" + endMinute)
                 timetableAdapter.addItem(newData)
                 mAlertDialog.dismiss()
                 timetableAdapter.notifyDataSetChanged()
