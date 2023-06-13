@@ -47,10 +47,16 @@ class BookMarkFragment : Fragment() {
                     val subArr = dataSnapshot.getValue(listType)
 
                     if (subArr != null) {
+                        Log.d("bookmarkList", "subArr starts!")
+                        Log.d("bookmarkList", "indices : ${subArr.indices}")
+                        Log.d("bookmarkList", "subArr $subArr")
                         for (i in subArr.indices) {
-                            Log.d("bookmarkList", subArr[i].toString())
-                            val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].dDay.toInt())
-                            arrayList.add(event)
+                            if (subArr[i] != null) {
+                                Log.d("bookmarkList", subArr[i].toString())
+                                val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].dDay.toInt())
+                                arrayList.add(event)
+                            }
+
                         }
                     }
                     bookmarkAdapter = BookMarkAdapter(arrayList)
