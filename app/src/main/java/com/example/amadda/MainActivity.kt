@@ -3,6 +3,7 @@ package com.example.amadda
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,7 +28,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        supportFragmentManager.beginTransaction().replace(binding.frameLayout.id, CalendarFragment())
+        val startFragment = CalendarFragment()
+        var bundle = Bundle()
+        Log.d("adsf", "init userId : $userId")
+        bundle.putString("userId", userId)
+        startFragment.arguments = bundle
+        supportFragmentManager.beginTransaction().replace(binding.frameLayout.id, startFragment)
             .commitAllowingStateLoss()
 
         bnv.setOnItemSelectedListener { item ->
