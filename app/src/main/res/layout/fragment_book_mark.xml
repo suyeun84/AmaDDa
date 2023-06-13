@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bookmark_row_style"
         android:textAppearance="?attr/textAppearanceListItem">
+        android:background="@drawable/bookmark_row_style">
         <ImageView
             android:id="@+id/eraseBookMark"
             android:layout_width="30dp"

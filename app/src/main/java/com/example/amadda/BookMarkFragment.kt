@@ -26,7 +26,7 @@ class BookMarkFragment : Fragment() {
     var count: Int = 0
     private var arrayList = arrayListOf<EventData>()
 
-    val userId: String = "kelsey6225"
+    var userId: String = ""
 
     @SuppressLint("CutPasteId")
     override fun onCreateView(
@@ -36,6 +36,8 @@ class BookMarkFragment : Fragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_book_mark_list, container, false)
 
+        userId = arguments?.getString("userId").toString()
+        Log.d("bookmarkList", userId)
         rdb = Firebase.database.getReference("Users/user/" + userId)
         rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
@@ -46,8 +48,8 @@ class BookMarkFragment : Fragment() {
 
                     if (subArr != null) {
                         for (i in subArr.indices) {
-//                            Log.d("bookmarkList", subArr[i].toString())
-                            val event = EventData(subArr[i].category.toString(), subArr[i].name.toString(), subArr[i].Dday.toInt())
+                            Log.d("bookmarkList", subArr[i].toString())
+                            val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].dDay.toInt())
                             arrayList.add(event)
                         }
                     }
@@ -74,11 +76,11 @@ class BookMarkFragment : Fragment() {
                 addBookMark.setOnClickListener {
                     for (i in 0 until size){
                         val category = arrayList[i].category.toString()
-                        val event = arrayList[i].name.toString()
-                        var dDay = arrayList[i].Dday.toString().toInt()
+                        val event = arrayList[i].event.toString()
+                        var dDay = arrayList[i].dDay.toString().toInt()
                         val edit = !arrayList[i].edit
 
-                        val eventdata = EventData(category, event, dDay, edit)
+                        val eventdata = EventData(category, event, dDay, edit, false)
                         arrayList[i] = eventdata
                     }
 
@@ -97,11 +99,6 @@ class BookMarkFragment : Fragment() {
                         }
                     }
                 }
-
-
-
-//                val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerList)
-//                recyclerView.adapter = bookmarkAdapter
             }
         }
 
@@ -110,7 +107,6 @@ class BookMarkFragment : Fragment() {
 
         bookmarkAdapter.itemClickListener = object : BookMarkAdapter.OnItemClickListener{
             override fun onItemClick(data: EventData, position: Int) {
-                Log.d("bookmarkList", "click")
                 arrayList.removeAt(position)
                 Log.d("bookmarkList", position.toString())
 //                bookmarkAdapter.notifyItemRemoved(position)
