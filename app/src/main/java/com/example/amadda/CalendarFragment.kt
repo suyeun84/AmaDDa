@@ -1,15 +1,14 @@
 package com.example.amadda
 
 import android.app.AlertDialog
+import android.graphics.drawable.ColorDrawable
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.os.Bundle
 import android.service.autofill.FieldClassification
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.amadda.databinding.FragmentCalendarBinding

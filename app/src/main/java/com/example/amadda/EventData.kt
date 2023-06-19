@@ -12,7 +12,7 @@ data class EventData(
     val code: Int = 0,
 
     var extra: String = ""
-) {
+) : java.io.Serializable {
     constructor(): this("", "", 0, false, false, 0) {
 
     }
