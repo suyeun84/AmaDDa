@@ -69,10 +69,10 @@ class CalendarFragment : Fragment() {
                         subscribeArr = subArr
                         Log.d("adsf", "subscribe count : ${subscribeArr.size}")
                         if (subscribeArr.contains(0)) {
-//                            getKonkukEvent2()
+                            getKonkukEvent2()
                         }
                         if (subscribeArr.contains(2)) {
-//                            getKBO2()
+                            getKBO2()
                         }
                     }
                 }
@@ -97,16 +97,12 @@ class CalendarFragment : Fragment() {
 
         adapter_calendar.notifyDataSetChanged()
 
-        Log.d("adsf", "subscribe count : ${subscribeArr.size}")
         if (subscribeArr.contains(0)) {
-//            getKonkukEvent2()
+            getKonkukEvent2()
         }
         if (subscribeArr.contains(2)) {
-//            getKBO2()
+            getKBO2()
         }
-//        getKonkukEvent()
-        Log.d("adsf", year.toString() + "," + month.toString())
-//        getKBO()
     }
 
     private fun initCalendar() {
@@ -143,16 +139,10 @@ class CalendarFragment : Fragment() {
                         "TodoDialog"
                     )
                 }
-
             }
         }
-
         adapter_calendar.notifyDataSetChanged()
 
-
-//
-//        getKonkukEvent()
-//        getKBO()
     }
 
     override fun onCreateView(
@@ -193,14 +183,12 @@ class CalendarFragment : Fragment() {
         }
 
         return binding.root
-//        val view =  inflater.inflate(R.layout.fragment_calendar, container, false)
-//        return view
+
     }
 
     private fun initDate() {
         val date: LocalDate = LocalDate.now()
-//        var iyear: Int = date.year
-//        var imonth: Int = date.monthValue
+
         year = date.year
         month = date.monthValue - 1
         dateModel.setCurYear(year)
@@ -208,45 +196,6 @@ class CalendarFragment : Fragment() {
         println("initdate! $year / $month")
 
     }
-
-    fun convertDate(dateString: String): String {
-        // 공백 및 괄호 제거
-        val cleanedString = dateString.replace(" ", "").replace("(", "").replace(")", "")
-
-        // 점(.) 제거
-        val dotRemovedString = cleanedString.replace(".", "")
-
-
-        // 날짜를 분리
-        val day = dotRemovedString.substring(0, 2)
-        val month = dotRemovedString.substring(2, 4)
-        val year = "2023"
-
-        Log.d("adsf", "convertDate : $year$day$month")
-        // 변환된 날짜 반환
-        return "$year$day$month"
-    }
-
-    fun KBOConvertDate(input: String): String {
-        // 숫자만 추출해서 월과 일로 분리
-        val dateParts = input.filter { it.isDigit() || it == '.' }.split(".")
-        val month = dateParts[0].toInt()
-        val day = dateParts[1].toInt()
-
-        // 현재 연도 사용
-        val year = LocalDate.now().year
-
-        // 날짜 객체 생성
-        val date = LocalDate.of(year, month, day)
-
-        // 원하는 형식으로 변환
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val formattedDate = date.format(formatter)
-        // 변환된 날짜 반환
-
-        return formattedDate
-    }
-
 
     private fun getKonkukEvent2() {
         rdb = Firebase.database.getReference("Events/event")
@@ -258,46 +207,20 @@ class CalendarFragment : Fragment() {
                     val subArr = dataSnapshot.getValue(listType)
 
                     if (subArr != null) {
-                        Log.d("adsfff", "length? : ${subArr.indices}")
                         for (day in monthData) {
 
                             for (i in subArr.indices) {
                                 if (subArr[i] != null && subArr[i].category=="konkuk") {
                                     if (day.date == subArr[i].date) {
-                                        Log.d("adsfff", "what day has... ${subArr[i]}")
                                         day.event.add(subArr[i])
                                         day.count += 1
                                     }
                                 }
                             }
-                            Log.d("adsfff", "day length : ${day.event.indices}")
-
                         }
                     }
                     adapter_calendar.notifyDataSetChanged()
                 }
-            }
-        }
-    }
-
-    private fun getKonkukEvent() {
-        scope.launch {
-            val konkukDoc = Jsoup.connect(konkukUrl).get()
-            val name = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dd")
-            val date = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dt")
-//            Log.d("adsff", "konkuk... $name : $date")
-            for (day in monthData) {
-                for (i in 0 until date.size) {
-                    Log.d("adsff", "${name[i].text()} : ${date[i].text()}")
-                    val convertedDate = convertDate(date[i].text())
-                    if (day.date == convertedDate) {
-                        day.event.add(EventData("konkuk", name[i].text()))
-                        day.count += 1
-                    }
-                }
-            }
-            withContext(Dispatchers.Main) {
-                adapter_calendar.notifyDataSetChanged()
             }
         }
     }
@@ -308,72 +231,23 @@ class CalendarFragment : Fragment() {
             GlobalScope.launch(Dispatchers.Main) {
                 // 비동기 작업이 완료된 후에 실행될 코드
                 if (dataSnapshot.exists()) {
-                    Log.d("adsffff", dataSnapshot.toString())
                     val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
                     val subArr = dataSnapshot.getValue(listType)
 
                     if (subArr != null) {
-//                        Log.d("adsfff", "length? : ${subArr.indices}")
                         for (day in monthData) {
-
                             for (i in subArr.indices) {
                                 if (subArr[i] != null && subArr[i].category=="KBO") {
                                     if (day.date == subArr[i].date) {
-                                        Log.d("adsfff", "what day has... ${subArr[i]}")
                                         day.event.add(subArr[i])
                                         day.count += 1
                                     }
                                 }
                             }
-                            Log.d("adsfff", "day length : ${day.event.indices}")
-
                         }
                     }
                     adapter_calendar.notifyDataSetChanged()
                 }
-            }
-        }
-    }
-
-    private fun getKBO() {
-        val KBOurl =
-            "https://sports.news.naver.com/kbaseball/schedule/index?month=${month + 1}&year=${year}"
-
-
-        scope.launch {
-            val KBOdoc = Jsoup.connect(KBOurl).get()
-            lateinit var dateKBO: String
-            val monthlyMatch = KBOdoc.select("div#calendarWrap>div")
-            for (dailyMatch in monthlyMatch) {
-                var matchInfo: String = ""
-                dateKBO = KBOConvertDate(dailyMatch.select("span.td_date").text())
-                if (dailyMatch.select("span.td_hour").size != 1) {
-                    val matches = dailyMatch.select("tbody>tr")
-                    for (match in matches) {
-                        val t1 = match.select("span.team_lft").text()
-                        val t2 = match.select("span.team_rgt").text()
-                        if (t1 == "SSG" || t2 == "SSG") {
-                            matchInfo = listOf(
-                                match.select("span.td_hour").text(),
-                                t1,
-                                t2,
-                                match.select("span.td_stadium")[0].text(),
-                                match.select("span.td_stadium")[1].text()
-                            ).joinToString("/")
-                            for (i in 0 until monthData.size) {
-                                var d = monthData[i]
-                                if (d.date == dateKBO) {
-                                    d.event.add(EventData("KBO",matchInfo))
-                                    d.count += 1
-                                    break
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            withContext(Dispatchers.Main) {
-                adapter_calendar.notifyDataSetChanged()
             }
         }
     }

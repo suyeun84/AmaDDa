@@ -167,28 +167,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
-    private fun getKonkukEvent() {
-        scope.launch {
-            val konkukDoc = Jsoup.connect(konkukUrl).get()
-            val name = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dd")
-            val date = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dt")
-            for (i in 0..date.size) {
-                Log.d("adsff", "${name[i].text()}: ${date[i].text()}, ")
-            }
-//            for (day in monthData) {
-//                for (i in 0 until date.size) {
-//                    val convertedDate = convertDate(date[i].text())
-//                    if (day.date == convertedDate) {
-//                        day.event.add(EventData("konkuk", name[i].text()))
-//                        day.count += 1
-//                    }
-//                }
-//            }
-//            withContext(Dispatchers.Main) {
-//                adapter_calendar.notifyDataSetChanged()
-//            }
-        }
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -201,7 +180,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        saveEvent()
+//        saveEvent()
         val startFragment = CalendarFragment()
         var bundle = Bundle()
         Log.d("adsf", "init userId : $userId")
@@ -250,31 +229,4 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-//    private fun initLayout(){
-//        binding.viewpager.adapter = MyViewPagerAdapter(this)
-//        TabLayoutMediator(binding.tabLayout, binding.viewpager){
-//                tab, pos ->
-//            tab.setIcon(ImgArr[pos])
-//        }.attach()
-//    }
 }
-
-
-/*
-
-    fun initBtn(){
-        binding.buttonTodo.setOnClickListener {
-            TodoFragment().show(
-                supportFragmentManager, "SampleDialog"
-            )
-        }
-        binding.buttonAddCategory.setOnClickListener {
-            val intent = Intent(this, AddCategoryActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.buttonCalendar.setOnClickListener {
-            val intent = Intent(this, CalendarActivity::class.java)
-            startActivity(intent)        }
-    }}
- */
