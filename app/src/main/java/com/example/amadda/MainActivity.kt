@@ -83,7 +83,8 @@ class MainActivity : AppCompatActivity() {
 
                     var event: EventData = EventData("konkuk", name[i].text(),
                         0, false, false, 0,
-                        convertDate(date[i].text()), i)
+                        convertDate(date[i].text()), i, ""
+                    )
                     newArr.add(event)
 //                    Log.d("adsff", "${name[i].text()}: ${date[i].text()}, ")
                 }
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+//            withContext(Dispatchers.Main)
         }
 
         rdb.child("KBO").get().addOnSuccessListener { _ ->
@@ -117,10 +119,15 @@ class MainActivity : AppCompatActivity() {
                                 val t1 = match.select("span.team_lft").text()
                                 val t2 = match.select("span.team_rgt").text()
                                 if (t1 == "SSG" || t2 == "SSG") {
+                                    var eventStr = match.select("span.td_hour").text() + "\n" +
+                                    match.select("span.td_stadium")[0].text() + "\n" +
+                                    match.select("span.td_stadium")[1].text()
 
                                     var event: EventData = EventData("KBO", "$t1:$t2",
                                         0, false, false, 0,
-                                        dateKBO, j)
+                                        dateKBO, j,
+                                        eventStr
+                                    )
                                     j++
                                     newArr.add(event)
                                 }
@@ -194,7 +201,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-//        saveEvent()
+        saveEvent()
         val startFragment = CalendarFragment()
         var bundle = Bundle()
         Log.d("adsf", "init userId : $userId")

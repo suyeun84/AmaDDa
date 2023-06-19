@@ -11,7 +11,7 @@ data class EventData(
     val date: String = "",
     val code: Int = 0,
 
-//    var extra: String = ""
+    var extra: String = ""
 ) {
     constructor(): this("", "", 0, false, false, 0) {
 

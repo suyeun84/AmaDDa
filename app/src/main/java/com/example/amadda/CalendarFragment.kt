@@ -69,10 +69,10 @@ class CalendarFragment : Fragment() {
                         subscribeArr = subArr
                         Log.d("adsf", "subscribe count : ${subscribeArr.size}")
                         if (subscribeArr.contains(0)) {
-                            getKonkukEvent2()
+//                            getKonkukEvent2()
                         }
                         if (subscribeArr.contains(2)) {
-                            getKBO2()
+//                            getKBO2()
                         }
                     }
                 }
@@ -99,10 +99,10 @@ class CalendarFragment : Fragment() {
 
         Log.d("adsf", "subscribe count : ${subscribeArr.size}")
         if (subscribeArr.contains(0)) {
-            getKonkukEvent2()
+//            getKonkukEvent2()
         }
         if (subscribeArr.contains(2)) {
-            getKBO2()
+//            getKBO2()
         }
 //        getKonkukEvent()
         Log.d("adsf", year.toString() + "," + month.toString())
