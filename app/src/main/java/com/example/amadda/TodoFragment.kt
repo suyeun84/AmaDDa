@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 var bookmarkNum = 0
@@ -140,7 +139,10 @@ class TodoFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val bottomSheetFragment = BottomSheet()
+        binding.buttonAdd.setOnClickListener {
+            bottomSheetFragment.show(getParentFragmentManager(), bottomSheetFragment.getTag())
+        }
 
         val now = LocalDate.now()
         val dDay = LocalDate.of(
