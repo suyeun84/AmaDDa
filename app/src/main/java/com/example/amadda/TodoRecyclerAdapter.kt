@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.TodoRowBinding
 
-class TodoRecyclerAdapter(val items: ArrayList<EventData>) :
+class TodoRecyclerAdapter(val items: ArrayList<EventData>, val likes: ArrayList<EventData>) :
     RecyclerView.Adapter<TodoRecyclerAdapter.ViewHolder>() {
     var itemClickListener: OnItemClickListener? = null
     var detailClickListener: OnItemClickListener? = null
@@ -61,10 +61,19 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>) :
 //        }
         holder.binding.textViewTodoCategory.text = items[position].category
 
-        if(items[position].star){
-            holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_24)
-        }else{
-            holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_border_24)
+
+
+        Log.d("wherestar", "$likes")
+        holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_border_24)
+        for (i in likes.indices) {
+            if (likes[i].category == items[position].category && likes[i].code == items[position].code) {
+                holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_24)
+            }
         }
+//        if(items[position].star){
+//            holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_24)
+//        }else{
+//            holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_border_24)
+//        }
     }
 }
