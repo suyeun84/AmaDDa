@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         bnv = binding.bottomNav
         userId = intent.getStringExtra("userId").toString()
 
-
         init()
         // initLayout()
     }
@@ -37,7 +36,6 @@ class MainActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
 
         bnv.setOnItemSelectedListener { item ->
-
             changeFragment(
                 when (item.itemId) {
                     R.id.calendarMenu -> {
@@ -54,8 +52,8 @@ class MainActivity : AppCompatActivity() {
                         SettingFragment()
                     }
                     else -> {
-                        // CalendarFragment()
-                        SettingFragment()
+                         CalendarFragment()
+//                        SettingFragment()
                     }
                 }
             )
@@ -70,7 +68,6 @@ class MainActivity : AppCompatActivity() {
         bundle.putString("userId", userId)
         var frg = fragment
         frg.arguments = bundle
-
 
         supportFragmentManager
             .beginTransaction()

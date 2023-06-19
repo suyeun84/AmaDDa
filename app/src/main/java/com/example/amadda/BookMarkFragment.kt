@@ -23,7 +23,6 @@ class BookMarkFragment : Fragment() {
     lateinit var rdb: DatabaseReference
     private lateinit var bookmarkAdapter: BookMarkAdapter
     private var columnCount = 1
-    var count: Int = 0
     private var arrayList = arrayListOf<EventData>()
 
     var userId: String = ""
@@ -38,7 +37,8 @@ class BookMarkFragment : Fragment() {
 
         userId = arguments?.getString("userId").toString()
         Log.d("bookmarkList", userId)
-        rdb = Firebase.database.getReference("Users/user/" + userId)
+//        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb = Firebase.database.getReference("Users/user/kelsey6225")
         rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
                 // 비동기 작업이 완료된 후에 실행될 코드
@@ -47,16 +47,16 @@ class BookMarkFragment : Fragment() {
                     val subArr = dataSnapshot.getValue(listType)
 
                     if (subArr != null) {
-                        Log.d("bookmarkList", "subArr starts!")
-                        Log.d("bookmarkList", "indices : ${subArr.indices}")
-                        Log.d("bookmarkList", "subArr $subArr")
                         for (i in subArr.indices) {
-                            if (subArr[i] != null) {
-                                Log.d("bookmarkList", subArr[i].toString())
-                                val event = EventData(subArr[i].category.toString(), subArr[i].event.toString(), subArr[i].dDay.toInt())
-                                arrayList.add(event)
-                            }
-
+                            Log.d("bookmarkList", subArr[i].toString())
+                            if(subArr[i] == null)
+                                continue
+                            val event = EventData(
+                                subArr[i].category,
+                                subArr[i].event,
+                                subArr[i].dDay.toInt()
+                            )
+                            arrayList.add(event)
                         }
                     }
                     bookmarkAdapter = BookMarkAdapter(arrayList)
@@ -115,7 +115,6 @@ class BookMarkFragment : Fragment() {
             override fun onItemClick(data: EventData, position: Int) {
                 arrayList.removeAt(position)
                 Log.d("bookmarkList", position.toString())
-//                bookmarkAdapter.notifyItemRemoved(position)
                 bookmarkAdapter.notifyDataSetChanged()
             }
         }
