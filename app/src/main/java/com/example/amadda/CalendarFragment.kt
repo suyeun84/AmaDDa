@@ -42,6 +42,7 @@ class CalendarFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //이거 못가져오는중
         userId = arguments?.getString("userId").toString()
         initDate()
         initCalendar()
@@ -92,6 +93,7 @@ class CalendarFragment : Fragment() {
             ) {
                 val bundle = Bundle()
                 bundle.putSerializable("data", data)
+                bundle.putString("userId", "kelsey6225")
                 val dialog: TodoFragment = TodoFragment()
                 dialog.arguments = bundle
 
@@ -115,7 +117,7 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
-
+        userId = arguments?.getString("userId").toString()
         binding.apply {
             textView3.setText("$year" + "년 ${month + 1}" + "월")
             prevMonth.setOnClickListener {
@@ -249,7 +251,7 @@ class CalendarFragment : Fragment() {
                             for (i in 0 until monthData.size) {
                                 var d = monthData[i]
                                 if (d.date == dateKBO) {
-                                    d.event.add(EventData("KBO",matchInfo ))
+                                    d.event.add(EventData("KBO",matchInfo))
                                     d.count += 1
                                     break
                                 }
