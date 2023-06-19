@@ -33,7 +33,7 @@ class BookMarkFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_book_mark_list, container, false)
+        val view =  inflater.inflate(R.layout.fragment_book_mark_list, container, false)
 
         userId = arguments?.getString("userId").toString()
         Log.d("bookmarkList", userId)
@@ -80,7 +80,7 @@ class BookMarkFragment : Fragment() {
                 Log.d("bookmarkList", size.toString())
 
                 addBookMark.setOnClickListener {
-                    for (i in 0 until size) {
+                    for (i in 0 until size){
                         val category = arrayList[i].category.toString()
                         val event = arrayList[i].event.toString()
                         var dDay = arrayList[i].dDay.toString().toInt()
@@ -111,7 +111,7 @@ class BookMarkFragment : Fragment() {
         bookmarkAdapter = BookMarkAdapter(arrayList)
         val recyclerList = view.findViewById<RecyclerView>(R.id.recyclerList)
 
-        bookmarkAdapter.itemClickListener = object : BookMarkAdapter.OnItemClickListener {
+        bookmarkAdapter.itemClickListener = object : BookMarkAdapter.OnItemClickListener{
             override fun onItemClick(data: EventData, position: Int) {
                 arrayList.removeAt(position)
                 Log.d("bookmarkList", position.toString())

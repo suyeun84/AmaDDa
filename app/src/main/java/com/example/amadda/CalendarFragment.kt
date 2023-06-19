@@ -13,10 +13,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.amadda.databinding.FragmentCalendarBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.GenericTypeIndicator
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.*
 import org.jsoup.Jsoup
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -36,6 +37,9 @@ class CalendarFragment : Fragment() {
     val dateModel: DateViewModel by viewModels()
     var userId: String = ""
 
+    lateinit var rdb: DatabaseReference
+    lateinit var subscribeArr: ArrayList<Int>
+
     private val konkukUrl =
         "http://www.konkuk.ac.kr/do/MessageBoard/HaksaArticleList.do?forum=11543"
 
@@ -44,12 +48,40 @@ class CalendarFragment : Fragment() {
         super.onCreate(savedInstanceState)
         //이거 못가져오는중
         userId = arguments?.getString("userId").toString()
+        Log.d("adsf", userId)
         initDate()
         initCalendar()
+        getSubscribe()
+//        initCalendar()
 
     }
 
-    private fun updateCalendar() {
+    private fun getSubscribe() {
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("subscribe").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<Int>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (subArr != null) {
+                        subscribeArr = subArr
+                        Log.d("adsf", "subscribe count : ${subscribeArr.size}")
+                        if (subscribeArr.contains(0)) {
+                            getKonkukEvent()
+                        }
+                        if (subscribeArr.contains(2)) {
+                            getKBO()
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun updateCalendar(arr: ArrayList<Int>) {
         println("updateCalendar !!")
         monthData.clear()
         val calendar = GregorianCalendar(year, month, 1)
@@ -64,9 +96,17 @@ class CalendarFragment : Fragment() {
         }
 
         adapter_calendar.notifyDataSetChanged()
-        getKonkukEvent()
+
+        Log.d("adsf", "subscribe count : ${subscribeArr.size}")
+        if (subscribeArr.contains(0)) {
+            getKonkukEvent()
+        }
+        if (subscribeArr.contains(2)) {
+            getKBO()
+        }
+//        getKonkukEvent()
         Log.d("adsf", year.toString() + "," + month.toString())
-        getKBO()
+//        getKBO()
     }
 
     private fun initCalendar() {
@@ -108,8 +148,11 @@ class CalendarFragment : Fragment() {
         }
 
         adapter_calendar.notifyDataSetChanged()
-        getKonkukEvent()
-        getKBO()
+
+
+//
+//        getKonkukEvent()
+//        getKBO()
     }
 
     override fun onCreateView(
@@ -130,7 +173,7 @@ class CalendarFragment : Fragment() {
                 dateModel.setCurYear(year)
                 dateModel.setCurMonth(month)
                 textView3.setText("$year" + "년 ${month + 1}" + "월")
-                updateCalendar()
+                updateCalendar(subscribeArr)
 
                 println("prevMonth! $year / ${month + 1}")
             }
@@ -144,7 +187,7 @@ class CalendarFragment : Fragment() {
                 dateModel.setCurYear(year)
                 dateModel.setCurMonth(month)
                 textView3.setText("$year" + "년 ${month + 1}" + "월")
-                updateCalendar()
+                updateCalendar(subscribeArr)
                 println("nextMonth! $year / ${month + 1}")
             }
         }
