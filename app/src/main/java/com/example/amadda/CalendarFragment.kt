@@ -1,15 +1,14 @@
 package com.example.amadda
 
 import android.app.AlertDialog
+import android.graphics.drawable.ColorDrawable
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.os.Bundle
 import android.service.autofill.FieldClassification
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.amadda.databinding.FragmentCalendarBinding
@@ -142,6 +141,7 @@ class CalendarFragment : Fragment() {
                         fragmentManager,
                         "TodoDialog"
                     )
+
                 }
 
             }
@@ -255,7 +255,7 @@ class CalendarFragment : Fragment() {
                 for (i in 0 until date.size) {
                     val convertedDate = convertDate(date[i].text())
                     if (day.date == convertedDate) {
-                        day.event.add(EventData("konkuk", name[i].text()))
+                        day.event.add(EventData("건국대 학사일정", name[i].text()))
                         day.count += 1
                     }
                 }
@@ -294,7 +294,7 @@ class CalendarFragment : Fragment() {
                             for (i in 0 until monthData.size) {
                                 var d = monthData[i]
                                 if (d.date == dateKBO) {
-                                    d.event.add(EventData("KBO",matchInfo))
+                                    d.event.add(EventData("KBO리그",matchInfo))
                                     d.count += 1
                                     break
                                 }

@@ -1,6 +1,8 @@
 package com.example.amadda
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,7 +30,7 @@ class TodoFragment : DialogFragment() {
     private lateinit var bindingRow: TodoRowBinding
     lateinit var rdb: DatabaseReference
     lateinit var adapter_todo: TodoRecyclerAdapter
-    lateinit var data: MyData
+    lateinit var mydata: MyData
     lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +42,7 @@ class TodoFragment : DialogFragment() {
         userId = bundle?.getString("userId").toString()
         Log.d("todoList", userId)
         val notice = bundle?.getSerializable("data")
-        data = notice as MyData
+        mydata = notice as MyData
     }
 
 
@@ -51,13 +53,15 @@ class TodoFragment : DialogFragment() {
         binding = FragmentTodoBinding.inflate(inflater, container, false)
         bindingRow = TodoRowBinding.inflate(layoutInflater)
 //        userId = arguments?.getString("userId").toString()
-        adapter_todo = TodoRecyclerAdapter(data.event)
+        binding.todoFrag.setBackgroundColor(Color.TRANSPARENT)
+
+        adapter_todo = TodoRecyclerAdapter(mydata.event)
         binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewTodo.adapter = adapter_todo
 
         adapter_todo.itemClickListener = object : TodoRecyclerAdapter.OnItemClickListener {
             @SuppressLint("NotifyDataSetChanged")
-            override fun OnItemClick(
+            override fun OnClick(
                 data: EventData,
                 holder: TodoRecyclerAdapter.ViewHolder,
                 position: Int
@@ -116,7 +120,21 @@ class TodoFragment : DialogFragment() {
             }
         }
 
+        adapter_todo.detailClickListener = object: TodoRecyclerAdapter.OnItemClickListener{
+            override fun OnClick(
+                data: EventData,
+                holder: TodoRecyclerAdapter.ViewHolder,
+                position: Int
+            ) {
+                val intent = Intent(requireContext(), TodoDetailActivity::class.java)
+                intent.putExtra("data", data)
+                intent.putExtra("year", mydata.date.substring(0,4))
+                intent.putExtra("month", mydata.date.substring(4,6))
+                intent.putExtra("day", mydata.date.substring(6,8))
+                startActivity(intent)
+            }
 
+        }
         return binding.root
     }
 
@@ -126,13 +144,13 @@ class TodoFragment : DialogFragment() {
 
         val now = LocalDate.now()
         val dDay = LocalDate.of(
-            data.date.substring(0, 4).toInt(),
-            data.date.substring(4, 6).toInt(),
-            data.date.substring(6, 8).toInt()
+            mydata.date.substring(0, 4).toInt(),
+            mydata.date.substring(4, 6).toInt(),
+            mydata.date.substring(6, 8).toInt()
         ) // D-Day를 설정합니다.
         val daysDiff = ChronoUnit.DAYS.between(now, dDay)
         binding.textViewDay.text =
-            data.date.substring(4, 6) + "월 " + data.date.substring(6, 8) + "일"
+            mydata.date.substring(4, 6) + "월 " + mydata.date.substring(6, 8) + "일"
 
         if (daysDiff > 0) {
             binding.textViewDday.text = "D - " + daysDiff.toString()

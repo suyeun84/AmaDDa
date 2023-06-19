@@ -63,7 +63,7 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
 
 
         if (items[position].count == 1) {
-            if(items[position].event[0].category == "KBO"){
+            if(items[position].event[0].category == "KBO리그"){
                 val KBOInfo = items[position].event[0].event.split("/")
                 holder.binding.textViewTodo1.text = "${KBOInfo[1]}:${KBOInfo[2]}"
                 holder.binding.textViewTodo1.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
@@ -77,7 +77,7 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
 
         if (items[position].count == 2) {
             holder.binding.textViewTodo1.text = items[position].event[0].event
-            if(items[position].event[1].category == "KBO"){
+            if(items[position].event[1].category == "KBO리그"){
                 val KBOInfo = items[position].event[1].event.split("/")
                 holder.binding.textViewTodo2.text = "${KBOInfo[1]}:${KBOInfo[2]}"
                 holder.binding.textViewTodo2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
@@ -90,7 +90,7 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
         if (items[position].count >= 3) {
             holder.binding.textViewTodo1.text = items[position].event[0].event
             holder.binding.textViewTodo2.text = items[position].event[1].event
-            if(items[position].event[2].category == "KBO"){
+            if(items[position].event[2].category == "KBO리그"){
                 val KBOInfo = items[position].event[2].event.split("/")
                 holder.binding.textViewTodo3.text = "${KBOInfo[1]}:${KBOInfo[2]}"
                 holder.binding.textViewTodo3.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))

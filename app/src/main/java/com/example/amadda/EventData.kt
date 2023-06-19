@@ -7,8 +7,8 @@ data class EventData(
     var edit: Boolean = false,
     var star: Boolean = false,
     var countNum: Int = 0
-) {
-    constructor(): this("", "", 0, false, false, 0) {
+) : java.io.Serializable {
+    constructor() : this("", "", 0, false, false, 0) {
 
     }
 

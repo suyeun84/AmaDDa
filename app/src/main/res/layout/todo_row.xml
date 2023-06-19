@@ -25,7 +25,7 @@
             android:id="@+id/textViewTodoCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#7E7E7E"
+            android:textColor="#BEBEBE"
             android:textSize="12sp"
             android:text="카테고리" />
 
@@ -33,15 +33,22 @@
             android:id="@+id/textViewTodoTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#505050"
+            android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:text="일정 이름" />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageViewCheckBox"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_baseline_check_box_outline_blank_24" />
+    <TextView
+        android:id="@+id/textViewTodoDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:background="#0047FF"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp"
+        android:text="일정확인"
+        />
 </LinearLayout>
