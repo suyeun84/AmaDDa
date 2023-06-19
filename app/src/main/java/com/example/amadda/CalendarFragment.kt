@@ -69,10 +69,10 @@ class CalendarFragment : Fragment() {
                         subscribeArr = subArr
                         Log.d("adsf", "subscribe count : ${subscribeArr.size}")
                         if (subscribeArr.contains(0)) {
-                            getKonkukEvent()
+                            getKonkukEvent2()
                         }
                         if (subscribeArr.contains(2)) {
-                            getKBO()
+                            getKBO2()
                         }
                     }
                 }
@@ -99,10 +99,10 @@ class CalendarFragment : Fragment() {
 
         Log.d("adsf", "subscribe count : ${subscribeArr.size}")
         if (subscribeArr.contains(0)) {
-            getKonkukEvent()
+            getKonkukEvent2()
         }
         if (subscribeArr.contains(2)) {
-            getKBO()
+            getKBO2()
         }
 //        getKonkukEvent()
         Log.d("adsf", year.toString() + "," + month.toString())
@@ -216,11 +216,13 @@ class CalendarFragment : Fragment() {
         // 점(.) 제거
         val dotRemovedString = cleanedString.replace(".", "")
 
+
         // 날짜를 분리
         val day = dotRemovedString.substring(0, 2)
         val month = dotRemovedString.substring(2, 4)
         val year = "2023"
 
+        Log.d("adsf", "convertDate : $year$day$month")
         // 변환된 날짜 반환
         return "$year$day$month"
     }
@@ -246,13 +248,47 @@ class CalendarFragment : Fragment() {
     }
 
 
+    private fun getKonkukEvent2() {
+        rdb = Firebase.database.getReference("Events/event")
+        rdb.child("konkuk").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (subArr != null) {
+                        Log.d("adsfff", "length? : ${subArr.indices}")
+                        for (day in monthData) {
+
+                            for (i in subArr.indices) {
+                                if (subArr[i] != null && subArr[i].category=="konkuk") {
+                                    if (day.date == subArr[i].date) {
+                                        Log.d("adsfff", "what day has... ${subArr[i]}")
+                                        day.event.add(subArr[i])
+                                        day.count += 1
+                                    }
+                                }
+                            }
+                            Log.d("adsfff", "day length : ${day.event.indices}")
+
+                        }
+                    }
+                    adapter_calendar.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
     private fun getKonkukEvent() {
         scope.launch {
             val konkukDoc = Jsoup.connect(konkukUrl).get()
             val name = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dd")
             val date = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dt")
+//            Log.d("adsff", "konkuk... $name : $date")
             for (day in monthData) {
                 for (i in 0 until date.size) {
+                    Log.d("adsff", "${name[i].text()} : ${date[i].text()}")
                     val convertedDate = convertDate(date[i].text())
                     if (day.date == convertedDate) {
                         day.event.add(EventData("konkuk", name[i].text()))
@@ -262,6 +298,39 @@ class CalendarFragment : Fragment() {
             }
             withContext(Dispatchers.Main) {
                 adapter_calendar.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun getKBO2() {
+        rdb = Firebase.database.getReference("Events/event")
+        rdb.child("KBO").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    Log.d("adsffff", dataSnapshot.toString())
+                    val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (subArr != null) {
+//                        Log.d("adsfff", "length? : ${subArr.indices}")
+                        for (day in monthData) {
+
+                            for (i in subArr.indices) {
+                                if (subArr[i] != null && subArr[i].category=="KBO") {
+                                    if (day.date == subArr[i].date) {
+                                        Log.d("adsfff", "what day has... ${subArr[i]}")
+                                        day.event.add(subArr[i])
+                                        day.count += 1
+                                    }
+                                }
+                            }
+                            Log.d("adsfff", "day length : ${day.event.indices}")
+
+                        }
+                    }
+                    adapter_calendar.notifyDataSetChanged()
+                }
             }
         }
     }

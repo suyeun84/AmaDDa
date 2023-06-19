@@ -40,8 +40,10 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>) :
             holder.binding.rowTodo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#94CE95"))
             holder.binding.textViewTodoTitle.text = items[position].event
         }else if (items[position].category == "KBO"){
-            val event = items[position].event.split("/")
-            holder.binding.textViewTodoTitle.text = event[1]+" vs "+event[2] + "\n" + event[0] + ","+ event[3] + ","+ event[4]
+            val event = items[position].event.split(":")
+            holder.binding.textViewTodoTitle.text = event[0]+" vs "+event[1]
+//            val event = items[position].event.split("/")
+//            holder.binding.textViewTodoTitle.text = event[1]+" vs "+event[2] + "\n" + event[0] + ","+ event[3] + ","+ event[4]
         }
         holder.binding.textViewTodoCategory.text = items[position].category
 
