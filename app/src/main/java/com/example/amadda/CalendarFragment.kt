@@ -389,8 +389,8 @@ class CalendarFragment : Fragment() {
                                 team1,
                                 team2
                             ).joinToString("/")
-                            var tag = team1 + ":" + team2
-                            day.event.add(EventData("프리미어리그", premierData, tag))
+//                            var tag = team1 + ":" + team2
+                            day.event.add(EventData("프리미어리그", premierData))
                             day.count += 1
                         }
                     }
