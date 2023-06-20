@@ -117,7 +117,10 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
             return "#6300C7"
         } else if (category == "KBO") {
             return "#0047FF"
-        }else{
+        } else if (category == "festival") {
+            return "#FD9BFF"
+        }
+        else{
             return "#005426"
         }
 
