@@ -101,6 +101,7 @@ class CalendarFragment : Fragment() {
                             getKBO2(filteredList)
                         }
                         if (subscribeArr.contains(22)) {
+                            getFestivalEvent()
 
                         }
                     }
@@ -150,6 +151,7 @@ class CalendarFragment : Fragment() {
             getKBO2(filteredList)
         }
         if (subscribeArr.contains(22)) {
+            getFestivalEvent()
 
         }
     }
@@ -246,20 +248,32 @@ class CalendarFragment : Fragment() {
 
     }
 
-    fun convertDate(dateString: String): String {
-        // 공백 및 괄호 제거
-        val cleanedString = dateString.replace(" ", "").replace("(", "").replace(")", "")
+    private fun getFestivalEvent() {
+        rdb = Firebase.database.getReference("Events/event")
+        rdb.child("festival").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
 
-        // 점(.) 제거
-        val dotRemovedString = cleanedString.replace(".", "")
+                    if (subArr != null) {
+                        for (day in monthData) {
 
-        // 날짜를 분리
-        val day = dotRemovedString.substring(0, 2)
-        val month = dotRemovedString.substring(2, 4)
-        val year = "2023"
-
-        // 변환된 날짜 반환
-        return "$year$day$month"
+                            for (i in subArr.indices) {
+                                if (subArr[i] != null && subArr[i].category=="festival") {
+                                    if (day.date == subArr[i].date) {
+                                        day.event.add(subArr[i])
+                                        day.count += 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    adapter_calendar.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     private fun getKonkukEvent2() {

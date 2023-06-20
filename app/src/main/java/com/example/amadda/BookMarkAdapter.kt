@@ -43,12 +43,18 @@ class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.A
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(items[position].category == "konkuk"){
             holder.binding.Dday.setBackgroundColor(Color.parseColor("#005426"))
+            holder.binding.category.text = "건국대 학사일정"
         }else if(items[position].category == "KBO"){
             holder.binding.Dday.setBackgroundColor(Color.parseColor("#0047FF"))
-        }else if(items[position].category == "프리미어리그"){
+            holder.binding.category.text = "KBO 리그"
+        }else if(items[position].category == "Premier"){
             holder.binding.Dday.setBackgroundColor(Color.parseColor("#6300C7"))
+            holder.binding.category.text = "프리미어리그"
+        } else if (items[position].category == "festival") {
+            holder.binding.Dday.setBackgroundColor(Color.parseColor("#FD9BFF"))
+            holder.binding.category.text = "페스티벌"
         }
-        holder.binding.category.text = items[position].category.toString()
+
         holder.binding.event.text = items[position].event.toString()
         holder.binding.Dday.text = "D-" + items[position].dDay.toString()
         if(items[position].edit){

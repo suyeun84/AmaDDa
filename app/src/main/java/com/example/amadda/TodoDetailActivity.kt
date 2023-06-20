@@ -37,7 +37,24 @@ class TodoDetailActivity : AppCompatActivity() {
             konkukDetail(eventData, date)
         } else if (eventData.category == "Premier") {
             PLDetail(eventData, date)
+        } else if (eventData.category == "festival") {
+            festivalDetail(eventData, date)
         }
+
+
+    }
+
+    fun festivalDetail(eventData: EventData, date: String) {
+        binding.todoDetailTime.visibility = View.VISIBLE
+        val arr: List<String> = eventData.extra.split("_")
+        binding.textViewTime.text = date + " " + arr[0]
+        binding.textViewTitle.text = "🎉 " + eventData.event
+
+        binding.todoDetailLocation.visibility = View.VISIBLE
+        binding.textViewLocation.text = arr[1]
+
+        binding.todoDetailTicket.visibility = View.VISIBLE
+        binding.textViewTicket.text = arr[2]
 
 
     }

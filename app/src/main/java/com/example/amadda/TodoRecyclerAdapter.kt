@@ -66,7 +66,15 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>, var likes: ArrayList<
             holder.binding.textViewTodoCategory.text = "프리미어리그"
 
 
-        } else {
+        } else if (items[position].category == "festival") {
+            holder.binding.rowTodo.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#F2FD9BFF"))
+            holder.binding.textViewTodoDetail.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#FD9BFF"))
+            holder.binding.textViewTodoTitle.text = items[position].event
+            holder.binding.textViewTodoCategory.text = "페스티벌"
+        }
+        else {
             holder.binding.textViewTodoTitle.text = items[position].event
         }
 
