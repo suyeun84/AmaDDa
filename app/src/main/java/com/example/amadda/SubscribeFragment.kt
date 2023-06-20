@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.amadda.databinding.ActivityMainBinding
 import com.example.amadda.databinding.FragmentSubscribeBinding
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ktx.database
@@ -34,15 +35,66 @@ class SubscribeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         userId = arguments?.getString("userId").toString()
-        data.add(Subscription("건국대 학사일정", R.drawable.subscribe_logo_1, false))
-        data.add(Subscription("프리미어리그", R.drawable.subscribe_logo_2, false))
-        data.add(Subscription("KBO리그", R.drawable.subscribe_logo_3, false))
-        data.add(Subscription("페스티벌", R.drawable.subscribe_logo_4, false))
+
+        data.add(Subscription("건국대", R.drawable.subscribe_logo_1, false))
+
         binding = FragmentSubscribeBinding.inflate(inflater, container, false)
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                data.clear()
+                Log.d("시발","...")
+                when (tab.position) {
+                    0 -> {
+                        data.add(Subscription("건국대", R.drawable.subscribe_logo_1, false))
+                    }
+                    1 -> {
+                        data.add(Subscription("아스널 FC", R.drawable.arsenal, false))
+                        data.add(Subscription("아스톤 빌라 FC", R.drawable.astonvila, false))
+                        data.add(Subscription("첼시 FC", R.drawable.chelsea, false))
+                        data.add(Subscription("에버턴 FC", R.drawable.everton, false))
+                        data.add(Subscription("풀럼 FC", R.drawable.fulham, false))
+                        data.add(Subscription("리버풀 FC", R.drawable.liverpool, false))
+                        data.add(Subscription("맨체스터 시티 FC", R.drawable.mancity, false))
+                        data.add(Subscription("맨체스터 유나이티드 FC", R.drawable.manutd, false))
+                        data.add(Subscription("뉴캐슬 유나이티드 FC", R.drawable.newcastle, false))
+                        data.add(Subscription("토트넘 훗스퍼 FC", R.drawable.tottenham, false))
+                        data.add(Subscription("웨스트햄 유나이티드 FC", R.drawable.westham, false))
+                    }
+                    2 -> {
+                        data.add(Subscription("SSG", R.drawable.ssg, false))
+                        data.add(Subscription("LG", R.drawable.lgtwins, false))
+                        data.add(Subscription("NC", R.drawable.nc, false))
+                        data.add(Subscription("롯데", R.drawable.lotte, false))
+                        data.add(Subscription("두산", R.drawable.doosan, false))
+                        data.add(Subscription("KIA", R.drawable.kia, false))
+                        data.add(Subscription("키움", R.drawable.kiwoom, false))
+                        data.add(Subscription("KT", R.drawable.ktwiz, false))
+                        data.add(Subscription("삼성", R.drawable.lions, false))
+                        data.add(Subscription("환화", R.drawable.eaglew, false))
+                    }
+                    3->{
+
+
+                        data.add(Subscription("페스티벌", R.drawable.subscribe_logo_4, false))
+                    }
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                // Do nothing
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                // Do nothing
+            }
+        })
+        initRecyclerView()
         mbinding = ActivityMainBinding.inflate(inflater, container, false)
 
         rdb = Firebase.database.getReference("Users/user/" + userId)
-        rdb.child("subscribe").get().addOnSuccessListener { dataSnapshot ->
+         rdb.child("subscribe").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
                 // 비동기 작업이 완료된 후에 실행될 코드
                 if (dataSnapshot.exists()) {

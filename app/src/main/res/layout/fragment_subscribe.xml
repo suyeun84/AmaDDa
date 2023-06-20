@@ -5,23 +5,56 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SubscribeFragment">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/subscribe_title"
-        android:textSize="32dp"
-        android:layout_marginLeft="35dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginTop="30dp"
         android:layout_marginHorizontal="30dp"
-        />
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/subscribe_title"
+        android:textColor="@color/black"
+        android:textSize="32dp"
+        android:textStyle="bold" />
+
+
+   <com.google.android.material.tabs.TabLayout
+       android:id="@+id/tabLayout"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+
+       <com.google.android.material.tabs.TabItem
+           android:text="학사일정"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
+
+       </com.google.android.material.tabs.TabItem>
+       <com.google.android.material.tabs.TabItem
+           android:text="프리미어리그"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
+
+       </com.google.android.material.tabs.TabItem>
+       <com.google.android.material.tabs.TabItem
+           android:text="KBO리그"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
+
+       </com.google.android.material.tabs.TabItem>
+       <com.google.android.material.tabs.TabItem
+           android:text="페스티벌"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
+
+       </com.google.android.material.tabs.TabItem>
+   </com.google.android.material.tabs.TabLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/subscribeRecyclerView"
-        android:overScrollMode="never"
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:overScrollMode="never" />
 
 </LinearLayout>
