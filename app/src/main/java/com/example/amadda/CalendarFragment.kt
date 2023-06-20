@@ -179,18 +179,20 @@ class CalendarFragment : Fragment() {
                 holder: CalendarRecyclerAdapter.ViewHolder,
                 position: Int
             ) {
-                val bundle = Bundle()
-                bundle.putSerializable("data", data)
-                bundle.putString("userId", "kelsey6225")
-                bundle.putString("year", year.toString())
-                val dialog: TodoFragment = TodoFragment()
-                dialog.arguments = bundle
+                if (holder.binding.textViewD.text.toString() != "") {
+                    val bundle = Bundle()
+                    bundle.putSerializable("data", data)
+                    bundle.putString("userId", "kelsey6225")
+                    bundle.putString("year", year.toString())
+                    val dialog: TodoFragment = TodoFragment()
+                    dialog.arguments = bundle
 
-                requireActivity().supportFragmentManager.let { fragmentManager ->
-                    dialog.show(
-                        fragmentManager,
-                        "TodoDialog"
-                    )
+                    requireActivity().supportFragmentManager.let { fragmentManager ->
+                        dialog.show(
+                            fragmentManager,
+                            "TodoDialog"
+                        )
+                    }
                 }
             }
         }
@@ -280,8 +282,13 @@ class CalendarFragment : Fragment() {
                             Log.d("day", dateToDay(day.date).toString())
                             for (i in subArr.indices) {
                                 if (subArr[i].date.contains(dateToDay(day.date))) {
-                                    var timeTableData = EventData("timetable", subArr[i].lecture )
-                                    timeTableData.extra = listOf(subArr[i].lecture, subArr[i].place ,subArr[i].startTime ,subArr[i].endTime).joinToString(" ")
+                                    var timeTableData = EventData("timetable", subArr[i].lecture)
+                                    timeTableData.extra = listOf(
+                                        subArr[i].lecture,
+                                        subArr[i].place,
+                                        subArr[i].startTime,
+                                        subArr[i].endTime
+                                    ).joinToString(" ")
                                     day.event.add(timeTableData)
                                     day.count += 1
                                 }
