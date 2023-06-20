@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
@@ -43,10 +44,19 @@ class TodoDetailActivity : AppCompatActivity() {
         } else if (eventData.category == "festival") {
             festivalDetail(eventData, date)
         }
+        binding.shareBtnAppbar.setOnClickListener {
+            val intent = Intent(android.content.Intent.ACTION_SEND)
+            val eventData = "[ "+binding.textViewTitle.text.toString() +" ]\n"+ "일시 : "+binding.textViewYear.text.toString() + "년 "+binding.textViewDate.text.toString()
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, eventData)
+            val chooser = Intent.createChooser(intent, eventData)
+            startActivity(chooser)
 
 
     }
 
+
+    }
     fun festivalDetail(eventData: EventData, date: String) {
         binding.todoDetailTime.visibility = View.VISIBLE
         val arr: List<String> = eventData.extra.split("_")
@@ -66,9 +76,7 @@ class TodoDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
     }
-
     fun PLDetail(eventData: EventData, date: String) {
 //        val leagueData = eventData.event.split("/")
         binding.todoDetailTime.visibility = View.VISIBLE

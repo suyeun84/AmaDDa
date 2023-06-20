@@ -93,7 +93,27 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/circle1"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/circle4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/premiercircle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/konkuk"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/priemier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="프리미어리그"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/circle4"
+                    app:layout_constraintTop_toTopOf="parent" />
                 <ImageView
                     android:id="@+id/circle2"
                     android:layout_width="wrap_content"
@@ -101,7 +121,7 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/kbocircle"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/konkuk"
+                    app:layout_constraintStart_toEndOf="@+id/priemier"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -115,6 +135,9 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/circle2"
                     app:layout_constraintTop_toTopOf="parent" />
+
+
+
 
                 <ImageView
                     android:id="@+id/circle3"
@@ -134,29 +157,9 @@
                     android:text="페스티벌"
                     android:textColor="@color/black"
                     android:textSize="16dp"
+                    android:paddingRight="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/circle3"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/circle4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:background="@drawable/premiercircle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/festival"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="프리미어리그"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/circle4"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
