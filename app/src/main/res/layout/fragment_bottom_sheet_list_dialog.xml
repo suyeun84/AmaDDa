@@ -68,6 +68,7 @@
             android:layout_height="70dp"></EditText>
         <requestFocus />
         <ImageView
+            android:id="@+id/todoAddBtn"
             android:src="@drawable/todoadd"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

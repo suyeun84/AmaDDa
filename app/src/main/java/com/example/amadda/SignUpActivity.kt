@@ -81,8 +81,8 @@ class SignUpActivity : AppCompatActivity() {
             rdb = Firebase.database.getReference("Users/user")
             var subArr: ArrayList<Int> = ArrayList<Int>()
             subArr.add(0)
-            var todoArr: ArrayList<Todo> = ArrayList<Todo>()
-            todoArr.add(Todo("20230610", 0, "title", false, false))
+//            var todoArr: ArrayList<Todo> = ArrayList<Todo>()
+//            todoArr.add(Todo("20230610", 0, "title", false, false))
             var cateArr: ArrayList<Category> = ArrayList<Category>()
 //            cateArr.add(Category(0, "title", "#FFFFFF"))
             val userinfo = Users(
