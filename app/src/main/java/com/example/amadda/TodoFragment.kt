@@ -107,6 +107,7 @@ class TodoFragment : DialogFragment() {
                                             if (subArr[i].category == data.category && subArr[i].code == data.code) {
                                                 event = subArr[i]
                                                 event.star = false
+                                                // tag
                                                 found = true
 
                                                 subArr.remove(subArr[i])

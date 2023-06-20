@@ -54,6 +54,7 @@ class BookMarkFragment : Fragment() {
                             val event = EventData(
                                 subArr[i].category,
                                 subArr[i].event,
+                                subArr[i].tag,
                                 subArr[i].dDay.toInt()
                             )
                             arrayList.add(event)
@@ -83,10 +84,11 @@ class BookMarkFragment : Fragment() {
                     for (i in 0 until size){
                         val category = arrayList[i].category.toString()
                         val event = arrayList[i].event.toString()
+                        val tag = arrayList[i].tag
                         var dDay = arrayList[i].dDay.toString().toInt()
                         val edit = !arrayList[i].edit
 
-                        val eventdata = EventData(category, event, dDay, edit, false)
+                        val eventdata = EventData(category, event, tag, dDay, edit, false)
                         arrayList[i] = eventdata
                     }
 
