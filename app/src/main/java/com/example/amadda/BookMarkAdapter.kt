@@ -18,9 +18,13 @@ class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.A
     }
 
     var itemClickListener: OnItemClickListener?= null
+    var eraseClickListener: OnItemClickListener?= null
 
     inner class ViewHolder (val binding: FragmentBookMarkBinding): RecyclerView.ViewHolder(binding.root){
         init {
+            binding.eraseBookMark.setOnClickListener {
+                eraseClickListener?.onItemClick(items[adapterPosition], adapterPosition)
+            }
 
             binding.eventrow.setOnClickListener {
                 itemClickListener?.onItemClick(items[adapterPosition], adapterPosition)

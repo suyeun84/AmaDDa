@@ -114,6 +114,11 @@ class BookMarkFragment : Fragment() {
         bookmarkAdapter = BookMarkAdapter(arrayList)
         val recyclerList = view.findViewById<RecyclerView>(R.id.recyclerList)
 
+        bookmarkAdapter.eraseClickListener = object : BookMarkAdapter.OnItemClickListener{
+            override fun onItemClick(data: EventData, position: Int) {
+                TODO("Not yet implemented")
+            }
+        }
         bookmarkAdapter.itemClickListener = object : BookMarkAdapter.OnItemClickListener{
             override fun onItemClick(data: EventData, position: Int) {
                 arrayList.removeAt(position)
