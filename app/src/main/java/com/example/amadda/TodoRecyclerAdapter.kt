@@ -53,6 +53,8 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>, var likes: ArrayList<
 //            val event = items[position].event.split("/")
 //            holder.binding.textViewTodoTitle.text = event[1]+" vs "+event[2] + "\n" + event[0] + ","+ event[3] + ","+ event[4]
 
+        } else {
+            holder.binding.textViewTodoTitle.text = items[position].event
         }
 //        else if (items[position].category == "KBO리그"){
 //            var KBOEventData = items[position].event.split("/")

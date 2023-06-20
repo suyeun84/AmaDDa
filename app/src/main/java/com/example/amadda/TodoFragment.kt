@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.metrics.Event
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,14 +26,62 @@ import java.time.temporal.ChronoUnit
 
 var bookmarkNum = 0
 
-class TodoFragment : DialogFragment() {
+class TodoFragment : DialogFragment(), DataListener {
     private lateinit var binding: FragmentTodoBinding
     private lateinit var bindingRow: TodoRowBinding
     lateinit var rdb: DatabaseReference
     lateinit var adapter_todo: TodoRecyclerAdapter
     lateinit var mydata: MyData
-    lateinit var mytodo: EventData
+    var mytodo: EventData = EventData()
     lateinit var userId: String
+
+//    private fun openBottomSheet() {
+//        val bottomSheet = BottomSheet()
+//        bottomSheet.setDataListener(this)
+//        bottomSheet.show(parentFragmentManager, "bottomSheetTag")
+//    }
+
+    // 데이터 수신 콜백 메서드 구현
+    override fun onDataReceived(data: EventData) {
+        // 데이터 처리 로직
+        Log.d("clickablee", "received : $data")
+        mytodo = data
+        if(mytodo != null){
+            var todos: ArrayList<EventData> = ArrayList<EventData>()
+            rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
+                GlobalScope.launch(Dispatchers.Main) {
+                    if(dataSnapshot.exists()){
+                        val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                        val todoArr = dataSnapshot.getValue(listType)
+                        if (todoArr != null) {
+                            for (i in todoArr.indices) {
+                                if (todoArr[i] != null) {
+                                    todos.add(todoArr[i])
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            todos.add(mytodo)
+            rdb.child("todoList").setValue(todos)
+                .addOnSuccessListener {
+                    // 데이터 추가 성공 시 실행되는 코드
+                    Log.d("Firebase", "Todo added successfully")
+                }
+                .addOnFailureListener { exception ->
+                    // 데이터 추가 실패 시 실행되는 코드
+                    Log.e("Firebase", "Failed to add todo: ${exception.message}")
+                }
+
+            for (i in todos.indices){
+                mydata.event.add(todos[i])
+            }
+            adapter_todo.notifyDataSetChanged()
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,15 +93,21 @@ class TodoFragment : DialogFragment() {
         Log.d("todoList", userId)
         val notice = bundle?.getSerializable("data")
         mydata = notice as MyData
-        mytodo = EventData(
-            "약속",
-            "모프",
-            0,
-            false,
-            false,
-            0,
-            "202030615"
-        )
+//        mytodo = EventData(
+//            "약속",
+//            "모프",
+//            0,
+//            false,
+//            false,
+//            0,
+//            "202030615"
+//        )
+//        if (bundle.containsKey("inputTodo")) {
+//            val temp = bundle?.getSerializable("inputTodo") as EventData
+//            mytodo = temp
+//            Log.d("clickablee", "!! $temp")
+//        }
+
     }
 
     private fun saveLike(subArr: ArrayList<EventData>, completion: (Boolean) -> Unit) {
@@ -130,9 +185,9 @@ class TodoFragment : DialogFragment() {
                             Log.e("Firebase", "Failed to add todo: ${exception.message}")
                         }
 
-                    for (i in todos.indices){
-                        mydata.event.add(todos[i])
-                    }
+//                    for (i in todos.indices){
+//                        mydata.event.add(todos[i])
+//                    }
                     adapter_todo = TodoRecyclerAdapter(mydata.event, userLikes)
                     binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
                     binding.recyclerViewTodo.adapter = adapter_todo
@@ -237,6 +292,7 @@ class TodoFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheetFragment = BottomSheet()
+        bottomSheetFragment.setDataListener(this)
         bottomSheetFragment.userId = userId
         binding.buttonAdd.setOnClickListener {
             bottomSheetFragment.show(getParentFragmentManager(), bottomSheetFragment.getTag())
