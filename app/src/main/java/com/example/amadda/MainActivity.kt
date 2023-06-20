@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun init() {
 //        saveKBOEvent()
-        savePremierEvent()
+//        savePremierEvent()
         val startFragment = CalendarFragment()
         var bundle = Bundle()
         Log.d("adsf", "init userId : $userId")
