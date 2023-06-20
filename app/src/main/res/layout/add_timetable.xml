@@ -124,13 +124,15 @@
         android:paddingTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></TextView>
-    <EditText
+
+    <Spinner
         android:id="@+id/startHour"
-        android:layout_marginLeft="20dp"
+        android:layout_width="90dp"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/starttime"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"></EditText>
+        />
+
     <TextView
         android:textAlignment="center"
         android:id="@+id/divider"
@@ -144,13 +146,16 @@
         app:layout_constraintStart_toEndOf="@+id/startHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></TextView>
-    <EditText
+
+
+    <Spinner
         android:id="@+id/startMinute"
-        android:layout_marginLeft="10dp"
+        android:layout_width="90dp"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/divider"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"></EditText>
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/endTimePicker"
@@ -169,13 +174,16 @@
             android:paddingTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></TextView>
-        <EditText
+
+
+        <Spinner
             android:id="@+id/endHour"
-            android:layout_marginLeft="20dp"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/endtime"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"></EditText>
+            />
+
         <TextView
             android:textAlignment="center"
             android:id="@+id/divider2"
@@ -189,13 +197,15 @@
             app:layout_constraintStart_toEndOf="@+id/endHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></TextView>
-        <EditText
+
+        <Spinner
             android:id="@+id/endMinute"
-            android:layout_marginLeft="10dp"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/divider2"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"></EditText>
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
     <Button
         android:layout_marginRight="30dp"
