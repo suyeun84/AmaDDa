@@ -1,6 +1,9 @@
 package com.example.amadda
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.Paint
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
@@ -55,6 +58,13 @@ class TodoDetailActivity : AppCompatActivity() {
 
         binding.todoDetailTicket.visibility = View.VISIBLE
         binding.textViewTicket.text = arr[2]
+        binding.textViewTicket.paintFlags = binding.textViewTicket.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+
+        binding.textViewTicket.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(binding.textViewTicket.text.toString()))
+            startActivity(intent)
+        }
 
 
     }
