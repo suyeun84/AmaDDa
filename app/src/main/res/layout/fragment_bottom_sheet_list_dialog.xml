@@ -51,11 +51,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/todoInput"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingBottom="220dp"
+
+        android:paddingBottom="300dp"
         android:background="@drawable/todoinput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <EditText
             android:id="@+id/input"

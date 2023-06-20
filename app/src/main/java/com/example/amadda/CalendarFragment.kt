@@ -27,8 +27,8 @@ class CalendarFragment : Fragment() {
     lateinit var kboTeamArr: Array<String>
     lateinit var preTeamArr: Array<String>
 
-    private var year = 2023
-    private var month = 5
+    private var year = 0
+    private var month = 0
     val dateModel: DateViewModel by viewModels()
     var userId: String = ""
 
