@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.app.NotificationCompat.getCategory
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -58,6 +59,23 @@ class CalendarFragment : Fragment() {
         getSubscribe()
 //        initCalendar()
 
+    }
+
+    private fun getCategory() {
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("todoCategory").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<Category>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (subArr != null) {
+                        adapter_calendar.categoryArr = subArr
+                    }
+                }
+            }
+        }
     }
 
     private fun getSubscribe() {
@@ -112,6 +130,7 @@ class CalendarFragment : Fragment() {
 
     private fun updateCalendar(arr: ArrayList<Int>) {
         println("updateCalendar !!")
+
         monthData.clear()
         val calendar = GregorianCalendar(year, month, 1)
         val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1
@@ -125,6 +144,7 @@ class CalendarFragment : Fragment() {
         }
 
         adapter_calendar.notifyDataSetChanged()
+        getCategory()
         getTimeTable()
         getTodoEvent()
         if (subscribeArr.contains(0)) {
@@ -468,7 +488,13 @@ class CalendarFragment : Fragment() {
                         binding.recyclerViewCalendar.adapter = adapter_calendar
                     }
                 }
+                else {
+                    val subArr = ArrayList<Category>()
+                    adapter_calendar.categoryArr = subArr
+                    binding.recyclerViewCalendar.adapter = adapter_calendar
+                }
             }
+
         }
 
 

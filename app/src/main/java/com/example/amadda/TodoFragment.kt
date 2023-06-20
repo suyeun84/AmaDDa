@@ -161,12 +161,12 @@ class TodoFragment : DialogFragment(), DataListener {
         rdb = Firebase.database.getReference("Users/user/" + userId)
         var userLikes: ArrayList<EventData> = ArrayList<EventData>()
 
-        rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
+        rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot1 ->
             GlobalScope.launch(Dispatchers.Main) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot1.exists()) {
                     val listType =
                         object : GenericTypeIndicator<ArrayList<EventData>>() {}
-                    val subArr = dataSnapshot.getValue(listType)
+                    val subArr = dataSnapshot1.getValue(listType)
                     if (subArr != null) {
                         for (i in subArr.indices) {
                             if (subArr[i] != null) {
@@ -174,6 +174,8 @@ class TodoFragment : DialogFragment(), DataListener {
                             }
                         }
                     }
+                } else {
+                    val subArr = ArrayList<EventData>()
                 }
 
 
@@ -192,86 +194,6 @@ class TodoFragment : DialogFragment(), DataListener {
                                 binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
                                 binding.recyclerViewTodo.adapter = adapter_todo
                                 adapter_todo.notifyDataSetChanged()
-
-                                adapter_todo.itemClickListener = object : TodoRecyclerAdapter.OnItemClickListener {
-                                    @SuppressLint("NotifyDataSetChanged")
-                                    override fun OnClick(
-                                        data: EventData,
-                                        holder: TodoRecyclerAdapter.ViewHolder,
-                                        position: Int
-                                    ) {
-                                        rdb = Firebase.database.getReference("Users/user/" + userId)
-                                        lateinit var event: EventData
-                                        rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
-                                            if (dataSnapshot.exists()) {
-
-                                                val listType =
-                                                    object : GenericTypeIndicator<ArrayList<EventData>>() {}
-                                                val subArr = dataSnapshot.getValue(listType)
-
-                                                var found: Boolean = false
-                                                if (subArr != null) {
-                                                    for (i in subArr.indices) {
-                                                        if (subArr[i] != null) {
-                                                            if (subArr[i].category == data.category && subArr[i].code == data.code) {
-                                                                event = subArr[i]
-                                                                event.star = false
-                                                                // tag
-                                                                found = true
-
-                                                                subArr.remove(subArr[i])
-                                                                saveLike(subArr) {
-
-                                                                }
-                                                                adapter_todo.likes = subArr
-                                                                adapter_todo.notifyItemChanged(position)
-                                                                adapter_todo.notifyDataSetChanged()
-                                                                break
-                                                            }
-                                                        }
-                                                    }
-                                                    if (!found) {
-//                                        if ((data.category == "konkuk" || data.category == "KBO"
-//                                                    || data.category == "Premier" || data.category == "festival")) {
-//
-//                                        }
-                                                        event = data
-                                                        event.star = true
-                                                        subArr.add(event)
-                                                        saveLike(subArr) {
-
-                                                        }
-                                                        adapter_todo.likes = subArr
-                                                        adapter_todo.notifyItemChanged(position)
-                                                        adapter_todo.notifyDataSetChanged()
-                                                    }
-                                                }}
-                                            else {
-                                                val subArr = ArrayList<EventData>()
-                                                event = data
-                                                event.star = true
-                                                subArr.add(event)
-                                                saveLike(subArr) {
-
-                                                }
-                                                adapter_todo.likes = subArr
-                                                adapter_todo.notifyItemChanged(position)
-                                                adapter_todo.notifyDataSetChanged()
-//                                if ((data.category == "konkuk" || data.category == "KBO"
-//                                            || data.category == "Premier" || data.category == "festival")) {
-//
-//                                }
-
-                                            }
-                                        }
-//                        val event = data
-                                        Log.d("todolist", "bookmarkNum = " + bookmarkNum)
-
-                                        adapter_todo.notifyDataSetChanged()
-                                        adapter_todo.notifyItemChanged(position)
-                                        adapter_todo.notifyDataSetChanged()
-                                    }
-                                }
 
                                 adapter_todo.checkClickListener = object : TodoRecyclerAdapter.OnItemClickListener{
                                     override fun OnClick(
@@ -325,23 +247,145 @@ class TodoFragment : DialogFragment(), DataListener {
 
                                     }
                                 }
-
-                                adapter_todo.detailClickListener = object: TodoRecyclerAdapter.OnItemClickListener{
-                                    override fun OnClick(
-                                        data: EventData,
-                                        holder: TodoRecyclerAdapter.ViewHolder,
-                                        position: Int
-                                    ) {
-                                        val intent = Intent(requireContext(), TodoDetailActivity::class.java)
-                                        intent.putExtra("data", data)
-                                        intent.putExtra("year", mydata.date.substring(0,4))
-                                        intent.putExtra("month", mydata.date.substring(4,6))
-                                        intent.putExtra("day", mydata.date.substring(6,8))
-                                        startActivity(intent)
-                                    }
-
-                                }
                             }
+                        }
+                        else {
+                            val subArr1 = ArrayList<Category>()
+                            adapter_todo = TodoRecyclerAdapter(mydata.event, userLikes)
+                            adapter_todo.categoryArr = subArr1
+                            binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
+                            binding.recyclerViewTodo.adapter = adapter_todo
+                            adapter_todo.notifyDataSetChanged()
+
+                        }
+                        adapter_todo.itemClickListener = object : TodoRecyclerAdapter.OnItemClickListener {
+                            @SuppressLint("NotifyDataSetChanged")
+                            override fun OnClick(
+                                data: EventData,
+                                holder: TodoRecyclerAdapter.ViewHolder,
+                                position: Int
+                            ) {
+                                rdb = Firebase.database.getReference("Users/user/" + userId)
+                                lateinit var event: EventData
+                                rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
+                                    if (dataSnapshot.exists()) {
+
+                                        val listType =
+                                            object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                                        val subArr = dataSnapshot.getValue(listType)
+
+                                        var found: Boolean = false
+                                        if (subArr != null) {
+                                            for (i in subArr.indices) {
+                                                if (subArr[i] != null) {
+                                                    if (subArr[i].category == data.category && subArr[i].code == data.code) {
+                                                        event = subArr[i]
+                                                        event.star = false
+                                                        // tag
+                                                        found = true
+
+                                                        subArr.remove(subArr[i])
+                                                        saveLike(subArr) {
+
+                                                        }
+                                                        adapter_todo.likes = subArr
+                                                        adapter_todo.notifyItemChanged(position)
+                                                        adapter_todo.notifyDataSetChanged()
+                                                        break
+                                                    }
+                                                }
+                                            }
+                                            if (!found) {
+                                                /*
+
+
+                                        subArr.add(event)
+                                        saveLike(subArr) {
+
+                                        }
+                                        adapter_todo.likes = subArr
+                                        adapter_todo.notifyItemChanged(position)
+                                        adapter_todo.notifyDataSetChanged()
+                                    }
+                                }}
+                                                 */
+//                                        if ((data.category == "konkuk" || data.category == "KBO"
+//                                                    || data.category == "Premier" || data.category == "festival")) {
+//
+//                                        }
+                                                event = data
+                                                event.star = true
+
+                                                val each = binding.textViewDday.text.split(" ")
+                                                if(each[2] == "DAY"){
+                                                    event.dDay = 0
+                                                }else if(each[1] == "-"){
+                                                    event.dDay = each[2].toInt()
+                                                }else if(each[1] == "+"){
+                                                    val num = each[2].toInt()
+                                                    event.dDay = 100 + num
+                                                }
+
+                                                subArr.add(event)
+                                                saveLike(subArr) {
+
+                                                }
+                                                adapter_todo.likes = subArr
+                                                adapter_todo.notifyItemChanged(position)
+                                                adapter_todo.notifyDataSetChanged()
+                                            }
+                                        }}
+                                    else {
+                                        val subArr = ArrayList<EventData>()
+                                        event = data
+                                        event.star = true
+                                        val each = binding.textViewDday.text.split(" ")
+                                        if(each[2] == "DAY"){
+                                            event.dDay = 0
+                                        }else if(each[1] == "-"){
+                                            event.dDay = each[2].toInt()
+                                        }else if(each[1] == "+"){
+                                            val num = each[2].toInt()
+                                            event.dDay = 100 + num
+                                        }
+
+
+                                        subArr.add(event)
+                                        saveLike(subArr) {
+
+                                        }
+                                        adapter_todo.likes = subArr
+                                        adapter_todo.notifyItemChanged(position)
+                                        adapter_todo.notifyDataSetChanged()
+//                                if ((data.category == "konkuk" || data.category == "KBO"
+//                                            || data.category == "Premier" || data.category == "festival")) {
+//
+//                                }
+
+                                    }
+                                }
+//                        val event = data
+                                Log.d("todolist", "bookmarkNum = " + bookmarkNum)
+
+                                adapter_todo.notifyDataSetChanged()
+                                adapter_todo.notifyItemChanged(position)
+                                adapter_todo.notifyDataSetChanged()
+                            }
+                        }
+                        adapter_todo.detailClickListener = object: TodoRecyclerAdapter.OnItemClickListener{
+                            override fun OnClick(
+                                data: EventData,
+                                holder: TodoRecyclerAdapter.ViewHolder,
+                                position: Int
+                            ) {
+                                val intent = Intent(requireContext(), TodoDetailActivity::class.java)
+                                intent.putExtra("data", data)
+                                intent.putExtra("year", mydata.date.substring(0,4))
+                                intent.putExtra("month", mydata.date.substring(4,6))
+                                intent.putExtra("day", mydata.date.substring(6,8))
+                                startActivity(intent)
+                            }
+
                         }
                     }
                 }

@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.FragmentBookMarkBinding
 import com.example.amadda.databinding.FragmentBookMarkListBinding
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.Adapter<BookMarkAdapter.ViewHolder>() {
 
@@ -59,8 +62,36 @@ class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.A
             holder.binding.category.text = "페스티벌"
         }
 
+//        holder.binding.event.text = items[position].event.toString()
+
+//        if (items[position].date.isNotEmpty()) {
+//            val today = LocalDate.now()
+//            Log.d("dateeee", "${items[position].date} !!")
+//            val targetDate = LocalDate.of(items[position].date.toInt()/10000,
+//                (items[position].date.toInt()%10000)/100,
+//                items[position].date.toInt()%100) // 예: 2023년 12월 31일
+//            Log.d("dateeee", "!!! $targetDate")
+//
+//            val dDay = ChronoUnit.DAYS.between(today, targetDate)
+//
+//
+//            if (dDay >= 0) {
+////            println("d-day: $dDay")
+//                holder.binding.Dday.text = "D-$dDay"
+//            } else {
+//                holder.binding.Dday.text = "D+${-dDay}"
+//            }
+//        }
+
         holder.binding.event.text = items[position].event.toString()
-        holder.binding.Dday.text = "D-" + items[position].dDay.toString()
+        if(items[position].dDay == 0){
+            holder.binding.Dday.text = "D-DAY"
+        }else if(items[position].dDay in 1..99){
+            holder.binding.Dday.text = "D-"+items[position].dDay.toString()
+        } else if(items[position].dDay > 100){
+            holder.binding.Dday.text = "D+"+(items[position].dDay.toInt()-100).toString()
+        }
+
         if(items[position].edit){
             holder.binding.eraseBookMark.visibility = View.VISIBLE
         }else{

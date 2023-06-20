@@ -112,6 +112,9 @@ class TodoRecyclerAdapter(var items: ArrayList<EventData>, var likes: ArrayList<
             holder.binding.rowTodo.backgroundTintList =
                 ColorStateList.valueOf(Color.parseColor("#000000"))
             holder.binding.textViewTodoDetail.visibility = View.GONE
+
+            holder.binding.imageViewTodoStar.visibility = View.INVISIBLE
+
             holder.binding.textViewTodoTitle.text = items[position].event
             var timeTableSplitData = items[position].extra.split(" ")
             holder.binding.textViewTodoCategory.text = timeTableSplitData[1] + " / " + timeTableSplitData[2] + "~" + timeTableSplitData[3]

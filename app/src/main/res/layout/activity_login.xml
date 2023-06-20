@@ -17,7 +17,7 @@
         android:inputType="textPersonName"
         android:padding="16dp"
         android:hint="아이디"
-        android:text="qwer1234"
+        android:text="mobile1234"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
