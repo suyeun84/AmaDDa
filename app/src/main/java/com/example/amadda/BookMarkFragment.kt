@@ -39,7 +39,7 @@ class BookMarkFragment : Fragment() {
         userId = arguments?.getString("userId").toString()
         Log.d("bookmarkList", userId)
 //        rdb = Firebase.database.getReference("Users/user/" + userId)
-        rdb = Firebase.database.getReference("Users/user/kelsey6225")
+        rdb = Firebase.database.getReference("Users/user/" + userId)
         rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
                 // 비동기 작업이 완료된 후에 실행될 코드

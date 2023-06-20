@@ -242,6 +242,10 @@ class MainActivity : AppCompatActivity() {
         bnv = binding.bottomNav
         userId = intent.getStringExtra("userId").toString()
 
+//        rdb = Firebase.database.getReference("Users/user/" + userId)
+//
+
+
         init()
         // initLayout()
     }

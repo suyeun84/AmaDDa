@@ -5,6 +5,9 @@ import android.icu.util.GregorianCalendar
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -14,6 +17,10 @@ import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import org.jsoup.Jsoup
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
@@ -174,8 +181,9 @@ class CalendarFragment : Fragment() {
                 if (holder.binding.textViewD.text.toString() != "") {
                     val bundle = Bundle()
                     bundle.putSerializable("data", data)
-                    bundle.putString("userId", "kelsey6225")
+                    bundle.putString("userId", userId)
                     bundle.putString("year", year.toString())
+//                bundle.putSerializable("category", )
                     val dialog: TodoFragment = TodoFragment()
                     dialog.arguments = bundle
 
@@ -189,7 +197,6 @@ class CalendarFragment : Fragment() {
             }
         }
         adapter_calendar.notifyDataSetChanged()
-
     }
 
     override fun onCreateView(
@@ -305,7 +312,7 @@ class CalendarFragment : Fragment() {
                     if (subArr != null) {
                         for (day in monthData) {
                             for (i in subArr.indices) {
-                                if (subArr[i] != null && subArr[i].category == "festival") {
+                                if (subArr[i] != null && subArr[i].category=="festival") {
                                     if (day.date == subArr[i].date) {
                                         day.event.add(subArr[i])
                                         day.count += 1
@@ -335,6 +342,7 @@ class CalendarFragment : Fragment() {
                                     if (day.date == subArr[i].date) {
                                         day.event.add(subArr[i])
                                         day.count += 1
+                                        EventBus.getDefault().post(ToDoEvent(day.event))
                                     }
                                 }
                             }
@@ -359,7 +367,7 @@ class CalendarFragment : Fragment() {
                         for (day in monthData) {
 
                             for (i in subArr.indices) {
-                                if (subArr[i] != null && subArr[i].category == "konkuk") {
+                                if (subArr[i] != null && subArr[i].category=="konkuk") {
                                     if (day.date == subArr[i].date) {
                                         day.event.add(subArr[i])
                                         day.count += 1
@@ -386,10 +394,9 @@ class CalendarFragment : Fragment() {
                     if (subArr != null) {
                         for (day in monthData) {
                             for (i in subArr.indices) {
-                                if (subArr[i] != null && subArr[i].category == "KBO") {
+                                if (subArr[i] != null && subArr[i].category=="KBO") {
                                     if (nowList.contains(subArr[i].event.split(":")[0])
-                                        || nowList.contains(subArr[i].event.split(":")[1])
-                                    ) {
+                                        || nowList.contains(subArr[i].event.split(":")[1])) {
                                         if (day.date == subArr[i].date) {
                                             day.event.add(subArr[i])
                                             day.count += 1
@@ -417,10 +424,9 @@ class CalendarFragment : Fragment() {
                     if (subArr != null) {
                         for (day in monthData) {
                             for (i in subArr.indices) {
-                                if (subArr[i] != null && subArr[i].category == "Premier") {
+                                if (subArr[i] != null && subArr[i].category=="Premier") {
                                     if (nowList.contains(subArr[i].event.split(":")[0])
-                                        || nowList.contains(subArr[i].event.split(":")[1])
-                                    ) {
+                                        || nowList.contains(subArr[i].event.split(":")[1])) {
                                         if (day.date == subArr[i].date) {
                                             day.event.add(subArr[i])
                                             day.count += 1
@@ -448,7 +454,25 @@ class CalendarFragment : Fragment() {
                 StaggeredGridLayoutManager.VERTICAL
             )
         )
-        binding.recyclerViewCalendar.adapter = adapter_calendar
+
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("todoCategory").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<Category>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (subArr != null) {
+                        adapter_calendar.categoryArr = subArr
+                        binding.recyclerViewCalendar.adapter = adapter_calendar
+                    }
+                }
+            }
+        }
+
+
+
 
     }
 
@@ -456,6 +480,27 @@ class CalendarFragment : Fragment() {
         super.onDestroyView()
 //        binding = null
 //        adapter_calendar = null
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("subArr", "onStart")
+        if (!EventBus.getDefault().isRegistered(this)) EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("subArr", "onStop")
+        if (EventBus.getDefault().isRegistered(this)) EventBus.getDefault().unregister(this)
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun printId(event: BusEvent) {
+//        Log.d("subArr", "")
+        if (event.id == 1) {
+            Log.d("subArr", "received")
+            Toast.makeText(context, "${event.id}", Toast.LENGTH_SHORT).show()
+            updateCalendar(subscribeArr)
+        }
     }
 
 }

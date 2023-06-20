@@ -185,41 +185,38 @@ class BottomSheet() : BottomSheetDialogFragment() {
         binding.categorySelect.visibility = View.GONE
         binding.todoInput.visibility = View.VISIBLE
 
-        rdb = Firebase.database.getReference("Users/user/kelsey6225")
+        rdb = Firebase.database.getReference("Users/user/" + userId)
         binding.todoAddBtn.setOnClickListener {
-            rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
-                if(dataSnapshot.exists()) {
-                    val listType = object : GenericTypeIndicator<ArrayList<Todo>>() {}
-                    val subArr = dataSnapshot.getValue(listType)
 
-                    if (binding.input.text != null) {
-                        val inputTodo = binding.input.text.toString()
-                        val todo = EventData(
-                            category.title,
-                            inputTodo,
-                            0,
-                            false,
-                            false,
-                            0,
-                            "202030615"
-                        )
+            if (binding.input.text != null) {
 
-                        val bundle = Bundle()
-                        bundle.putSerializable("inputTodo", todo)
-                        Log.d("inputodo", todo.toString())
+                val inputTodo = binding.input.text.toString()
+                val todo = EventData(
+                    category.title,
+                    inputTodo,
+                    0,
+                    false,
+                    false,
+                    0,
+                    "202030615"
+                )
+                Log.d("subArr", "sent! : ${todo}")
 
-                        val fragment = TodoFragment()
-                        fragment.arguments = bundle
-                        sendData(todo)
-//                        fragment.addTodoToList(todo)
+                val bundle = Bundle()
+                bundle.putSerializable("inputTodo", todo)
+                bundle.putSerializable("category", categoryArr)
+                Log.d("inputodo", todo.toString())
 
-                        binding.input.text.clear()
+                val fragment = TodoFragment()
+                fragment.arguments = bundle
+                sendData(todo)
 
-                        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-                        fragmentManager.beginTransaction().remove(this@BottomSheet).commit()
-                        fragmentManager.popBackStack()
-                    }
-                }
+
+                binding.input.text.clear()
+
+                val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+                fragmentManager.beginTransaction().remove(this@BottomSheet).commit()
+                fragmentManager.popBackStack()
             }
         }
     }
