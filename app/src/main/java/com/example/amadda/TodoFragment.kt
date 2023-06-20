@@ -1,6 +1,7 @@
 package com.example.amadda
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.amadda.databinding.FragmentTodoBinding
@@ -44,6 +47,9 @@ class TodoFragment : DialogFragment() {
         mydata = notice as MyData
     }
 
+    fun softkeyboardHide() {
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +59,9 @@ class TodoFragment : DialogFragment() {
         bindingRow = TodoRowBinding.inflate(layoutInflater)
 //        userId = arguments?.getString("userId").toString()
         binding.todoFrag.setBackgroundColor(Color.TRANSPARENT)
+        binding.todoFrag.setOnClickListener{
 
+        }
         adapter_todo = TodoRecyclerAdapter(mydata.event)
         binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewTodo.adapter = adapter_todo
@@ -138,6 +146,7 @@ class TodoFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         val bottomSheetFragment = BottomSheet()
         binding.buttonAdd.setOnClickListener {

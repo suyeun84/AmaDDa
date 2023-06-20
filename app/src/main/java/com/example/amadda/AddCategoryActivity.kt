@@ -1,10 +1,10 @@
 package com.example.amadda
 
-import android.content.res.ColorStateList
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.amadda.databinding.ActivityAddCategoryBinding
 
 
@@ -27,6 +27,7 @@ class AddCategoryActivity : AppCompatActivity() {
         binding.backBtnAppbar.setOnClickListener {
             finish()
         }
+
         binding.button.setOnClickListener {
          //   val categoryText = binding.editTextTextCategory.text.toString()
             // 가져온 카테고리 데이터를 리스트에 추가
@@ -36,6 +37,13 @@ class AddCategoryActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return true
+    }
+
     fun initBtn(){
         val imageViews = arrayOf(
             binding.imageView4,
