@@ -9,7 +9,7 @@ data class EventData(
     var star: Boolean = false,
     var countNum: Int = 0,
 
-    val date: String = "",
+    var date: String = "",
     val code: Int = 0,
 
     var extra: String = ""

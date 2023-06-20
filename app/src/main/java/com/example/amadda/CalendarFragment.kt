@@ -76,6 +76,7 @@ class CalendarFragment : Fragment() {
 
                     if (subArr != null) {
                         subscribeArr = subArr
+                        getTodoEvent()
                         Log.d("adsf", "subscribe count : ${subscribeArr.size}")
                         if (subscribeArr.contains(0)) {
                             getKonkukEvent2()
@@ -127,6 +128,7 @@ class CalendarFragment : Fragment() {
 
         adapter_calendar.notifyDataSetChanged()
 
+        getTodoEvent()
         if (subscribeArr.contains(0)) {
             getKonkukEvent2()
         }
@@ -181,6 +183,7 @@ class CalendarFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putSerializable("data", data)
                 bundle.putString("userId", "kelsey6225")
+                bundle.putString("year", year.toString())
                 val dialog: TodoFragment = TodoFragment()
                 dialog.arguments = bundle
 
@@ -277,7 +280,29 @@ class CalendarFragment : Fragment() {
     }
 
     private fun getTodoEvent() {
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
 
+                    if (subArr != null) {
+                        for (day in monthData) {
+                            for (i in subArr.indices) {
+                                if (subArr[i] != null) {
+                                    if (day.date == subArr[i].date) {
+                                        day.event.add(subArr[i])
+                                        day.count += 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    adapter_calendar.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     private fun getKonkukEvent2() {

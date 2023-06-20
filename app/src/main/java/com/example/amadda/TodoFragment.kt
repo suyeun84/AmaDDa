@@ -36,6 +36,7 @@ class TodoFragment : DialogFragment(), DataListener {
     lateinit var mydata: MyData
     var mytodo: EventData = EventData()
     lateinit var userId: String
+    lateinit var year: String
 
 //    private fun openBottomSheet() {
 //        val bottomSheet = BottomSheet()
@@ -56,30 +57,53 @@ class TodoFragment : DialogFragment(), DataListener {
                         val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
                         val todoArr = dataSnapshot.getValue(listType)
                         if (todoArr != null) {
-                            for (i in todoArr.indices) {
-                                if (todoArr[i] != null) {
-                                    todos.add(todoArr[i])
+//                            for (i in todoArr.indices) {
+//                                if (todoArr[i] != null) {
+//                                    todos.add(todoArr[i])
+//                                }
+//                            }
+                            val date = binding.textViewDay.text.filter { it.isDigit() }
+//                            binding.textViewDay
+                            mytodo.date = year + date
+                            todoArr.add(mytodo)
+
+                            rdb.child("todoList").setValue(todoArr)
+                                .addOnSuccessListener {
+                                    // 데이터 추가 성공 시 실행되는 코드
+                                    Log.d("Firebase", "Todo added successfully")
                                 }
-                            }
+                                .addOnFailureListener { exception ->
+                                    // 데이터 추가 실패 시 실행되는 코드
+                                    Log.e("Firebase", "Failed to add todo: ${exception.message}")
+                                }
                         }
+                    } else {
+                        val todoArr = ArrayList<EventData>()
+                        val date = binding.textViewDay.text.filter { it.isDigit() }
+//                            binding.textViewDay
+                        mytodo.date = year + date
+                        todoArr.add(mytodo)
+
+                        rdb.child("todoList").setValue(todoArr)
+                            .addOnSuccessListener {
+                                // 데이터 추가 성공 시 실행되는 코드
+                                Log.d("Firebase", "Todo added successfully")
+                            }
+                            .addOnFailureListener { exception ->
+                                // 데이터 추가 실패 시 실행되는 코드
+                                Log.e("Firebase", "Failed to add todo: ${exception.message}")
+                            }
                     }
 
                 }
-            }
-            todos.add(mytodo)
-            rdb.child("todoList").setValue(todos)
-                .addOnSuccessListener {
-                    // 데이터 추가 성공 시 실행되는 코드
-                    Log.d("Firebase", "Todo added successfully")
-                }
-                .addOnFailureListener { exception ->
-                    // 데이터 추가 실패 시 실행되는 코드
-                    Log.e("Firebase", "Failed to add todo: ${exception.message}")
-                }
 
-            for (i in todos.indices){
-                mydata.event.add(todos[i])
             }
+//            todos.add(mytodo)
+
+
+//            for (i in todos.indices){
+//                mydata.event.add(todos[i])
+//            }
             adapter_todo.notifyDataSetChanged()
         }
 
@@ -92,6 +116,8 @@ class TodoFragment : DialogFragment(), DataListener {
         val bundle = arguments
         @Suppress("DEPRECATION")
         userId = bundle?.getString("userId").toString()
+        year = bundle?.getString("year").toString()
+
         Log.d("todoList", userId)
         val notice = bundle?.getSerializable("data")
         mydata = notice as MyData

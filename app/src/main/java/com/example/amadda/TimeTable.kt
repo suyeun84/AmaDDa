@@ -292,7 +292,58 @@ class TimeTable : AppCompatActivity() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            timetableAdapter.removeItem(viewHolder.adapterPosition)
+
+
+
+            rdb = Firebase.database.getReference("Users/user/" + userId)
+            rdb.child("timetableList").get().addOnSuccessListener { dataSnapshot ->
+                GlobalScope.launch(Dispatchers.Main) {
+                    // 비동기 작업이 완료된 후에 실행될 코드
+                    if (dataSnapshot.exists()) {
+                        val listType = object : GenericTypeIndicator<ArrayList<TimeTableData>>() {}
+                        val subArr = dataSnapshot.getValue(listType)
+                        val choice = timetableAdapter.items[viewHolder.absoluteAdapterPosition]
+
+                        if (subArr != null) {
+                            if (choice != null) {
+                                for (i in subArr.indices) {
+                                    if (
+                                        subArr[i].startTime == choice.startTime
+                                        && subArr[i].endTime == choice.endTime
+                                        && subArr[i].lecture == choice.lecture
+                                        && subArr[i].place == choice.place
+                                        && subArr[i].professor == choice.professor) {
+                                        subArr.removeAt(i)
+                                        break
+                                    }
+                                }
+                                saveLecture(subArr) { success ->
+                                    if (success) {
+                                        // 데이터베이스에 변경된 값 저장 후 처리할 작업 수행
+                                        Log.d("saveSubscription", "canceled success")
+                                    } else {
+                                        // 저장 실패 처리
+                                        Log.d("saveSubscription", "canceled failed")
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+//                        Log.d("TimeTableLog", "5")
+//                        saveLecture(data) { success ->
+//                            Log.d("TimeTableLog", "6")
+//                            if (success) {
+//                                // 데이터베이스에 변경된 값 저장 후 처리할 작업 수행
+//                                Log.d("saveSubscription", "canceled success")
+//                            } else {
+//                                // 저장 실패 처리
+//                                Log.d("saveSubscription", "canceled failed")
+//                            }
+//                        }
+                    }
+                    timetableAdapter.removeItem(viewHolder.adapterPosition)
+                }
+            }
         }
     }
     val itemTouchHelper = ItemTouchHelper(simpleCallback)
