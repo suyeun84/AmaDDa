@@ -226,6 +226,16 @@ class TodoFragment : DialogFragment(), DataListener {
                                     if (!found) {
                                         event = data
                                         event.star = true
+
+                                        val each = binding.textViewDday.text.split(" ")
+                                        if(each[2] == "DAY"){
+                                            event.dDay = 0
+                                        }else if(each[1] == "-"){
+                                            event.dDay = each[2].toInt()
+                                        }else if(each[1] == "+"){
+                                            val num = each[2].toInt()
+                                            event.dDay = 100 + num
+                                        }
                                         subArr.add(event)
                                         saveLike(subArr) {
 
@@ -239,6 +249,16 @@ class TodoFragment : DialogFragment(), DataListener {
                                 val subArr = ArrayList<EventData>()
                                 event = data
                                 event.star = true
+
+                                val each = binding.textViewDday.text.split(" ")
+                                if(each[2] == "DAY"){
+                                    event.dDay = 0
+                                }else if(each[1] == "-"){
+                                    event.dDay = each[2].toInt()
+                                }else if(each[1] == "+"){
+                                    val num = each[2].toInt()
+                                    event.dDay = 100 + num
+                                }
                                 subArr.add(event)
                                 saveLike(subArr) {
 

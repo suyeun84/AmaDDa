@@ -56,7 +56,13 @@ class BookMarkAdapter(private var items: ArrayList<EventData>)  : RecyclerView.A
         }
 
         holder.binding.event.text = items[position].event.toString()
-        holder.binding.Dday.text = "D-" + items[position].dDay.toString()
+        if(items[position].dDay == 0){
+            holder.binding.Dday.text = "D - DAY"
+        }else if(items[position].dDay in 1..99){
+            holder.binding.Dday.text = "D - "+items[position].dDay.toString()
+        } else if(items[position].dDay > 100){
+            holder.binding.Dday.text = "D + "+(items[position].dDay.toInt()-100).toString()
+        }
         if(items[position].edit){
             holder.binding.eraseBookMark.visibility = View.VISIBLE
         }else{
