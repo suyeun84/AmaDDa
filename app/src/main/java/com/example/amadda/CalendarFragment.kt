@@ -197,7 +197,6 @@ class CalendarFragment : Fragment() {
             }
         }
         adapter_calendar.notifyDataSetChanged()
-
     }
 
     override fun onCreateView(
