@@ -3,6 +3,7 @@ package com.example.amadda
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.amadda.databinding.ActivityLoginBinding
@@ -30,8 +31,10 @@ class LoginActivity : AppCompatActivity() {
         binding.buttonLogin.setOnClickListener {
             //firebase에 회원정보 저장
             rdb = Firebase.database.getReference("Users/user")
+            Log.d("login", "why")
             val inputId = binding.editTextId.text.toString()
             val inputPwd = binding.editTextPassword.text.toString()
+            Log.d("login", "id : $inputId, pw : $inputPwd")
             rdb.child(inputId).child("id").get().addOnSuccessListener {
                 if (it.value == null) {
                     Toast.makeText(this, "아이디나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
