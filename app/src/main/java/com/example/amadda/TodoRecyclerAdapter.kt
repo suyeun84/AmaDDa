@@ -57,7 +57,7 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>, var likes: ArrayList<
             holder.binding.textViewTodoCategory.text = "KBO리그"
 
 
-        } else if (items[position].category == "프리미어리그") {
+        } else if (items[position].category == "Premier") {
             holder.binding.rowTodo.backgroundTintList =
                 ColorStateList.valueOf(Color.parseColor("#F26300C7"))
             holder.binding.textViewTodoDetail.backgroundTintList =
@@ -66,15 +66,9 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>, var likes: ArrayList<
             holder.binding.textViewTodoCategory.text = "프리미어리그"
 
 
+        } else {
+            holder.binding.textViewTodoTitle.text = items[position].event
         }
-//        else if (items[position].category == "KBO리그"){
-//            var KBOEventData = items[position].event.split("/")
-//            holder.binding.textViewTodoTitle.text = KBOEventData[1] + " vs " + KBOEventData[2]
-//
-//        }
-//        holder.binding.textViewTodoCategory.text = items[position].category
-
-
 
         holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_border_24)
         for (i in likes.indices) {

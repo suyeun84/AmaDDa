@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var bnv: BottomNavigationView
     val ImgArr = arrayListOf<Int>(R.drawable.todo, R.drawable.bookmark, R.drawable.subscribe, R.drawable.setting)
     var userId: String = ""
+
+    lateinit var preTeamArr: Array<String>
 
     private val konkukUrl =
         "http://www.konkuk.ac.kr/do/MessageBoard/HaksaArticleList.do?forum=11543"
@@ -72,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         return formattedDate
     }
 
-    private fun saveEvent() {
+    private fun saveKonkukEvent() {
 
         rdb = Firebase.database.getReference("Events/event")
         rdb.child("konkuk").get().addOnSuccessListener { _ ->
@@ -102,14 +105,19 @@ class MainActivity : AppCompatActivity() {
 //            withContext(Dispatchers.Main)
         }
 
-        rdb.child("KBO").get().addOnSuccessListener { _ ->
-            val newArr = ArrayList<EventData>()
-            for (i in 4..7) {
-                val KBOurl =
-                    "https://sports.news.naver.com/kbaseball/schedule/index?month=${i + 1}&year=${2023}"
+    }
+    private fun saveKBOEvent() {
 
-                scope.launch {
-                    var j: Int = 0
+        rdb = Firebase.database.getReference("Events/event")
+        val newArr = ArrayList<EventData>()
+        rdb.child("KBO").get().addOnSuccessListener { _ ->
+            var j: Int = 0
+
+            scope.launch {
+                for (i in 4..7) {
+                    val KBOurl =
+                        "https://sports.news.naver.com/kbaseball/schedule/index?month=${i + 1}&year=${2023}"
+
                     val KBOdoc = Jsoup.connect(KBOurl).get()
                     lateinit var dateKBO: String
                     val monthlyMatch = KBOdoc.select("div#calendarWrap>div")
@@ -121,32 +129,77 @@ class MainActivity : AppCompatActivity() {
                             for (match in matches) {
                                 val t1 = match.select("span.team_lft").text()
                                 val t2 = match.select("span.team_rgt").text()
-                                if (t1 == "SSG" || t2 == "SSG") {
-                                    var eventStr = match.select("span.td_hour").text() + "\n" +
-                                    match.select("span.td_stadium")[0].text() + "\n" +
-                                    match.select("span.td_stadium")[1].text()
+                                var eventStr = match.select("span.td_hour").text() + "\n" +
+                                        match.select("span.td_stadium")[0].text() + "\n" +
+                                        match.select("span.td_stadium")[1].text()
 
-                                    var event: EventData = EventData("KBO", "$t1:$t2",
-                                        0, false, false, 0,
-                                        dateKBO, j,
-                                        eventStr
-                                    )
-                                    j++
-                                    newArr.add(event)
-                                }
+                                var event: EventData = EventData("KBO", "$t1:$t2",
+                                    0, false, false, 0,
+                                    dateKBO, j,
+                                    eventStr
+                                )
+                                j++
+                                newArr.add(event)
                             }
+
                         }
+
                     }
-                    saveKBOList(newArr) {success ->
-                        if (success) {
+                }
+                saveKBOList(newArr) {success ->
+                    if (success) {
 
-                        } else {
+                    } else {
 
-                        }
                     }
                 }
             }
+
         }
+    }
+
+    private fun savePremierEvent() {
+
+        rdb = Firebase.database.getReference("Events/event")
+        val newArr = ArrayList<EventData>()
+        rdb.child("Premier").get().addOnSuccessListener { _ ->
+            var j: Int = 0
+
+            scope.launch {
+                val PLurl =
+                    "https://www.zentoto.com/sports/soccer/epl/fixtures"
+                val PLdoc = Jsoup.connect(PLurl).get()
+                val matches = PLdoc.select("div.game-table div.league-game")
+
+                for (match in matches) {
+                    val matchDetail = match.select("div.game>div")
+                    val dayList = matchDetail[0].select("p").text().split("-", " (", ")")
+                    val date = dayList[0] + dayList[1] + dayList[2]
+                    val time = dayList[3]
+                    val team1 = matchDetail[1].select("a.team-nm").text()
+                    val team2 = matchDetail[3].select("a.team-nm").text()
+
+                    preTeamArr = resources.getStringArray(R.array.primier_team)
+                    if (preTeamArr.contains(team1) || preTeamArr.contains(team2)) {
+                        var event: EventData = EventData("Premier", "$team1:$team2",
+                            0, false, false, 0,
+                            date, j,
+                            time)
+                        j++
+                        newArr.add(event)
+                    }
+                }
+                savePremierList(newArr) {success ->
+                    if (success) {
+
+                    } else {
+
+                    }
+                }
+            }
+
+        }
+
     }
 
     private fun saveKonkukList(subArr: ArrayList<EventData>, completion: (Boolean) -> Unit) {
@@ -162,6 +215,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveKBOList(subArr: ArrayList<EventData>, completion: (Boolean) -> Unit) {
         rdb.child("KBO").setValue(subArr)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            }
+    }
+
+    private fun savePremierList(subArr: ArrayList<EventData>, completion: (Boolean) -> Unit) {
+        rdb.child("Premier").setValue(subArr)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     completion(true)
@@ -187,7 +251,8 @@ class MainActivity : AppCompatActivity() {
         return true
     }
     private fun init() {
-//        saveEvent()
+//        saveKBOEvent()
+        savePremierEvent()
         val startFragment = CalendarFragment()
         var bundle = Bundle()
         Log.d("adsf", "init userId : $userId")

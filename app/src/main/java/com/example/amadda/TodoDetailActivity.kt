@@ -35,7 +35,7 @@ class TodoDetailActivity : AppCompatActivity() {
             KBODetail(eventData, date)
         } else if (eventData.category == "konkuk") {
             konkukDetail(eventData, date)
-        } else if (eventData.category == "프리미어리그") {
+        } else if (eventData.category == "Premier") {
             PLDetail(eventData, date)
         }
 
@@ -43,10 +43,10 @@ class TodoDetailActivity : AppCompatActivity() {
     }
 
     fun PLDetail(eventData: EventData, date: String) {
-        val leagueData = eventData.event.split("/")
+//        val leagueData = eventData.event.split("/")
         binding.todoDetailTime.visibility = View.VISIBLE
-        binding.textViewTime.text = date + " " + leagueData[1]
-        binding.textViewTitle.text = "⚽️ " + leagueData[2] + " VS " + leagueData[3]
+        binding.textViewTime.text = date + " " + eventData.extra
+        binding.textViewTitle.text = "⚽️ " + eventData.event.split(":")[0] + " VS " + eventData.event.split(":")[1]
     }
 
     fun konkukDetail(eventData: EventData, date: String) {

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.FragmentBottomSheetListDialogBinding
@@ -46,6 +47,18 @@ class BottomSheet() : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     var categoryArr: ArrayList<Category> = ArrayList()
+
+    private var dataListener: DataListener? = null
+
+    // 데이터 리스너 설정 메서드
+    fun setDataListener(listener: DataListener) {
+        dataListener = listener
+    }
+
+    // 데이터 전달 메서드
+    private fun sendData(data: EventData) {
+        dataListener?.onDataReceived(data)
+    }
 
     override fun onResume() {
         super.onResume()
@@ -89,19 +102,19 @@ class BottomSheet() : BottomSheetDialogFragment() {
     ): View? {
 
         _binding = FragmentBottomSheetListDialogBinding.inflate(inflater, container, false)
-        binding.addCategory.setOnClickListener {
+        binding.addCategory.setOnClickListener{
             val intent = Intent(context, AddCategoryActivity::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
         }
 
         val bottomSheetFragment = BottomSheet()
-        binding.todoAddBtn.setOnClickListener {
-            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-            fragmentManager.beginTransaction().remove(this@BottomSheet).commit()
-            fragmentManager.popBackStack()
-
-        }
+//        binding.todoAddBtn.setOnClickListener {
+//            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+//            fragmentManager.beginTransaction().remove(this@BottomSheet).commit()
+//            fragmentManager.popBackStack()
+//
+//        }
 
         return binding.root
 
@@ -172,6 +185,43 @@ class BottomSheet() : BottomSheetDialogFragment() {
         binding.categorySelect.visibility = View.GONE
         binding.todoInput.visibility = View.VISIBLE
 
+        rdb = Firebase.database.getReference("Users/user/kelsey6225")
+        binding.todoAddBtn.setOnClickListener {
+            rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
+                if(dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<Todo>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (binding.input.text != null) {
+                        val inputTodo = binding.input.text.toString()
+                        val todo = EventData(
+                            category.title,
+                            inputTodo,
+                            0,
+                            false,
+                            false,
+                            0,
+                            "202030615"
+                        )
+
+                        val bundle = Bundle()
+                        bundle.putSerializable("inputTodo", todo)
+                        Log.d("inputodo", todo.toString())
+
+                        val fragment = TodoFragment()
+                        fragment.arguments = bundle
+                        sendData(todo)
+//                        fragment.addTodoToList(todo)
+
+                        binding.input.text.clear()
+
+                        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+                        fragmentManager.beginTransaction().remove(this@BottomSheet).commit()
+                        fragmentManager.popBackStack()
+                    }
+                }
+            }
+        }
     }
 
     private inner class ViewHolder internal constructor(binding: FragmentBottomSheetListDialogItemBinding) :
