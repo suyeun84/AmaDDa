@@ -1,16 +1,10 @@
 package com.example.amadda
 
-import android.app.AlertDialog
-import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.os.Bundle
-import android.service.autofill.FieldClassification
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -20,11 +14,9 @@ import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
-import org.jsoup.Jsoup
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
-import kotlin.text.Typography.times
 
 class CalendarFragment : Fragment() {
     private val scope = CoroutineScope(Dispatchers.IO)
