@@ -104,6 +104,12 @@ class BottomSheet() : BottomSheetDialogFragment() {
                 }
             } else {
                 val subArr = ArrayList<Category>()
+                subArr.add(Category("약속", "#FFB800"))
+                subArr.add(Category("알바","#4C4C67"))
+                subArr.add(Category("공부","#AECFFF"))
+                rdb.child("todoCategory").setValue(subArr)
+                    .addOnCompleteListener { task ->
+                    }
                 adapter = CategoryAdapter(subArr)
                 recyclerView.adapter = adapter
                 adapter.setOnItemClickListener { category ->

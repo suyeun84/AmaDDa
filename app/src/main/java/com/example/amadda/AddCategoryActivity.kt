@@ -1,10 +1,16 @@
 package com.example.amadda
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColor
 import com.example.amadda.databinding.ActivityAddCategoryBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.GenericTypeIndicator
@@ -83,12 +89,31 @@ class AddCategoryActivity : AppCompatActivity() {
             R.color.circle8
         )
 
+        val colorArr = arrayOf(
+            "#FFB800",
+            "#4C4C67",
+            "#AECFFF",
+            "#FF6F6F",
+            "#69CE67",
+            "#CB88FF",
+            "#DBDBDB",
+            "#FF9B3F"
+        )
+
         val imageViews = arrayOf(
             binding.imageView4,
             binding.imageView5,
             binding.imageView6,
             binding.imageView7,
             binding.imageView8
+        )
+
+        val checkedResources = arrayOf(
+            R.drawable.circle4check,
+            R.drawable.circle5check,
+            R.drawable.circle6check,
+            R.drawable.circle7check,
+            R.drawable.circle8check
         )
 
         val selectedResources = arrayOf(
@@ -107,10 +132,34 @@ class AddCategoryActivity : AppCompatActivity() {
             R.drawable.circle8
         )
 
+        for (i in categoryArr) {
+            for (j in 0..4) {
+                if (i.color == colorArr[j + 3]) {
+                    imageViews[j].setImageResource(checkedResources[j])
+                    imageViews[j].isClickable = false
+                }
+            }
+//            if (i.color == colorArr[3]) {
+//
+//            }
+        }
+
         for (i in imageViews.indices) {
             imageViews[i].setOnClickListener {
+                Log.d("wherestar", "i == ${i}")
                 for (j in imageViews.indices) {
-                    imageViews[j].setImageResource(if (i == j) selectedResources[j] else unselectedResources[j])
+                    if (i == j) {
+                        imageViews[j].setImageResource(selectedResources[j])
+//                        imageViews[j].drawable.setColorFilter(Color.parseColor(colorArr[j + 3]), PorterDuff.Mode.SRC_IN)
+                        Log.d("wherestar", "i == j ${circleColors[j]}")
+                    }
+                    else {
+                        imageViews[j].setImageResource(R.drawable.none_circle)
+                        imageViews[j].drawable.setColorFilter(Color.parseColor(colorArr[j + 3]), PorterDuff.Mode.SRC_IN)
+                        Log.d("wherestar", "i != j ${circleColors[j]}")
+
+                    }
+//                    imageViews[j].setImageResource(if (i == j) selectedResources[j] else unselectedResources[j])
                 }
             }
         }
