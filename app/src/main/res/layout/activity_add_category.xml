@@ -70,7 +70,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:src="@drawable/circle1check" />
+                android:src="@drawable/circle1check"
+                />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -125,7 +126,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:src="@drawable/circle8" />
+                android:src="@drawable/circle8"
+                />
         </TableRow>
 
     </TableLayout>

@@ -54,6 +54,7 @@ class BottomSheet() : BottomSheetDialogFragment() {
         _binding = FragmentBottomSheetListDialogBinding.inflate(inflater, container, false)
         binding.addCategory.setOnClickListener {
             val intent = Intent(context, AddCategoryActivity::class.java)
+            intent.putExtra("userId", userId)
             startActivity(intent)
         }
         return binding.root

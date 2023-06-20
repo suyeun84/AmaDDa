@@ -6,20 +6,46 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.amadda.databinding.ActivityAddCategoryBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.GenericTypeIndicator
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 
 class AddCategoryActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddCategoryBinding
     private lateinit var categoryList: MutableList<Category>
     private lateinit var categoryAdapter: CategoryAdapter
+    lateinit var rdb: DatabaseReference
+
+    var categoryArr: ArrayList<Category> = ArrayList()
+
+
+    var userId: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        userId = intent.getStringExtra("userId").toString()
 
-        initLayout();
-        initBtn();
 
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("todoCategory").get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                categoryArr.clear()
+
+                val listType = object : GenericTypeIndicator<ArrayList<Category>>() {}
+                val subArr = dataSnapshot.getValue(listType)
+                if (subArr != null)
+                    categoryArr = subArr
+            }
+            else {
+                val subArr = ArrayList<Category>()
+                categoryArr = subArr
+            }
+            initLayout()
+            initBtn()
+        }
     }
 
     fun initLayout() {
@@ -37,6 +63,18 @@ class AddCategoryActivity : AppCompatActivity() {
         }
     }
     fun initBtn(){
+
+        val circleColors = arrayOf(
+            R.color.circle1,
+            R.color.circle2,
+            R.color.circle3,
+            R.color.circle4,
+            R.color.circle5,
+            R.color.circle6,
+            R.color.circle7,
+            R.color.circle8
+        )
+
         val imageViews = arrayOf(
             binding.imageView4,
             binding.imageView5,

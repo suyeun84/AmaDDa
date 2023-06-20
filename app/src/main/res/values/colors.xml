@@ -10,4 +10,14 @@
     <color name="red">#FF4242</color>
     <color name="green">#005426</color>
 
+    <color name="circle1">#FFB800</color>
+    <color name="circle2">#4C4C67</color>
+    <color name="circle3">#AECFFF</color>
+    <color name="circle4">#FF6F6F</color>
+    <color name="circle5">#69CE67</color>
+    <color name="circle6">#CB88FF</color>
+    <color name="circle7">#DBDBDB</color>
+    <color name="circle8">#FF9B3F</color>
+
+
 </resources>
