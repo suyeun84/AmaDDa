@@ -1,9 +1,15 @@
 package com.example.amadda
 
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class CategoryAdapter(private val categories: List<Category>) :
@@ -31,9 +37,18 @@ class CategoryAdapter(private val categories: List<Category>) :
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textView: TextView = itemView.findViewById(R.id.categoryTextView)
+        private val colorView: ImageView = itemView.findViewById<ImageView?>(R.id.categoryColorView)
 
         fun bind(category: Category) {
             textView.text = category.title
+//            colorView.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+            Log.d("wherestar", "${category.title} -> ${category.color}")
+
+            if (category.color.length != 0) {
+                colorView.drawable.setColorFilter(Color.parseColor(category.color), PorterDuff.Mode.SRC_IN)
+//                colorView.setBackgroundColor(Color.parseColor(category.color))
+
+            }
             itemView.setOnClickListener {
                 itemClickListener?.invoke(category)
             }

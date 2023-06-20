@@ -1,10 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!-- item_category.xml -->
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/categoryTextView"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/todoCategoryItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
     android:paddingTop="16dp"
-    android:textSize="16sp"
-    android:textColor="@color/black"
-    />
+    android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/categoryColorView"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginRight="10dp"
+
+        android:src="@drawable/categorycircle" />
+    <TextView
+        android:id="@+id/categoryTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="hello"
+        android:textColor="@color/black"
+        />
+
+</LinearLayout>
