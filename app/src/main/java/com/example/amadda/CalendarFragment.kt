@@ -276,6 +276,10 @@ class CalendarFragment : Fragment() {
         }
     }
 
+    private fun getTodoEvent() {
+
+    }
+
     private fun getKonkukEvent2() {
         rdb = Firebase.database.getReference("Events/event")
         rdb.child("konkuk").get().addOnSuccessListener { dataSnapshot ->
