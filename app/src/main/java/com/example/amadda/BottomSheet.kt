@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.FragmentBottomSheetListDialogBinding
@@ -57,11 +58,24 @@ class BottomSheet() : BottomSheetDialogFragment() {
             intent.putExtra("userId", userId)
             startActivity(intent)
         }
+
+        val bottomSheetFragment = BottomSheet()
+        binding.todoAddBtn.setOnClickListener {
+            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.beginTransaction().remove(this@BottomSheet).commit()
+            fragmentManager.popBackStack()
+
+        }
+
         return binding.root
+
 
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
