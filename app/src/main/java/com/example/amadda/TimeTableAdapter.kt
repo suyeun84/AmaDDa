@@ -1,6 +1,7 @@
 package com.example.amadda
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,8 @@ class TimeTableAdapter(val items: ArrayList<TimeTableData>) :
         fun OnClick(data: TimeTableData, holder: ViewHolder, position: Int)
     }
 
-    inner class ViewHolder(val binding: TimetableRowBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: TimetableRowBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.item.setOnClickListener {
                 itemClickListener?.OnClick(items[adapterPosition], this, adapterPosition)
@@ -39,31 +41,29 @@ class TimeTableAdapter(val items: ArrayList<TimeTableData>) :
     override fun getItemCount(): Int {
         return items.size
     }
+
     fun addItem(item: TimeTableData) {
         items.add(item)
         notifyItemInserted(items.size - 1)
     }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.classRoom.text = items[position].place
         holder.binding.className.text = items[position].lecture
-        holder.binding.textView1.text = dateArr[items[position].date[0]] + " " + items[position].startTime + " ~ " + items[position].endTime
-        holder.binding.apply {
-            if (items[position].date.size == 2) {
-                textView2.visibility == View.VISIBLE
-                holder.binding.textView2.text = dateArr[items[position].date[1]] + " " + items[position].startTime + " ~ " + items[position].endTime
-            }
-            else {
-                textView2.visibility == View.GONE
-                holder.binding.textView2.text = ""
-            }
+        var data =
+            items[position].date.size
+        holder.binding.textView1.text =
+            dateArr[items[position].date[0]] + " " + items[position].startTime + " ~ " + items[position].endTime
+        Log.d("timeTableeeee", data.toString())
+        if (items[position].date.size == 2) {
+            holder.binding.textView2.visibility = View.VISIBLE
+            holder.binding.textView2.text =
+                dateArr[items[position].date[1]] + " " + items[position].startTime + " ~ " + items[position].endTime
+
         }
-
-
     }
-//
-//    fun removeItem(adapterPosition: Int) {
-//        items.removeAt(adapterPosition)
-//        notifyItemRemoved(adapterPosition)
-//
-//    }
+    fun removeItem(pos:Int){
+        items.removeAt(pos)
+        notifyItemRemoved(pos)
+    }
 }
