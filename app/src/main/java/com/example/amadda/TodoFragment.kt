@@ -1,6 +1,7 @@
 package com.example.amadda
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -30,6 +31,7 @@ class TodoFragment : DialogFragment() {
     lateinit var rdb: DatabaseReference
     lateinit var adapter_todo: TodoRecyclerAdapter
     lateinit var mydata: MyData
+    lateinit var mytodo: EventData
     lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +44,15 @@ class TodoFragment : DialogFragment() {
         Log.d("todoList", userId)
         val notice = bundle?.getSerializable("data")
         mydata = notice as MyData
+        mytodo = EventData(
+            "약속",
+            "모프",
+            0,
+            false,
+            false,
+            0,
+            "202030615"
+        )
     }
 
     private fun saveLike(subArr: ArrayList<EventData>, completion: (Boolean) -> Unit) {
@@ -67,6 +78,7 @@ class TodoFragment : DialogFragment() {
 
         rdb = Firebase.database.getReference("Users/user/" + userId)
         var userLikes: ArrayList<EventData> = ArrayList<EventData>()
+
         rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
                 if (dataSnapshot.exists()) {
@@ -81,9 +93,56 @@ class TodoFragment : DialogFragment() {
                         }
                     }
                 }
-                adapter_todo = TodoRecyclerAdapter(mydata.event, userLikes)
-                binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
-                binding.recyclerViewTodo.adapter = adapter_todo
+//                var totalArr = ArrayList<EventData>()
+//
+//                for(i in mydata.event.indices){
+//                    totalArr.add(mydata.event[i])
+//                }
+//                for (i in todos.indices){
+//                    totalArr.add(todos[i])
+//                }
+                if(mytodo != null){
+                    var todos: ArrayList<EventData> = ArrayList<EventData>()
+                    rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
+                        GlobalScope.launch(Dispatchers.Main) {
+                            if(dataSnapshot.exists()){
+                                val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                                val todoArr = dataSnapshot.getValue(listType)
+                                if (todoArr != null) {
+                                    for (i in todoArr.indices) {
+                                        if (todoArr[i] != null) {
+                                            todos.add(todoArr[i])
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    todos.add(mytodo)
+                    rdb.child("todoList").setValue(todos)
+                        .addOnSuccessListener {
+                            // 데이터 추가 성공 시 실행되는 코드
+                            Log.d("Firebase", "Todo added successfully")
+                        }
+                        .addOnFailureListener { exception ->
+                            // 데이터 추가 실패 시 실행되는 코드
+                            Log.e("Firebase", "Failed to add todo: ${exception.message}")
+                        }
+
+                    for (i in todos.indices){
+                        mydata.event.add(todos[i])
+                    }
+                    adapter_todo = TodoRecyclerAdapter(mydata.event, userLikes)
+                    binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
+                    binding.recyclerViewTodo.adapter = adapter_todo
+                    adapter_todo.notifyDataSetChanged()
+                }
+
+//                adapter_todo = TodoRecyclerAdapter(totalArr, userLikes)
+//                binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
+//                binding.recyclerViewTodo.adapter = adapter_todo
+
                 adapter_todo.itemClickListener = object : TodoRecyclerAdapter.OnItemClickListener {
                     @SuppressLint("NotifyDataSetChanged")
                     override fun OnClick(
@@ -96,8 +155,7 @@ class TodoFragment : DialogFragment() {
                         rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
                             if (dataSnapshot.exists()) {
 
-                                val listType =
-                                    object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                                val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
                                 val subArr = dataSnapshot.getValue(listType)
 
                                 var found: Boolean = false
@@ -131,12 +189,13 @@ class TodoFragment : DialogFragment() {
                                         adapter_todo.notifyItemChanged(position)
                                         adapter_todo.notifyDataSetChanged()
                                     }
-                                }
-                            } else {
+                                }}
+                            else {
                                 val subArr = ArrayList<EventData>()
                                 event = data
                                 event.star = true
                                 subArr.add(event)
+                                subArr.add(mytodo)
                                 saveLike(subArr) {
 
                                 }
@@ -147,29 +206,31 @@ class TodoFragment : DialogFragment() {
                         }
 //                        val event = data
                         Log.d("todolist", "bookmarkNum = " + bookmarkNum)
+
                         adapter_todo.notifyDataSetChanged()
                         adapter_todo.notifyItemChanged(position)
                         adapter_todo.notifyDataSetChanged()
                     }
                 }
-                adapter_todo.detailClickListener =
-                    object : TodoRecyclerAdapter.OnItemClickListener {
-                        override fun OnClick(
-                            data: EventData,
-                            holder: TodoRecyclerAdapter.ViewHolder,
-                            position: Int
-                        ) {
-                            val intent = Intent(requireContext(), TodoDetailActivity::class.java)
-                            intent.putExtra("data", data)
-                            intent.putExtra("year", mydata.date.substring(0, 4))
-                            intent.putExtra("month", mydata.date.substring(4, 6))
-                            intent.putExtra("day", mydata.date.substring(6, 8))
-                            startActivity(intent)
-                        }
 
+                adapter_todo.detailClickListener = object: TodoRecyclerAdapter.OnItemClickListener{
+                    override fun OnClick(
+                        data: EventData,
+                        holder: TodoRecyclerAdapter.ViewHolder,
+                        position: Int
+                    ) {
+                        val intent = Intent(requireContext(), TodoDetailActivity::class.java)
+                        intent.putExtra("data", data)
+                        intent.putExtra("year", mydata.date.substring(0,4))
+                        intent.putExtra("month", mydata.date.substring(4,6))
+                        intent.putExtra("day", mydata.date.substring(6,8))
+                        startActivity(intent)
                     }
+
                 }
             }
+        }
+
         return binding.root
     }
 
@@ -200,5 +261,47 @@ class TodoFragment : DialogFragment() {
         }
 
 
+    }
+
+    fun addTodoToList(todo: EventData) {
+        if(todo != null){
+            var todos: ArrayList<EventData> = ArrayList<EventData>()
+            rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
+                GlobalScope.launch(Dispatchers.Main) {
+                    if(dataSnapshot.exists()){
+                        val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                        val todoArr = dataSnapshot.getValue(listType)
+                        if (todoArr != null) {
+                            for (i in todoArr.indices) {
+                                if (todoArr[i] != null) {
+                                    todos.add(todoArr[i])
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            todos.add(todo)
+            rdb.child("todoList").setValue(todos)
+                .addOnSuccessListener {
+                    // 데이터 추가 성공 시 실행되는 코드
+                    Log.d("Firebase", "Todo added successfully")
+                }
+                .addOnFailureListener { exception ->
+                    // 데이터 추가 실패 시 실행되는 코드
+                    Log.e("Firebase", "Failed to add todo: ${exception.message}")
+                }
+            var totalArr = ArrayList<EventData>()
+
+            for(i in mydata.event.indices){
+                totalArr.add(mydata.event[i])
+            }
+            for (i in todos.indices){
+                totalArr.add(todos[i])
+            }
+        }
+        // 데이터가 추가되었으므로 RecyclerView 등을 업데이트하는 로직을 구현
+        // adapter_todo.notifyDataSetChanged() 등으로 RecyclerView 갱신
     }
 }

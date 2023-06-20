@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.FragmentBottomSheetListDialogBinding
@@ -89,7 +91,7 @@ class BottomSheet() : BottomSheetDialogFragment() {
     ): View? {
 
         _binding = FragmentBottomSheetListDialogBinding.inflate(inflater, container, false)
-        binding.addCategory.setOnClickListener {
+        binding.addCategory.setOnClickListener{
             val intent = Intent(context, AddCategoryActivity::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
@@ -171,6 +173,43 @@ class BottomSheet() : BottomSheetDialogFragment() {
 
         binding.categorySelect.visibility = View.GONE
         binding.todoInput.visibility = View.VISIBLE
+
+        rdb = Firebase.database.getReference("Users/user/kelsey6225")
+        binding.todoAddBtn.setOnClickListener {
+            rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
+                if(dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<Todo>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (binding.input.text != null) {
+                        val inputTodo = binding.input.text.toString()
+                        val todo = EventData(
+                            "약속",
+                            inputTodo,
+                            0,
+                            false,
+                            false,
+                            0,
+                            "202030615"
+                        )
+
+//                        val bundle = Bundle()
+//                        bundle.putSerializable("inputTodo", todo)
+//                        Log.d("inputodo", todo.toString())
+//
+                        val fragment = TodoFragment()
+//                        fragment.arguments = bundle
+                        fragment.addTodoToList(todo)
+
+                        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+                        fragmentManager.beginTransaction().remove(this@BottomSheet).commit()
+                        fragmentManager.popBackStack()
+                    }
+                }
+            }
+        }
+
+    }
 
     }
 
