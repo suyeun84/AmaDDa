@@ -16,6 +16,8 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
     RecyclerView.Adapter<CalendarRecyclerAdapter.ViewHolder>() {
     var itemClickListener: OnItemClickListener? = null
 
+    var categoryArr: ArrayList<Category> = ArrayList()
+
     interface OnItemClickListener {
         fun OnClick(data: MyData, holder: ViewHolder, position: Int)
     }
@@ -63,6 +65,7 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
 
 
         if (items[position].count == 1) {
+            Log.d("subArr", "adapter : ${items[position].event}")
             var bgColor = setColor(items[position].event[0].category)
             holder.binding.textViewTodo1.text = items[position].event[0].event
             holder.binding.textViewTodo1.backgroundTintList =
@@ -121,6 +124,10 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
             return "#FD9BFF"
         }
         else{
+            for (i in categoryArr.indices) {
+                if (category == categoryArr[i].title)
+                    return categoryArr[i].color
+            }
             return "#005426"
         }
 

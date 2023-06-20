@@ -10,6 +10,7 @@ import android.service.autofill.FieldClassification
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +21,9 @@ import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jsoup.Jsoup
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -62,6 +66,21 @@ class CalendarFragment : Fragment() {
 //        initCalendar()
 
     }
+
+//    private fun getCategory() {
+//        rdb = Firebase.database.getReference("Users/user/" + userId)
+//        rdb.child("todoCategory").get().addOnSuccessListener { dataSnapshot ->
+//            GlobalScope.launch(Dispatchers.Main) {
+//                // 비동기 작업이 완료된 후에 실행될 코드
+//                if (dataSnapshot.exists()) {
+//                    val listType = object : GenericTypeIndicator<ArrayList<Int>>() {}
+//                    val subArr = dataSnapshot.getValue(listType)
+//
+//                    if (subArr != null) {
+//                        subscribeArr = subArr
+//                        getTodoEvent()
+//
+//    }
 
     private fun getSubscribe() {
         kboTeamArr = resources.getStringArray(R.array.kbo_team)
@@ -109,11 +128,12 @@ class CalendarFragment : Fragment() {
                 }
             }
         }
-
     }
+
 
     private fun updateCalendar(arr: ArrayList<Int>) {
         println("updateCalendar !!")
+
         monthData.clear()
         val calendar = GregorianCalendar(year, month, 1)
         val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1
@@ -182,8 +202,9 @@ class CalendarFragment : Fragment() {
             ) {
                 val bundle = Bundle()
                 bundle.putSerializable("data", data)
-                bundle.putString("userId", "kelsey6225")
+                bundle.putString("userId", userId)
                 bundle.putString("year", year.toString())
+//                bundle.putSerializable("category", )
                 val dialog: TodoFragment = TodoFragment()
                 dialog.arguments = bundle
 
@@ -279,21 +300,28 @@ class CalendarFragment : Fragment() {
         }
     }
 
+
+
     private fun getTodoEvent() {
+        Log.d("subArr", "where")
         rdb = Firebase.database.getReference("Users/user/" + userId)
         rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
                 if (dataSnapshot.exists()) {
+                    Log.d("subArr", "exists?")
                     val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
                     val subArr = dataSnapshot.getValue(listType)
 
                     if (subArr != null) {
+                        Log.d("subArr", "$subArr")
                         for (day in monthData) {
                             for (i in subArr.indices) {
                                 if (subArr[i] != null) {
                                     if (day.date == subArr[i].date) {
                                         day.event.add(subArr[i])
+                                        Log.d("subArrr", "${day.event}")
                                         day.count += 1
+                                        EventBus.getDefault().post(ToDoEvent(day.event))
                                     }
                                 }
                             }
@@ -405,7 +433,25 @@ class CalendarFragment : Fragment() {
                 StaggeredGridLayoutManager.VERTICAL
             )
         )
-        binding.recyclerViewCalendar.adapter = adapter_calendar
+
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("todoCategory").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<Category>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (subArr != null) {
+                        adapter_calendar.categoryArr = subArr
+                        binding.recyclerViewCalendar.adapter = adapter_calendar
+                    }
+                }
+            }
+        }
+
+
+
 
     }
 
@@ -413,6 +459,27 @@ class CalendarFragment : Fragment() {
         super.onDestroyView()
 //        binding = null
 //        adapter_calendar = null
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("subArr", "onStart")
+        if (!EventBus.getDefault().isRegistered(this)) EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("subArr", "onStop")
+        if (EventBus.getDefault().isRegistered(this)) EventBus.getDefault().unregister(this)
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun printId(event: BusEvent) {
+//        Log.d("subArr", "")
+        if (event.id == 1) {
+            Log.d("subArr", "received")
+            Toast.makeText(context, "${event.id}", Toast.LENGTH_SHORT).show()
+            updateCalendar(subscribeArr)
+        }
     }
 
 }
