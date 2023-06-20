@@ -34,6 +34,7 @@ class SubscribeAdapter(val items: ArrayList<Subscription>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         holder.binding.apply {
 
             // subscriptionImage.setImageResource(R.drawable.subscribe_test)

@@ -44,14 +44,27 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>, var likes: ArrayList<
             holder.binding.rowTodo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CC005426"))
             holder.binding.textViewTodoDetail.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#005426"))
             holder.binding.textViewTodoTitle.text = items[position].event
-        }else if (items[position].category == "KBO"){
-            holder.binding.rowTodo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CC0047FF"))
-            holder.binding.textViewTodoDetail.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
+            holder.binding.textViewTodoCategory.text = "건국대 학사일정"
 
+        }else if (items[position].category == "KBO"){
+            holder.binding.rowTodo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F20047FF"))
+            holder.binding.textViewTodoDetail.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
+//            holder.binding.textViewTodoTitle.text = items[position].tag
             val event = items[position].event.split(":")
             holder.binding.textViewTodoTitle.text = event[0]+" vs "+event[1]
 //            val event = items[position].event.split("/")
 //            holder.binding.textViewTodoTitle.text = event[1]+" vs "+event[2] + "\n" + event[0] + ","+ event[3] + ","+ event[4]
+            holder.binding.textViewTodoCategory.text = "KBO리그"
+
+
+        } else if (items[position].category == "프리미어리그") {
+            holder.binding.rowTodo.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#F26300C7"))
+            holder.binding.textViewTodoDetail.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#6300C7"))
+            holder.binding.textViewTodoTitle.text = items[position].event
+            holder.binding.textViewTodoCategory.text = "프리미어리그"
+
 
         } else {
             holder.binding.textViewTodoTitle.text = items[position].event
@@ -61,7 +74,7 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>, var likes: ArrayList<
 //            holder.binding.textViewTodoTitle.text = KBOEventData[1] + " vs " + KBOEventData[2]
 //
 //        }
-        holder.binding.textViewTodoCategory.text = items[position].category
+//        holder.binding.textViewTodoCategory.text = items[position].category
 
 //        if (todos[position].todoCategory == "약속"){
 //            holder.binding.rowTodo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CC0025FF"))

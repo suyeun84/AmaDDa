@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="20dp"
-    android:layout_marginVertical="10dp">
-
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/subscriptionImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:padding="10dp"
         android:elevation="5dp"
         android:src="@drawable/subscribe_logo_1" />
@@ -17,7 +20,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="match_parent"
+        android:layout_height="90dp"
         android:layout_marginLeft="20dp"
         android:orientation="vertical">
         <TextView
@@ -43,5 +46,12 @@
             />
 
     </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="25dp"
+        android:background="@drawable/subscribe_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="1dp">
 
+    </LinearLayout>
 </LinearLayout>

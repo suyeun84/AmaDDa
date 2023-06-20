@@ -35,28 +35,40 @@ class TodoDetailActivity : AppCompatActivity() {
             KBODetail(eventData, date)
         } else if (eventData.category == "konkuk") {
             konkukDetail(eventData, date)
+        } else if (eventData.category == "프리미어리그") {
+            PLDetail(eventData, date)
         }
 
 
     }
 
-    fun konkukDetail(eventData: EventData, date: String) {
-        binding.textViewTitle.text = eventData.event
+    fun PLDetail(eventData: EventData, date: String) {
+        val leagueData = eventData.event.split("/")
+        binding.todoDetailTime.visibility = View.VISIBLE
+        binding.textViewTime.text = date + " " + leagueData[1]
+        binding.textViewTitle.text = "⚽️ " + leagueData[2] + " VS " + leagueData[3]
     }
+
+    fun konkukDetail(eventData: EventData, date: String) {
+        binding.textViewTitle.text = "🏫 " + eventData.event
+    }
+
+//    fun KBODetail(eventData: EventData, date: String) {
 
 
     fun KBODetail(eventData: EventData, date: String) {
-        val kboData = eventData.event.split("/")
+//        val kboData = eventData.event.split("/")
+//        binding.textViewTitle.text = "⚾️ " + kboData[1] + " VS " + kboData[2]
 
         val kboData2 = eventData.extra.split("\n")
         Log.d("adsfffff", "$kboData2")
 
 
+//        binding.imageViewIcon.setImageResource(R.drawable.ic_baseline_sports_baseball_24)
 
-        binding.imageViewIcon.setImageResource(R.drawable.ic_baseline_sports_baseball_24)
-
-//        binding.textViewTitle.text = kboData[1] + " VS " + kboData[2]
-        binding.textViewTitle.text = eventData.event.split(":")[0] + " VS " + eventData.event.split(":")[1]
+//        binding.textViewTitle.text = "⚾️ " + kboData[1] + " VS " + kboData[2]
+        binding.textViewTitle.text = "⚾️ " +
+                eventData.event.split(":")[0] + " VS " + eventData.event.split(":")[1]
 
         binding.todoDetailTime.visibility = View.VISIBLE
 //        binding.textViewTime.text = date + kboData[0]

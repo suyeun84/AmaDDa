@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.metrics.Event
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.amadda.databinding.FragmentTodoBinding
@@ -93,21 +95,6 @@ class TodoFragment : DialogFragment(), DataListener {
         Log.d("todoList", userId)
         val notice = bundle?.getSerializable("data")
         mydata = notice as MyData
-//        mytodo = EventData(
-//            "약속",
-//            "모프",
-//            0,
-//            false,
-//            false,
-//            0,
-//            "202030615"
-//        )
-//        if (bundle.containsKey("inputTodo")) {
-//            val temp = bundle?.getSerializable("inputTodo") as EventData
-//            mytodo = temp
-//            Log.d("clickablee", "!! $temp")
-//        }
-
     }
 
     private fun saveLike(subArr: ArrayList<EventData>, completion: (Boolean) -> Unit) {
@@ -129,7 +116,8 @@ class TodoFragment : DialogFragment(), DataListener {
         binding = FragmentTodoBinding.inflate(inflater, container, false)
         bindingRow = TodoRowBinding.inflate(layoutInflater)
 //        userId = arguments?.getString("userId").toString()
-        binding.todoFrag.setBackgroundColor(Color.TRANSPARENT)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
         rdb = Firebase.database.getReference("Users/user/" + userId)
         var userLikes: ArrayList<EventData> = ArrayList<EventData>()
@@ -210,7 +198,8 @@ class TodoFragment : DialogFragment(), DataListener {
                         rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
                             if (dataSnapshot.exists()) {
 
-                                val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                                val listType =
+                                    object : GenericTypeIndicator<ArrayList<EventData>>() {}
                                 val subArr = dataSnapshot.getValue(listType)
 
                                 var found: Boolean = false
@@ -220,6 +209,7 @@ class TodoFragment : DialogFragment(), DataListener {
                                             if (subArr[i].category == data.category && subArr[i].code == data.code) {
                                                 event = subArr[i]
                                                 event.star = false
+                                                // tag
                                                 found = true
 
                                                 subArr.remove(subArr[i])
@@ -250,7 +240,6 @@ class TodoFragment : DialogFragment(), DataListener {
                                 event = data
                                 event.star = true
                                 subArr.add(event)
-                                subArr.add(mytodo)
                                 saveLike(subArr) {
 
                                 }
