@@ -21,6 +21,7 @@ import org.jsoup.Jsoup
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
+import kotlin.text.Typography.times
 
 class CalendarFragment : Fragment() {
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -28,11 +29,12 @@ class CalendarFragment : Fragment() {
     lateinit var adapter_calendar: CalendarRecyclerAdapter
     val monthData: ArrayList<MyData> = ArrayList()
 
+    val favoriteKBO : ArrayList<String> = arrayListOf("SSG", "롯데")
+    val favoritePL : ArrayList<String> = arrayListOf("에버턴 FC", "루턴", "토트넘 홋스퍼 FC")
+
     //    var todoList: ArrayList<String> = ArrayList()
     private var year = 2023
     private var month = 5
-    val CALENDAR_EMPTY: String = "CALENDAR_EMPTY"
-    val CALENDAR_DAY: String = "CALENDAR_DAY"
     val dateModel: DateViewModel by viewModels()
     var userId: String = ""
 
@@ -70,6 +72,9 @@ class CalendarFragment : Fragment() {
                         if (subscribeArr.contains(0)) {
                             getKonkukEvent()
                         }
+                        if (subscribeArr.contains(1)) {
+                            getPremierLeague()
+                        }
                         if (subscribeArr.contains(2)) {
                             getKBO()
                         }
@@ -100,12 +105,12 @@ class CalendarFragment : Fragment() {
         if (subscribeArr.contains(0)) {
             getKonkukEvent()
         }
+        if (subscribeArr.contains(1)) {
+            getPremierLeague()
+        }
         if (subscribeArr.contains(2)) {
             getKBO()
         }
-//        getKonkukEvent()
-        Log.d("adsf", year.toString() + "," + month.toString())
-//        getKBO()
     }
 
     private fun initCalendar() {
@@ -116,11 +121,11 @@ class CalendarFragment : Fragment() {
         var str = ""
 
         for (i in 0 until dayOfWeek) {
-            monthData.add(MyData( "0", arrayListOf()))
+            monthData.add(MyData("0", arrayListOf()))
         }
         for (i in 1..max) {
             var mdate = Integer.toString(year * 10000 + (month + 1) * 100 + i)
-            monthData.add(MyData( mdate, arrayListOf()))
+            monthData.add(MyData(mdate, arrayListOf()))
         }
 
         adapter_calendar = CalendarRecyclerAdapter(monthData)
@@ -148,11 +153,6 @@ class CalendarFragment : Fragment() {
         }
 
         adapter_calendar.notifyDataSetChanged()
-
-
-//
-//        getKonkukEvent()
-//        getKBO()
     }
 
     override fun onCreateView(
@@ -255,7 +255,7 @@ class CalendarFragment : Fragment() {
                 for (i in 0 until date.size) {
                     val convertedDate = convertDate(date[i].text())
                     if (day.date == convertedDate) {
-                        day.event.add(EventData("건국대 학사일정", name[i].text()))
+                        day.event.add(EventData("건국대 학사일정", name[i].text(), name[i].text()))
                         day.count += 1
                     }
                 }
@@ -264,6 +264,48 @@ class CalendarFragment : Fragment() {
                 adapter_calendar.notifyDataSetChanged()
             }
         }
+    }
+
+    private fun getPremierLeague() {
+        val PLurl =
+            "https://www.zentoto.com/sports/soccer/epl/fixtures"
+
+        scope.launch {
+            val konkukDoc = Jsoup.connect(PLurl).get()
+            val matches = konkukDoc.select("div.game-table div.league-game")
+
+            for (match in matches) {
+                val matchDetail = match.select("div.game>div")
+                val dayList = matchDetail[0].select("p").text().split("-", " (", ")")
+                val date = dayList[0] + dayList[1] + dayList[2]
+                val time = dayList[3]
+                val team1 = matchDetail[1].select("a.team-nm").text()
+                val team2 = matchDetail[3].select("a.team-nm").text()
+
+                if (favoritePL.contains(team1) || favoritePL.contains(team2)) {
+                    for (day in monthData) {
+                        if (day.date == date) {
+                            var premierData = ""
+                            premierData = listOf(
+                                date,
+                                time,
+                                team1,
+                                team2
+                            ).joinToString("/")
+                            var tag = team1 + ":" + team2
+                            day.event.add(EventData("프리미어리그", premierData, tag))
+                            day.count += 1
+                        }
+                    }
+                }
+
+            }
+            withContext(Dispatchers.Main) {
+                adapter_calendar.notifyDataSetChanged()
+            }
+
+        }
+
     }
 
     private fun getKBO() {
@@ -283,7 +325,7 @@ class CalendarFragment : Fragment() {
                     for (match in matches) {
                         val t1 = match.select("span.team_lft").text()
                         val t2 = match.select("span.team_rgt").text()
-                        if (t1 == "SSG" || t2 == "SSG") {
+                        if (favoriteKBO.contains(t1) || favoriteKBO.contains(t2)) {
                             matchInfo = listOf(
                                 match.select("span.td_hour").text(),
                                 t1,
@@ -291,10 +333,11 @@ class CalendarFragment : Fragment() {
                                 match.select("span.td_stadium")[0].text(),
                                 match.select("span.td_stadium")[1].text()
                             ).joinToString("/")
+                            var tag = t1 + ":" + t2
                             for (i in 0 until monthData.size) {
                                 var d = monthData[i]
                                 if (d.date == dateKBO) {
-                                    d.event.add(EventData("KBO리그",matchInfo))
+                                    d.event.add(EventData("KBO리그", matchInfo, tag))
                                     d.count += 1
                                     break
                                 }

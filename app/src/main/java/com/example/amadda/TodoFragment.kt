@@ -95,6 +95,7 @@ class TodoFragment : DialogFragment() {
                                         val getevent = EventData(
                                             subArr[i].category.toString(),
                                             subArr[i].event.toString(),
+                                            subArr[i].tag.toString(),
                                             subArr[i].dDay.toInt(),
                                             subArr[i].edit,
                                             subArr[i].star,

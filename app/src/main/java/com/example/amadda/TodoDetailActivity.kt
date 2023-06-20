@@ -32,23 +32,28 @@ class TodoDetailActivity : AppCompatActivity() {
 
         if (eventData.category == "KBO리그") {
             KBODetail(eventData, date)
-        }else if(eventData.category == "건국대 학사일정"){
+        } else if (eventData.category == "건국대 학사일정") {
             konkukDetail(eventData, date)
+        } else if (eventData.category == "프리미어리그") {
+            PLDetail(eventData, date)
         }
 
 
     }
-    fun konkukDetail(eventData: EventData, date: String) {
-        binding.textViewTitle.text = eventData.event
+    fun PLDetail(eventData: EventData, date: String) {
+        val leagueData = eventData.event.split("/")
+        binding.todoDetailTime.visibility = View.VISIBLE
+        binding.textViewTime.text = date + " "+ leagueData[1]
+        binding.textViewTitle.text = "⚽️ " + leagueData[2] + " VS " + leagueData[3]
     }
 
+    fun konkukDetail(eventData: EventData, date: String) {
+        binding.textViewTitle.text = "🏫 "+eventData.event
+    }
 
-
-        fun KBODetail(eventData: EventData, date: String) {
+    fun KBODetail(eventData: EventData, date: String) {
         val kboData = eventData.event.split("/")
-        binding.imageViewIcon.setImageResource(R.drawable.ic_baseline_sports_baseball_24)
-
-        binding.textViewTitle.text = kboData[1] + " VS " + kboData[2]
+        binding.textViewTitle.text = "⚾️ " + kboData[1] + " VS " + kboData[2]
 
         binding.todoDetailTime.visibility = View.VISIBLE
         binding.textViewTime.text = date + kboData[0]

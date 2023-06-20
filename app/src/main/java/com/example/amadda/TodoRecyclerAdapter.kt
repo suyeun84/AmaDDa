@@ -40,24 +40,33 @@ class TodoRecyclerAdapter(val items: ArrayList<EventData>) :
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (items[position].category == "건국대 학사일정"){
-            holder.binding.rowTodo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CC005426"))
-            holder.binding.textViewTodoDetail.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#005426"))
+        if (items[position].category == "건국대 학사일정") {
+            holder.binding.rowTodo.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#005426"))
+            holder.binding.textViewTodoDetail.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#005426"))
             holder.binding.textViewTodoTitle.text = items[position].event
 
-        }
-        else if (items[position].category == "KBO리그"){
-            holder.binding.rowTodo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CC0047FF"))
-            holder.binding.textViewTodoDetail.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
-            var KBOEventData = items[position].event.split("/")
-            holder.binding.textViewTodoTitle.text = KBOEventData[1] + " vs " + KBOEventData[2]
+        } else if (items[position].category == "KBO리그") {
+            holder.binding.rowTodo.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#F20047FF"))
+            holder.binding.textViewTodoDetail.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#0047FF"))
+            holder.binding.textViewTodoTitle.text = items[position].tag
+
+        } else if (items[position].category == "프리미어리그") {
+            holder.binding.rowTodo.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#F26300C7"))
+            holder.binding.textViewTodoDetail.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#6300C7"))
+            holder.binding.textViewTodoTitle.text = items[position].tag
 
         }
         holder.binding.textViewTodoCategory.text = items[position].category
 
-        if(items[position].star){
+        if (items[position].star) {
             holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_24)
-        }else{
+        } else {
             holder.binding.imageViewTodoStar.setImageResource(R.drawable.ic_baseline_star_border_24)
         }
     }
