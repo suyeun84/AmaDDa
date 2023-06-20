@@ -29,13 +29,10 @@ class SettingFragment : Fragment() {
     }
 
     fun init(){
+        binding.useEmail.text = userId
         binding.timetableBtn.setOnClickListener{
             val intent = Intent(context, TimeTable::class.java)
             intent.putExtra("userId", userId)
-            startActivity(intent)
-        }
-        binding.pushAlarmBtn.setOnClickListener{
-            val intent = Intent(context, Profile_push::class.java)
             startActivity(intent)
         }
         binding.logoutBtn.setOnClickListener{

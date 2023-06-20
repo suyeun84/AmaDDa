@@ -92,7 +92,7 @@ class TodoRecyclerAdapter(var items: ArrayList<EventData>, var likes: ArrayList<
                 ColorStateList.valueOf(Color.parseColor("#F26300C7"))
             holder.binding.textViewTodoDetail.backgroundTintList =
                 ColorStateList.valueOf(Color.parseColor("#6300C7"))
-            holder.binding.textViewTodoTitle.text = items[position].event
+            holder.binding.textViewTodoTitle.text = items[position].event.split(":")[0] + " vs " + items[position].event.split(":")[1]
             holder.binding.textViewTodoCategory.text = "프리미어리그"
 
 
@@ -107,6 +107,14 @@ class TodoRecyclerAdapter(var items: ArrayList<EventData>, var likes: ArrayList<
                 ColorStateList.valueOf(Color.parseColor("#FD9BFF"))
             holder.binding.textViewTodoTitle.text = items[position].event
             holder.binding.textViewTodoCategory.text = "페스티벌"
+        }
+        else if (items[position].category == "timetable") {
+            holder.binding.rowTodo.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#000000"))
+            holder.binding.textViewTodoDetail.visibility = View.GONE
+            holder.binding.textViewTodoTitle.text = items[position].event
+            var timeTableSplitData = items[position].extra.split(" ")
+            holder.binding.textViewTodoCategory.text = timeTableSplitData[1] + " / " + timeTableSplitData[2] + "~" + timeTableSplitData[3]
         }
         else {
 

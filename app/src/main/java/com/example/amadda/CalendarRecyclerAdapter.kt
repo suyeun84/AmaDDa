@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.DayBinding
+import java.time.LocalDate
 
 class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
     RecyclerView.Adapter<CalendarRecyclerAdapter.ViewHolder>() {
@@ -40,6 +41,9 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        var today: String = LocalDate.now().toString()
+        today = today.replace("-", "")
+
         if (position % 7 == 0) {
             holder.binding.textViewD.setTextColor(Color.RED)
         }
@@ -55,6 +59,13 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
             holder.binding.textViewD.text = items[position].date[7].toString()
         } else {
             holder.binding.textViewD.text = items[position].date.substring(6, 8)
+        }
+
+        Log.d("today", items[position].date + " / " + today.toString())
+        if(items[position].date == today.toString()){
+            holder.binding.textViewD.setBackgroundResource(R.drawable.today_style)
+            holder.binding.textViewD.setTextColor(Color.WHITE)
+            holder.binding.textViewD.setPadding(20,0,20,0)
         }
 
         if (items[position].count == 0) {
@@ -122,6 +133,8 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
             return "#0047FF"
         } else if (category == "festival") {
             return "#FD9BFF"
+        } else if (category == "timetable") {
+            return "#000000"
         }
         else{
             for (i in categoryArr.indices) {

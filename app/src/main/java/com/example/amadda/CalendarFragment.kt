@@ -1,12 +1,8 @@
 package com.example.amadda
 
-import android.app.AlertDialog
-import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.os.Bundle
-import android.service.autofill.FieldClassification
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -28,7 +24,6 @@ import org.jsoup.Jsoup
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
-import kotlin.text.Typography.times
 
 class CalendarFragment : Fragment() {
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -39,17 +34,15 @@ class CalendarFragment : Fragment() {
     lateinit var kboTeamArr: Array<String>
     lateinit var preTeamArr: Array<String>
 
-    val favoriteKBO : ArrayList<String> = arrayListOf("SSG", "롯데")
-    val favoritePL : ArrayList<String> = arrayListOf("에버턴 FC", "루턴", "토트넘 홋스퍼 FC")
-
-    //    var todoList: ArrayList<String> = ArrayList()
-    private var year = 2023
-    private var month = 5
+    private var year = 0
+    private var month = 0
     val dateModel: DateViewModel by viewModels()
     var userId: String = ""
 
     lateinit var rdb: DatabaseReference
     lateinit var subscribeArr: ArrayList<Int>
+
+    val timeTableArr: ArrayList<TimeTableData> = ArrayList()
 
     private val konkukUrl =
         "http://www.konkuk.ac.kr/do/MessageBoard/HaksaArticleList.do?forum=11543"
@@ -67,22 +60,8 @@ class CalendarFragment : Fragment() {
 
     }
 
-//    private fun getCategory() {
-//        rdb = Firebase.database.getReference("Users/user/" + userId)
-//        rdb.child("todoCategory").get().addOnSuccessListener { dataSnapshot ->
-//            GlobalScope.launch(Dispatchers.Main) {
-//                // 비동기 작업이 완료된 후에 실행될 코드
-//                if (dataSnapshot.exists()) {
-//                    val listType = object : GenericTypeIndicator<ArrayList<Int>>() {}
-//                    val subArr = dataSnapshot.getValue(listType)
-//
-//                    if (subArr != null) {
-//                        subscribeArr = subArr
-//                        getTodoEvent()
-//
-//    }
-
     private fun getSubscribe() {
+        getTimeTable()
         kboTeamArr = resources.getStringArray(R.array.kbo_team)
         preTeamArr = resources.getStringArray(R.array.primier_team)
         rdb = Firebase.database.getReference("Users/user/" + userId)
@@ -128,12 +107,11 @@ class CalendarFragment : Fragment() {
                 }
             }
         }
-    }
 
+    }
 
     private fun updateCalendar(arr: ArrayList<Int>) {
         println("updateCalendar !!")
-
         monthData.clear()
         val calendar = GregorianCalendar(year, month, 1)
         val dayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK) - 1
@@ -147,7 +125,7 @@ class CalendarFragment : Fragment() {
         }
 
         adapter_calendar.notifyDataSetChanged()
-
+        getTimeTable()
         getTodoEvent()
         if (subscribeArr.contains(0)) {
             getKonkukEvent2()
@@ -200,19 +178,21 @@ class CalendarFragment : Fragment() {
                 holder: CalendarRecyclerAdapter.ViewHolder,
                 position: Int
             ) {
-                val bundle = Bundle()
-                bundle.putSerializable("data", data)
-                bundle.putString("userId", userId)
-                bundle.putString("year", year.toString())
+                if (holder.binding.textViewD.text.toString() != "") {
+                    val bundle = Bundle()
+                    bundle.putSerializable("data", data)
+                    bundle.putString("userId", userId)
+                    bundle.putString("year", year.toString())
 //                bundle.putSerializable("category", )
-                val dialog: TodoFragment = TodoFragment()
-                dialog.arguments = bundle
+                    val dialog: TodoFragment = TodoFragment()
+                    dialog.arguments = bundle
 
-                requireActivity().supportFragmentManager.let { fragmentManager ->
-                    dialog.show(
-                        fragmentManager,
-                        "TodoDialog"
-                    )
+                    requireActivity().supportFragmentManager.let { fragmentManager ->
+                        dialog.show(
+                            fragmentManager,
+                            "TodoDialog"
+                        )
+                    }
                 }
             }
         }
@@ -272,6 +252,55 @@ class CalendarFragment : Fragment() {
 
     }
 
+    private fun dateToDay(date: String): Int {
+        if (date == "0") {
+            return -1
+        }
+        val year = date.substring(0, 4)
+        val month = date.substring(4, 6)
+        val day = date.substring(6, 8)
+
+        val dateString = "$year-$month-$day"
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+        val date = LocalDate.parse(dateString, formatter)
+        val dayOfWeek = date.dayOfWeek.value
+        return dayOfWeek - 1
+    }
+
+    private fun getTimeTable() {
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("timetableList").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<TimeTableData>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+
+                    if (subArr != null) {
+                        for (day in monthData) {
+                            Log.d("day", dateToDay(day.date).toString())
+                            for (i in subArr.indices) {
+                                if (subArr[i].date.contains(dateToDay(day.date))) {
+                                    var timeTableData = EventData("timetable", subArr[i].lecture)
+                                    timeTableData.extra = listOf(
+                                        subArr[i].lecture,
+                                        subArr[i].place,
+                                        subArr[i].startTime,
+                                        subArr[i].endTime
+                                    ).joinToString(" ")
+                                    day.event.add(timeTableData)
+                                    day.count += 1
+                                }
+                            }
+                        }
+                    }
+                    adapter_calendar.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
     private fun getFestivalEvent() {
         rdb = Firebase.database.getReference("Events/event")
         rdb.child("festival").get().addOnSuccessListener { dataSnapshot ->
@@ -283,7 +312,6 @@ class CalendarFragment : Fragment() {
 
                     if (subArr != null) {
                         for (day in monthData) {
-
                             for (i in subArr.indices) {
                                 if (subArr[i] != null && subArr[i].category=="festival") {
                                     if (day.date == subArr[i].date) {
@@ -300,26 +328,20 @@ class CalendarFragment : Fragment() {
         }
     }
 
-
-
     private fun getTodoEvent() {
-        Log.d("subArr", "where")
         rdb = Firebase.database.getReference("Users/user/" + userId)
         rdb.child("todoList").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
                 if (dataSnapshot.exists()) {
-                    Log.d("subArr", "exists?")
                     val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
                     val subArr = dataSnapshot.getValue(listType)
 
                     if (subArr != null) {
-                        Log.d("subArr", "$subArr")
                         for (day in monthData) {
                             for (i in subArr.indices) {
                                 if (subArr[i] != null) {
                                     if (day.date == subArr[i].date) {
                                         day.event.add(subArr[i])
-                                        Log.d("subArrr", "${day.event}")
                                         day.count += 1
                                         EventBus.getDefault().post(ToDoEvent(day.event))
                                     }

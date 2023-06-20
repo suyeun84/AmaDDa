@@ -54,7 +54,6 @@ class TimeTableAdapter(val items: ArrayList<TimeTableData>) :
             items[position].date.size
         holder.binding.textView1.text =
             dateArr[items[position].date[0]] + " " + items[position].startTime + " ~ " + items[position].endTime
-        Log.d("timeTableeeee", data.toString())
         if (items[position].date.size == 2) {
             holder.binding.textView2.visibility = View.VISIBLE
             holder.binding.textView2.text =
