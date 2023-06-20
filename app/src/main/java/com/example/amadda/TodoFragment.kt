@@ -178,6 +178,7 @@ class TodoFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheetFragment = BottomSheet()
+        bottomSheetFragment.userId = userId
         binding.buttonAdd.setOnClickListener {
             bottomSheetFragment.show(getParentFragmentManager(), bottomSheetFragment.getTag())
         }

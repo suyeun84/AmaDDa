@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.amadda.databinding.FragmentBottomSheetListDialogBinding
 import com.example.amadda.databinding.FragmentBottomSheetListDialogItemBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.GenericTypeIndicator
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 
 // TODO: Customize parameter argument names
@@ -27,7 +32,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
  *    BottomSheet.newInstance(30).show(supportFragmentManager, "dialog")
  * </pre>
  */
-class BottomSheet : BottomSheetDialogFragment() {
+class BottomSheet() : BottomSheetDialogFragment() {
+
+    var userId: String = ""
+    lateinit var rdb: DatabaseReference
+    lateinit var adapter: CategoryAdapter
 
     private var _binding: FragmentBottomSheetListDialogBinding? = null
 
@@ -35,13 +44,15 @@ class BottomSheet : BottomSheetDialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    var categoryArr: ArrayList<Category> = ArrayList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         _binding = FragmentBottomSheetListDialogBinding.inflate(inflater, container, false)
-        binding.addCategory.setOnClickListener{
+        binding.addCategory.setOnClickListener {
             val intent = Intent(context, AddCategoryActivity::class.java)
             startActivity(intent)
         }
@@ -53,34 +64,67 @@ class BottomSheet : BottomSheetDialogFragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val categories = listOf(
-            Category(0,"약속","."),
-            Category(0,"알바","."),
-            Category(0,"공부",".")
-        )
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("todoCategory").get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                categoryArr.clear()
 
-        val adapter = CategoryAdapter(categories)
-        recyclerView.adapter = adapter
+                val listType = object : GenericTypeIndicator<ArrayList<Category>>() {}
+                val subArr = dataSnapshot.getValue(listType)
 
-        adapter.setOnItemClickListener { category ->
-            handleCategoryItemClick(category)
+                if (subArr != null) {
+                    for (i in subArr.indices) {
+                        if (subArr[i] != null) {
+                            categoryArr.add(subArr[i])
+                        }
+                    }
+                }
+                rdb.child("todoCategory").setValue(subArr)
+                    .addOnCompleteListener { task ->
+                    }
+                adapter = CategoryAdapter(categoryArr)
+                recyclerView.adapter = adapter
+                adapter.setOnItemClickListener { category ->
+                    handleCategoryItemClick(category)
+                }
+            } else {
+                val subArr = ArrayList<Category>()
+                adapter = CategoryAdapter(subArr)
+                recyclerView.adapter = adapter
+                adapter.setOnItemClickListener { category ->
+                    handleCategoryItemClick(category)
+                }
+            }
+
         }
-        }
+//        val categories = listOf(
+//            Category("약속","#C88888"),
+//            Category("알바","#C7D695"),
+//            Category("공부","#C082E9")
+//        )
+
+
+    }
+
     private fun handleCategoryItemClick(category: Category) {
 
-                binding.input.requestFocus()
-                val inputMethodManager =
-                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+        binding.input.requestFocus()
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
-                binding.categorySelect.visibility = View.GONE
-                binding.todoInput.visibility = View.VISIBLE
+        binding.categorySelect.visibility = View.GONE
+        binding.todoInput.visibility = View.VISIBLE
 
-        }
+    }
+
     private inner class ViewHolder internal constructor(binding: FragmentBottomSheetListDialogItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         internal val text: TextView = binding.text
+
+
     }
+
     private inner class ItemAdapter internal constructor(private val mItemCount: Int) :
         RecyclerView.Adapter<ViewHolder>() {
 
