@@ -47,6 +47,42 @@ class BottomSheet() : BottomSheetDialogFragment() {
 
     var categoryArr: ArrayList<Category> = ArrayList()
 
+    override fun onResume() {
+        super.onResume()
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        rdb.child("todoCategory").get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                categoryArr.clear()
+
+                val listType = object : GenericTypeIndicator<ArrayList<Category>>() {}
+                val subArr = dataSnapshot.getValue(listType)
+
+                if (subArr != null) {
+                    for (i in subArr.indices) {
+                        if (subArr[i] != null) {
+                            categoryArr.add(subArr[i])
+                        }
+                    }
+                }
+                rdb.child("todoCategory").setValue(subArr)
+                    .addOnCompleteListener { task ->
+                    }
+                adapter.notifyDataSetChanged()
+
+            } else {
+                val subArr = ArrayList<Category>()
+                subArr.add(Category("약속", "#FFB800"))
+                subArr.add(Category("알바","#4C4C67"))
+                subArr.add(Category("공부","#AECFFF"))
+                rdb.child("todoCategory").setValue(subArr)
+                    .addOnCompleteListener { task ->
+                    }
+                adapter.notifyDataSetChanged()
+            }
+
+        }
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,7 +110,6 @@ class BottomSheet() : BottomSheetDialogFragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
