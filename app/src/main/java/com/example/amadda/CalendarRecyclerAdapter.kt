@@ -109,51 +109,11 @@ class CalendarRecyclerAdapter(val items: ArrayList<MyData>) :
             }
         }
 
-//        if (items[position].count == 1) {
-//            if(items[position].event[0].category == "KBO"){
-////                val KBOInfo = items[position].event[0].event.split("/")
-////                holder.binding.textViewTodo1.text = "${KBOInfo[1]}:${KBOInfo[2]}"
-//                holder.binding.textViewTodo1.text = items[position].event[0].event
-//                holder.binding.textViewTodo1.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
-//            }else{
-//                holder.binding.textViewTodo1.text = items[position].event[0].event
-//            }
-//            holder.binding.textViewTodo2.setBackgroundColor(Color.TRANSPARENT)
-//            holder.binding.textViewTodo3.setBackgroundColor(Color.TRANSPARENT)
-//
-//        }
-
-//        if (items[position].count == 2) {
-//            holder.binding.textViewTodo1.text = items[position].event[0].event
-//            if(items[position].event[1].category == "KBO"){
-////                val KBOInfo = items[position].event[1].event.split("/")
-////                holder.binding.textViewTodo2.text = "${KBOInfo[1]}:${KBOInfo[2]}"
-//                holder.binding.textViewTodo2.text = items[position].event[1].event
-//                holder.binding.textViewTodo2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
-//            }else{
-//                holder.binding.textViewTodo2.text = items[position].event[1].event
-//            }
-//            holder.binding.textViewTodo3.setBackgroundColor(Color.TRANSPARENT)
-//        }
-//
-//        if (items[position].count >= 3) {
-//            holder.binding.textViewTodo1.text = items[position].event[0].event
-//            holder.binding.textViewTodo2.text = items[position].event[1].event
-//            if(items[position].event[2].category == "KBO"){
-////                val KBOInfo = items[position].event[2].event.split("/")
-////                holder.binding.textViewTodo3.text = "${KBOInfo[1]}:${KBOInfo[2]}"
-//                holder.binding.textViewTodo3.text = items[position].event[2].event
-//                holder.binding.textViewTodo3.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0047FF"))
-//            }else{
-//                holder.binding.textViewTodo3.text = items[position].event[2].event
-//            }
-//        }
-
     }
     fun setColor(category: String): String {
         if (category == "konkuk") {
             return "#005426"
-        } else if (category == "프리미어리그") {
+        } else if (category == "Premier") {
             return "#6300C7"
         } else if (category == "KBO") {
             return "#0047FF"

@@ -32,6 +32,9 @@ class CalendarFragment : Fragment() {
     lateinit var adapter_calendar: CalendarRecyclerAdapter
     val monthData: ArrayList<MyData> = ArrayList()
 
+    lateinit var kboTeamArr: Array<String>
+    lateinit var preTeamArr: Array<String>
+
     val favoriteKBO : ArrayList<String> = arrayListOf("SSG", "롯데")
     val favoritePL : ArrayList<String> = arrayListOf("에버턴 FC", "루턴", "토트넘 홋스퍼 FC")
 
@@ -61,6 +64,8 @@ class CalendarFragment : Fragment() {
     }
 
     private fun getSubscribe() {
+        kboTeamArr = resources.getStringArray(R.array.kbo_team)
+        preTeamArr = resources.getStringArray(R.array.primier_team)
         rdb = Firebase.database.getReference("Users/user/" + userId)
         rdb.child("subscribe").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
@@ -75,11 +80,28 @@ class CalendarFragment : Fragment() {
                         if (subscribeArr.contains(0)) {
                             getKonkukEvent2()
                         }
-                        if (subscribeArr.contains(1)) {
-                            getPremierLeague()
+                        if (subscribeArr.any { it in 1..11 }) {
+                            val filteredList = ArrayList<String>()
+
+                            for (number in subscribeArr) {
+                                if (number in 1..11) {
+                                    filteredList.add(preTeamArr[number - 1])
+                                }
+                            }
+                            getPremier(filteredList)
                         }
-                        if (subscribeArr.contains(2)) {
-                            getKBO2()
+                        if (subscribeArr.any { it in 12..21 }) {
+                            val filteredList = ArrayList<String>()
+
+                            for (number in subscribeArr) {
+                                if (number in 12..21) {
+                                    filteredList.add(kboTeamArr[number - 12])
+                                }
+                            }
+                            getKBO2(filteredList)
+                        }
+                        if (subscribeArr.contains(22)) {
+
                         }
                     }
                 }
@@ -107,11 +129,28 @@ class CalendarFragment : Fragment() {
         if (subscribeArr.contains(0)) {
             getKonkukEvent2()
         }
-        if (subscribeArr.contains(1)) {
-            getPremierLeague()
+        if (subscribeArr.any { it in 1..11 }) {
+            val filteredList = ArrayList<String>()
+
+            for (number in subscribeArr) {
+                if (number in 1..11) {
+                    filteredList.add(preTeamArr[number - 1])
+                }
+            }
+            getPremier(filteredList)
         }
-        if (subscribeArr.contains(2)) {
-            getKBO2()
+        if (subscribeArr.any { it in 12..21 }) {
+            val filteredList = ArrayList<String>()
+
+            for (number in subscribeArr) {
+                if (number in 12..21) {
+                    filteredList.add(kboTeamArr[number - 12])
+                }
+            }
+            getKBO2(filteredList)
+        }
+        if (subscribeArr.contains(22)) {
+
         }
     }
 
@@ -223,26 +262,6 @@ class CalendarFragment : Fragment() {
         return "$year$day$month"
     }
 
-    fun KBOConvertDate(input: String): String {
-        // 숫자만 추출해서 월과 일로 분리
-        val dateParts = input.filter { it.isDigit() || it == '.' }.split(".")
-        val month = dateParts[0].toInt()
-        val day = dateParts[1].toInt()
-
-        // 현재 연도 사용
-        val year = LocalDate.now().year
-
-        // 날짜 객체 생성
-        val date = LocalDate.of(year, month, day)
-
-        // 원하는 형식으로 변환
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val formattedDate = date.format(formatter)
-        // 변환된 날짜 반환
-
-        return formattedDate
-    }
-
     private fun getKonkukEvent2() {
         rdb = Firebase.database.getReference("Events/event")
         rdb.child("konkuk").get().addOnSuccessListener { dataSnapshot ->
@@ -271,7 +290,7 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun getKBO2() {
+    private fun getKBO2(nowList: ArrayList<String>) {
         rdb = Firebase.database.getReference("Events/event")
         rdb.child("KBO").get().addOnSuccessListener { dataSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
@@ -284,9 +303,12 @@ class CalendarFragment : Fragment() {
                         for (day in monthData) {
                             for (i in subArr.indices) {
                                 if (subArr[i] != null && subArr[i].category=="KBO") {
-                                    if (day.date == subArr[i].date) {
-                                        day.event.add(subArr[i])
-                                        day.count += 1
+                                    if (nowList.contains(subArr[i].event.split(":")[0])
+                                        || nowList.contains(subArr[i].event.split(":")[1])) {
+                                        if (day.date == subArr[i].date) {
+                                            day.event.add(subArr[i])
+                                            day.count += 1
+                                        }
                                     }
                                 }
                             }
@@ -298,113 +320,35 @@ class CalendarFragment : Fragment() {
         }
     }
 
+    private fun getPremier(nowList: ArrayList<String>) {
+        rdb = Firebase.database.getReference("Events/event")
+        rdb.child("Premier").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                // 비동기 작업이 완료된 후에 실행될 코드
+                if (dataSnapshot.exists()) {
+                    val listType = object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
 
-
-    private fun getKonkukEvent() {
-        scope.launch {
-            val konkukDoc = Jsoup.connect(konkukUrl).get()
-            val name = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dd")
-            val date = konkukDoc.select("div.calendar_area > div.detail_calendar > dl > dt")
-            for (day in monthData) {
-                for (i in 0 until date.size) {
-                    val convertedDate = convertDate(date[i].text())
-                    if (day.date == convertedDate) {
-                        day.event.add(EventData("건국대 학사일정", name[i].text()))
-                        day.count += 1
-                    }
-                }
-            }
-            withContext(Dispatchers.Main) {
-                adapter_calendar.notifyDataSetChanged()
-            }
-        }
-    }
-
-    private fun getKBO() {
-        val KBOurl =
-            "https://sports.news.naver.com/kbaseball/schedule/index?month=${month + 1}&year=${year}"
-
-
-        scope.launch {
-            val KBOdoc = Jsoup.connect(KBOurl).get()
-            lateinit var dateKBO: String
-            val monthlyMatch = KBOdoc.select("div#calendarWrap>div")
-            for (dailyMatch in monthlyMatch) {
-                var matchInfo: String = ""
-                dateKBO = KBOConvertDate(dailyMatch.select("span.td_date").text())
-                if (dailyMatch.select("span.td_hour").size != 1) {
-                    val matches = dailyMatch.select("tbody>tr")
-                    for (match in matches) {
-                        val t1 = match.select("span.team_lft").text()
-                        val t2 = match.select("span.team_rgt").text()
-                        if (t1 == "SSG" || t2 == "SSG") {
-                            matchInfo = listOf(
-                                match.select("span.td_hour").text(),
-                                t1,
-                                t2,
-                                match.select("span.td_stadium")[0].text(),
-                                match.select("span.td_stadium")[1].text()
-                            ).joinToString("/")
-                            for (i in 0 until monthData.size) {
-                                var d = monthData[i]
-                                if (d.date == dateKBO) {
-                                    d.event.add(EventData("KBO리그",matchInfo))
-                                    d.count += 1
-                                    break
+                    if (subArr != null) {
+                        for (day in monthData) {
+                            for (i in subArr.indices) {
+                                if (subArr[i] != null && subArr[i].category=="Premier") {
+                                    if (nowList.contains(subArr[i].event.split(":")[0])
+                                        || nowList.contains(subArr[i].event.split(":")[1])) {
+                                        if (day.date == subArr[i].date) {
+                                            day.event.add(subArr[i])
+                                            day.count += 1
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
+                    adapter_calendar.notifyDataSetChanged()
                 }
-            }
-            withContext(Dispatchers.Main) {
-                adapter_calendar.notifyDataSetChanged()
             }
         }
     }
-
-    private fun getPremierLeague() {
-        val PLurl =
-            "https://www.zentoto.com/sports/soccer/epl/fixtures"
-
-        scope.launch {
-            val konkukDoc = Jsoup.connect(PLurl).get()
-            val matches = konkukDoc.select("div.game-table div.league-game")
-
-            for (match in matches) {
-                val matchDetail = match.select("div.game>div")
-                val dayList = matchDetail[0].select("p").text().split("-", " (", ")")
-                val date = dayList[0] + dayList[1] + dayList[2]
-                val time = dayList[3]
-                val team1 = matchDetail[1].select("a.team-nm").text()
-                val team2 = matchDetail[3].select("a.team-nm").text()
-
-                if (favoritePL.contains(team1) || favoritePL.contains(team2)) {
-                    for (day in monthData) {
-                        if (day.date == date) {
-                            var premierData = ""
-                            premierData = listOf(
-                                date,
-                                time,
-                                team1,
-                                team2
-                            ).joinToString("/")
-//                            var tag = team1 + ":" + team2
-                            day.event.add(EventData("프리미어리그", premierData))
-                            day.count += 1
-                        }
-                    }
-                }
-
-            }
-            withContext(Dispatchers.Main) {
-                adapter_calendar.notifyDataSetChanged()
-            }
-
-        }
-
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

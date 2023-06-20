@@ -11,4 +11,31 @@
     <string name="user_id">%s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="primier_team">
+        <item>아스널 FC</item>
+        <item>아스톤 빌라 FC</item>
+        <item>첼시 FC</item>
+        <item>에버턴 FC</item>
+        <item>풀럼 FC</item>
+        <item>리버풀 FC</item>
+        <item>맨체스터 시티 FC</item>
+        <item>맨체스터 유나이티드 FC</item>
+        <item>뉴캐슬 유나이티드 FC</item>
+        <item>토트넘 홋스퍼 FC</item>
+        <item>웨스트햄 유나이티드 FC</item>
+    </string-array>
+
+    <string-array name="kbo_team">
+        <item>SSG</item>
+        <item>LG</item>
+        <item>NC</item>
+        <item>롯데</item>
+        <item>두산</item>
+        <item>KIA</item>
+        <item>키움</item>
+        <item>KT</item>
+        <item>삼성</item>
+        <item>한화</item>
+    </string-array>
 </resources>
