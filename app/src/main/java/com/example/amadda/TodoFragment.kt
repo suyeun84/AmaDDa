@@ -44,6 +44,17 @@ class TodoFragment : DialogFragment() {
         mydata = notice as MyData
     }
 
+    private fun saveLike(subArr: ArrayList<EventData>, completion: (Boolean) -> Unit) {
+        rdb.child("bookmarkList").setValue(subArr)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,86 +65,111 @@ class TodoFragment : DialogFragment() {
 //        userId = arguments?.getString("userId").toString()
         binding.todoFrag.setBackgroundColor(Color.TRANSPARENT)
 
-        adapter_todo = TodoRecyclerAdapter(mydata.event)
-        binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewTodo.adapter = adapter_todo
-
-        adapter_todo.itemClickListener = object : TodoRecyclerAdapter.OnItemClickListener {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun OnClick(
-                data: EventData,
-                holder: TodoRecyclerAdapter.ViewHolder,
-                position: Int
-            ) {
-                rdb = Firebase.database.getReference("Users/user/" + userId)
-                val event = data
-                Log.d("todolist", "bookmarkNum = " + bookmarkNum)
-                event.star = !event.star
-//                rdb.child(event.event).child("star").setValue(event.star)
-                adapter_todo.notifyDataSetChanged()
-                if (event.star) {
-                    //firebase에 넣기
-                    event.countNum = bookmarkNum
-                    rdb.child("bookmarkList/"+bookmarkNum.toString()).setValue(event)
-                    Log.d("todoList", "bookmark number:"+bookmarkNum.toString())
-                    bookmarkNum++
-                } else {
-                    //firebase에서 remove
-                    rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
-                        GlobalScope.launch(Dispatchers.Main) {
-                            if (dataSnapshot.exists()) {
-                                val listType =
-                                    object : GenericTypeIndicator<ArrayList<EventData>>() {}
-                                val subArr = dataSnapshot.getValue(listType)
-                                Log.d("todoList", "subArr = "+subArr.toString())
-                                if (subArr != null) {
-                                    for (i in subArr.indices) {
-                                        if(subArr[i] == null)
-                                            continue
-                                        Log.d("todoList", "i = "+i.toString())
-                                        Log.d("todoList", "subArr[$i] = "+subArr[i].toString())
-                                        val getevent = EventData(
-                                            subArr[i].category.toString(),
-                                            subArr[i].event.toString(),
-                                            subArr[i].dDay.toInt(),
-                                            subArr[i].edit,
-                                            subArr[i].star,
-                                            subArr[i].countNum
-                                        )
-                                        Log.d("todoList", "getevent = "+getevent.toString())
-                                        Log.d("todoList", "dataevent = "+data.event.toString())
-
-                                        if (getevent.event == data.event) {
-                                            val parentKey = getevent.countNum
-                                            Log.d("todoList", "parentKey = "+parentKey.toString())
-                                            rdb.child("bookmarkList/"+parentKey.toString()).removeValue()
-                                            break
-                                        }
-                                    }
-                                }
+        rdb = Firebase.database.getReference("Users/user/" + userId)
+        var userLikes: ArrayList<EventData> = ArrayList<EventData>()
+        rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                if (dataSnapshot.exists()) {
+                    val listType =
+                        object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                    val subArr = dataSnapshot.getValue(listType)
+                    if (subArr != null) {
+                        for (i in subArr.indices) {
+                            if (subArr[i] != null) {
+                                userLikes.add(subArr[i])
                             }
                         }
                     }
                 }
-                adapter_todo.notifyDataSetChanged()
-            }
-        }
+                adapter_todo = TodoRecyclerAdapter(mydata.event, userLikes)
+                binding.recyclerViewTodo.layoutManager = LinearLayoutManager(requireContext())
+                binding.recyclerViewTodo.adapter = adapter_todo
+                adapter_todo.itemClickListener = object : TodoRecyclerAdapter.OnItemClickListener {
+                    @SuppressLint("NotifyDataSetChanged")
+                    override fun OnClick(
+                        data: EventData,
+                        holder: TodoRecyclerAdapter.ViewHolder,
+                        position: Int
+                    ) {
+                        rdb = Firebase.database.getReference("Users/user/" + userId)
+                        lateinit var event: EventData
+                        rdb.child("bookmarkList").get().addOnSuccessListener { dataSnapshot ->
+                            if (dataSnapshot.exists()) {
 
-        adapter_todo.detailClickListener = object: TodoRecyclerAdapter.OnItemClickListener{
-            override fun OnClick(
-                data: EventData,
-                holder: TodoRecyclerAdapter.ViewHolder,
-                position: Int
-            ) {
-                val intent = Intent(requireContext(), TodoDetailActivity::class.java)
-                intent.putExtra("data", data)
-                intent.putExtra("year", mydata.date.substring(0,4))
-                intent.putExtra("month", mydata.date.substring(4,6))
-                intent.putExtra("day", mydata.date.substring(6,8))
-                startActivity(intent)
-            }
+                                val listType =
+                                    object : GenericTypeIndicator<ArrayList<EventData>>() {}
+                                val subArr = dataSnapshot.getValue(listType)
 
-        }
+                                var found: Boolean = false
+                                if (subArr != null) {
+                                    for (i in subArr.indices) {
+                                        if (subArr[i] != null) {
+                                            if (subArr[i].category == data.category && subArr[i].code == data.code) {
+                                                event = subArr[i]
+                                                event.star = false
+                                                found = true
+
+                                                subArr.remove(subArr[i])
+                                                saveLike(subArr) {
+
+                                                }
+                                                adapter_todo.likes = subArr
+                                                adapter_todo.notifyItemChanged(position)
+                                                adapter_todo.notifyDataSetChanged()
+                                                break
+                                            }
+                                        }
+                                    }
+                                    if (!found) {
+                                        event = data
+                                        event.star = true
+                                        subArr.add(event)
+                                        saveLike(subArr) {
+
+                                        }
+                                        adapter_todo.likes = subArr
+                                        adapter_todo.notifyItemChanged(position)
+                                        adapter_todo.notifyDataSetChanged()
+                                    }
+                                }
+                            } else {
+                                val subArr = ArrayList<EventData>()
+                                event = data
+                                event.star = true
+                                subArr.add(event)
+                                saveLike(subArr) {
+
+                                }
+                                adapter_todo.likes = subArr
+                                adapter_todo.notifyItemChanged(position)
+                                adapter_todo.notifyDataSetChanged()
+                            }
+                        }
+//                        val event = data
+                        Log.d("todolist", "bookmarkNum = " + bookmarkNum)
+                        adapter_todo.notifyDataSetChanged()
+                        adapter_todo.notifyItemChanged(position)
+                        adapter_todo.notifyDataSetChanged()
+                    }
+                }
+                adapter_todo.detailClickListener =
+                    object : TodoRecyclerAdapter.OnItemClickListener {
+                        override fun OnClick(
+                            data: EventData,
+                            holder: TodoRecyclerAdapter.ViewHolder,
+                            position: Int
+                        ) {
+                            val intent = Intent(requireContext(), TodoDetailActivity::class.java)
+                            intent.putExtra("data", data)
+                            intent.putExtra("year", mydata.date.substring(0, 4))
+                            intent.putExtra("month", mydata.date.substring(4, 6))
+                            intent.putExtra("day", mydata.date.substring(6, 8))
+                            startActivity(intent)
+                        }
+
+                    }
+                }
+            }
         return binding.root
     }
 
